@@ -1,15 +1,22 @@
 import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Form, InputField, CheckboxField, TextareaField} from '../src/index'
+import {Form, InputField, CheckboxField, TextareaField, ChoiceField} from '../src/index'
 
 const initialValue = Immutable.fromJS({
   name: 'name',
   password: 'password',
   color: '#888888',
   adult: true,
-  description: 'Foo\nBar'
+  description: 'Foo\nBar',
+  size: 's'
 })
+
+const sizes = [
+  {value: 's', label: 'Small'},
+  {value: 'm', label: 'Medium'},
+  {value: 'l', label: 'Large'}
+]
 
 class App extends React.Component {
   render () {
@@ -33,6 +40,9 @@ class App extends React.Component {
               </div>
               <div>
                 <TextareaField name="description" rows={6}/>
+              </div>
+              <div>
+                <ChoiceField name="type" choices={sizes}/>
               </div>
             </div>
             <button type="submit">Submit</button>

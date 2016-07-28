@@ -103,4 +103,13 @@ Object.defineProperty(exports, 'TextareaField', {
   }
 });
 
+var _ChoiceField = require('./form/ChoiceField');
+
+Object.defineProperty(exports, 'ChoiceField', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ChoiceField).default;
+  }
+});
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
