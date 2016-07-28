@@ -76,4 +76,13 @@ Object.defineProperty(exports, 'SortField', {
   }
 });
 
+var _TextareaField = require('./form/TextareaField');
+
+Object.defineProperty(exports, 'TextareaField', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_TextareaField).default;
+  }
+});
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

@@ -6,7 +6,7 @@
     "start": "node ./webpack.devserver.js",
     "test": "npm run lint && npm run karma",
     "build": "rm -rf build/ && babel src/ --out-dir build/",
-    "lint": "eslint --ext js,jsx *.js src/ test/",
+    "lint": "eslint --ext js,jsx *.js src/ test/ public/",
     "karma": "NODE_ENV=test karma start"
   },
   "repository": {
