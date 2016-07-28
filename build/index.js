@@ -13,6 +13,24 @@ Object.defineProperty(exports, 'withClassName', {
   }
 });
 
+var _BaseField = require('./form/BaseField');
+
+Object.defineProperty(exports, 'BaseField', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_BaseField).default;
+  }
+});
+
+var _FormValueScope = require('./form/FormValueScope');
+
+Object.defineProperty(exports, 'FormValueScope', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_FormValueScope).default;
+  }
+});
+
 var _Form = require('./form/Form');
 
 Object.defineProperty(exports, 'Form', {

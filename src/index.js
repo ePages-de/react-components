@@ -1,5 +1,7 @@
 export {default as withClassName} from './withClassName'
 
+export {default as BaseField} from './form/BaseField'
+export {default as FormValueScope} from './form/FormValueScope'
 export {default as Form} from './form/Form'
 export {default as CheckboxField} from './form/CheckboxField'
 export {default as ErrorMessage} from './form/ErrorMessage'
