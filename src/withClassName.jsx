@@ -7,7 +7,7 @@ export default function withClassName (className) {
       static displayName = `WithClassName(${Component.displayName || Component.name || 'Component'})`
 
       render () {
-        return <Component {...this.props} className={className}/>
+        return <Component {...this.props} className={className} ref="wrappedComponent"/>
       }
     }
 

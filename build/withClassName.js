@@ -40,7 +40,7 @@ function withClassName(className) {
       _createClass(WithClassName, [{
         key: 'render',
         value: function render() {
-          return _react2.default.createElement(Component, _extends({}, this.props, { className: className }));
+          return _react2.default.createElement(Component, _extends({}, this.props, { className: className, ref: 'wrappedComponent' }));
         }
       }]);
 
