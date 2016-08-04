@@ -26,47 +26,48 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var InputField = function (_React$Component) {
-  _inherits(InputField, _React$Component);
+var DropDownField = function (_React$Component) {
+  _inherits(DropDownField, _React$Component);
 
-  function InputField() {
+  function DropDownField() {
     var _Object$getPrototypeO;
 
     var _temp, _this, _ret;
 
-    _classCallCheck(this, InputField);
+    _classCallCheck(this, DropDownField);
 
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(InputField)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.focus = function () {
-      _this.refs.input.focus();
-    }, _this.onChange = function (event) {
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(DropDownField)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.onChange = function (event) {
       _this.value = event.target.value;
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
-  _createClass(InputField, [{
+  _createClass(DropDownField, [{
     key: 'render',
     value: function render() {
       var _props = this.props;
       var name = _props.name;
-      var type = _props.type;
+      var options = _props.options;
 
-      var other = _objectWithoutProperties(_props, ['name', 'type']);
+      var other = _objectWithoutProperties(_props, ['name', 'options']); // eslint-disable-line no-unused-vars
 
-      return _react2.default.createElement('input', _extends({
-        autoComplete: 'off',
-        autoCorrect: 'off',
-        autoCapitalize: 'off',
-        spellCheck: 'false'
-      }, other, {
-        name: this.context.formValueScope.name + '.' + name,
-        type: type,
-        value: this.value,
-        onChange: this.onChange,
-        ref: 'input' }));
+      return _react2.default.createElement(
+        'select',
+        _extends({}, other, {
+          name: this.context.formValueScope.name + '.' + name,
+          value: this.value,
+          onChange: this.onChange }),
+        options.map(function (option, index) {
+          return _react2.default.createElement(
+            'option',
+            { key: index, value: option.value },
+            option.label
+          );
+        })
+      );
     }
   }, {
     key: 'value',
@@ -78,14 +79,15 @@ var InputField = function (_React$Component) {
     }
   }]);
 
-  return InputField;
+  return DropDownField;
 }(_react2.default.Component);
 
-InputField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-InputField.propTypes = _extends({}, _BaseField2.default.propTypes, {
-  type: _react.PropTypes.string
+DropDownField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
+DropDownField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+    value: _react.PropTypes.any.isRequired,
+    label: _react.PropTypes.string.isRequired
+  })).isRequired
 });
-InputField.defaultProps = _extends({}, _BaseField2.default.defaultProps, {
-  type: 'text'
-});
-exports.default = InputField;
+DropDownField.defaultProps = _extends({}, _BaseField2.default.defaultProps);
+exports.default = DropDownField;

@@ -33,7 +33,7 @@ function render ({validate} = {}) {
   return {initialValue, onSubmit, dom, form, nameField}
 }
 
-describe.only('FormValueScope', function () {
+describe('FormValueScope', function () {
   it('renders', function () {
     const {dom} = render()
 

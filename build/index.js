@@ -49,6 +49,15 @@ Object.defineProperty(exports, 'CheckboxField', {
   }
 });
 
+var _DropDownField = require('./form/DropDownField');
+
+Object.defineProperty(exports, 'DropDownField', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_DropDownField).default;
+  }
+});
+
 var _ErrorMessage = require('./form/ErrorMessage');
 
 Object.defineProperty(exports, 'ErrorMessage', {

@@ -16,6 +16,14 @@ export default class InputField extends React.Component {
     type: 'text'
   }
 
+  get value () {
+    return this.context.formValueScope.getValue(this.props.name)
+  }
+
+  set value (newValue) {
+    this.context.formValueScope.setValue(this.props.name, newValue)
+  }
+
   render () {
     const {name, type, ...other} = this.props
     return <input
@@ -26,7 +34,7 @@ export default class InputField extends React.Component {
       {...other}
       name={`${this.context.formValueScope.name}.${name}`}
       type={type}
-      value={this.context.formValueScope.getValue(name)}
+      value={this.value}
       onChange={this.onChange}
       ref="input"/>
   }
@@ -36,6 +44,6 @@ export default class InputField extends React.Component {
   }
 
   onChange = (event) => {
-    this.context.formValueScope.setValue(this.props.name, event.target.value)
+    this.value = event.target.value
   }
 }
