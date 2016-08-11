@@ -4,7 +4,9 @@
     "stage-1",
     "react"
   ],
-  "compact": false,
+  "plugins": [
+    "transform-es2015-modules-umd"
+  ],
   "env": {
     "test": {
       "plugins": [
