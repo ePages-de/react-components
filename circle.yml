@@ -1,3 +1,9 @@
 machine:
   node:
     version: 6.3.0
+
+test:
+  post:
+    - npm run build
+    # Ensure build folder is up-to-date
+    - exit $(git -c core.filemode=false status --porcelain | wc -l)
