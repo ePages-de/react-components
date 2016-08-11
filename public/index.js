@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField} from '../src/index'
+import {Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField} from '../src/index'
 
 const initialValue = Immutable.fromJS({
   name: 'name',
@@ -9,13 +9,20 @@ const initialValue = Immutable.fromJS({
   color: '#888888',
   adult: true,
   description: 'Foo\nBar',
-  size: 's'
+  size: 's',
+  cut: 'loose'
 })
 
 const sizes = [
   {value: 's', label: 'Small'},
   {value: 'm', label: 'Medium'},
   {value: 'l', label: 'Large'}
+]
+
+const cuts = [
+  {value: 'wide', label: 'Wide'},
+  {value: 'loose', label: 'Loose'},
+  {value: 'fit', label: 'Fit'}
 ]
 
 class App extends React.Component {
@@ -46,6 +53,9 @@ class App extends React.Component {
               </div>
               <div>
                 <DropDownField name="size" options={sizes}/>
+              </div>
+              <div>
+                <RadioButtonField name="cut" buttons={cuts}/>
               </div>
             </div>
             <button type="submit">Submit</button>
