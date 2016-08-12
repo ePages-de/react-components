@@ -91,20 +91,34 @@
   }
 
   function withClassName(className) {
+    var hoistedMethods = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+
     return function (Component) {
       var WithClassName = function (_React$Component) {
         _inherits(WithClassName, _React$Component);
 
         function WithClassName() {
+          var _Object$getPrototypeO;
+
+          var _temp, _this, _ret;
+
           _classCallCheck(this, WithClassName);
 
-          return _possibleConstructorReturn(this, Object.getPrototypeOf(WithClassName).apply(this, arguments));
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(WithClassName)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.hoistMethods = function (wrappedComponent) {
+            hoistedMethods.forEach(function (methodName) {
+              _this[methodName] = wrappedComponent[methodName];
+            });
+          }, _temp), _possibleConstructorReturn(_this, _ret);
         }
 
         _createClass(WithClassName, [{
           key: 'render',
           value: function render() {
-            return _react2.default.createElement(Component, _extends({}, this.props, { className: className, ref: 'wrappedComponent' }));
+            return _react2.default.createElement(Component, _extends({}, this.props, { className: className, ref: this.hoistMethods }));
           }
         }]);
 

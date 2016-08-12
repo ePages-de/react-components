@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField} from '../src/index'
+import {withClassName, Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField} from '../src/index'
 
 const initialValue = Immutable.fromJS({
   name: 'name',
@@ -25,6 +25,8 @@ const cuts = [
   {value: 'fit', label: 'Fit'}
 ]
 
+const BlueInputField = withClassName('blue', ['focus'])(InputField)
+
 class App extends React.Component {
   render () {
     return (
@@ -34,7 +36,7 @@ class App extends React.Component {
           <Form name="form" value={initialValue} onSubmit={this.onSubmit}>
             <div>
               <div>
-                <InputField name="name" type="text"/>
+                <BlueInputField name="name" type="text" autoFocus/>
               </div>
               <div>
                 <InputField name="password" type="password"/>
