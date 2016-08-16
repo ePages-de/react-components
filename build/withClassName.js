@@ -109,7 +109,7 @@
           }
 
           return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(WithClassName)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.hoistMethods = function (wrappedComponent) {
-            hoistedMethods.forEach(function (methodName) {
+            wrappedComponent && hoistedMethods.forEach(function (methodName) {
               _this[methodName] = wrappedComponent[methodName];
             });
           }, _temp), _possibleConstructorReturn(_this, _ret);

@@ -11,7 +11,7 @@ export default function withClassName (className, hoistedMethods = []) {
       }
 
       hoistMethods = (wrappedComponent) => {
-        hoistedMethods.forEach((methodName) => {
+        wrappedComponent && hoistedMethods.forEach((methodName) => {
           this[methodName] = wrappedComponent[methodName]
         })
       }
