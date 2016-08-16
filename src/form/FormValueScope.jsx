@@ -35,7 +35,9 @@ export default class FormValueScope extends React.Component {
     }
   }
 
-  setValue = (name, value) => {
+  // gets overwritten so make sure we don't use an ES7 property
+  // TODO Don't extend `Form` with `FormValueScope`. See https://github.com/ePages-de/react-components/issues/8
+  setValue (name, value) {
     const outerScope = this.context.formValueScope
     if (outerScope) {
       const ownName = this.props.name
