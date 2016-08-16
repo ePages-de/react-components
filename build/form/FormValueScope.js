@@ -96,16 +96,6 @@
         } else {
           return _this.state.value.get(name);
         }
-      }, _this.setValue = function (name, value) {
-        var outerScope = _this.context.formValueScope;
-        if (outerScope) {
-          var ownName = _this.props.name;
-          return outerScope.setValue(ownName, outerScope.getValue(ownName).set(name, value));
-        } else {
-          var newValue = _this.state.value.set(name, value);
-          _this.setState({ value: newValue });
-          return newValue;
-        }
       }, _this.getError = function (name) {
         var outerScope = _this.context.formValueScope;
         if (outerScope) {
@@ -122,6 +112,19 @@
       key: 'render',
       value: function render() {
         return this.props.children;
+      }
+    }, {
+      key: 'setValue',
+      value: function setValue(name, value) {
+        var outerScope = this.context.formValueScope;
+        if (outerScope) {
+          var ownName = this.props.name;
+          return outerScope.setValue(ownName, outerScope.getValue(ownName).set(name, value));
+        } else {
+          var newValue = this.state.value.set(name, value);
+          this.setState({ value: newValue });
+          return newValue;
+        }
       }
     }, {
       key: 'getChildContext',
