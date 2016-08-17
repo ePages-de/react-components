@@ -81,4 +81,14 @@ describe('Form', function () {
     TestUtils.Simulate.submit(form)
     expect(onSubmit, 'was called once')
   })
+
+  // https://github.com/ePages-de/react-components/issues/8
+  it('calls validate while typing', function () {
+    const validate = sinon.spy()
+    const {onSubmit, firstNameField} = render({validate})
+
+    TestUtils.Simulate.change(firstNameField)
+    expect(validate, 'was called')
+    expect(onSubmit, 'was not called')
+  })
 })

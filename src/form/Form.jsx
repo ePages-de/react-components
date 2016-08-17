@@ -64,7 +64,7 @@ export default class Form extends FormValueScope {
     const newValue1 = super.setValue(name, value)
     const newValue2 = this.props.onChange(newValue1)
 
-    // validate while typing - third parameter (isOnSubmit) set to false
+    // validate while typing - second parameter (isOnSubmit) set to false
     const errors = this.props.validate(newValue2 || newValue1, false)
     this.setState({
       errors: containsError(errors) ? errors : new Immutable.Map(),
