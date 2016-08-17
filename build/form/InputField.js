@@ -146,7 +146,8 @@
     }, {
       key: 'value',
       get: function get() {
-        return this.context.formValueScope.getValue(this.props.name);
+        // fall back to empty string to keep it a controlled component
+        return this.context.formValueScope.getValue(this.props.name) || '';
       },
       set: function set(newValue) {
         this.context.formValueScope.setValue(this.props.name, newValue);
