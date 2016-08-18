@@ -36,14 +36,12 @@ export default class InputField extends React.Component {
       type={type}
       value={this.value}
       onChange={this.onChange}
-      ref="input"/>
+      ref={this.setRef}/>
   }
 
-  focus = () => {
-    this.refs.input.focus()
-  }
+  setRef = (input) => { this.input = input }
 
-  onChange = (event) => {
-    this.value = event.target.value
-  }
+  focus = () => this.input && this.input.focus()
+
+  onChange = (event) => { this.value = event.target.value }
 }
