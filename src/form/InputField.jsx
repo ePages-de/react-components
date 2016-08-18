@@ -17,7 +17,8 @@ export default class InputField extends React.Component {
   }
 
   get value () {
-    return this.context.formValueScope.getValue(this.props.name)
+    // fall back to empty string to keep it a controlled component
+    return this.context.formValueScope.getValue(this.props.name) || ''
   }
 
   set value (newValue) {
