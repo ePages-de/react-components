@@ -115,8 +115,10 @@
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(InputField)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.focus = function () {
-        _this.refs.input.focus();
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(InputField)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.setRef = function (input) {
+        _this.input = input;
+      }, _this.focus = function () {
+        return _this.input && _this.input.focus();
       }, _this.onChange = function (event) {
         _this.value = event.target.value;
       }, _temp), _possibleConstructorReturn(_this, _ret);
@@ -141,7 +143,7 @@
           type: type,
           value: this.value,
           onChange: this.onChange,
-          ref: 'input' }));
+          ref: this.setRef }));
       }
     }, {
       key: 'value',
