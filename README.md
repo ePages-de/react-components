@@ -1,8 +1,12 @@
 # react-components
-A zoo of useful [React][react] components. 
 
-![](zoo.png) <span style="color:gray;font-size:smaller;">Images by [VectorOpenStock.com](https://www.vectoropenstock.com/vectors/preview/71474/cartoon-domestic-and-wild-animals-pack)</span>
+[![CircleCI](https://circleci.com/gh/ePages-de/react-components.svg?style=svg)](https://circleci.com/gh/ePages-de/react-components)
+[![codecov](https://codecov.io/gh/ePages-de/react-components/branch/master/graph/badge.svg)](https://codecov.io/gh/ePages-de/react-components)
 
+> A zoo of useful [React][react] components.
+
+![](zoo.png)
+Images by [VectorOpenStock]
 
 ## Usage
 
@@ -22,3 +26,4 @@ npm run karma -- --auto-watch --no-single-run
 ```
 
 [react]: https://facebook.github.io/react/
+[VectorOpenStock]: https://www.vectoropenstock.com/vectors/preview/71474/cartoon-domestic-and-wild-animals-pack
