@@ -1,6 +1,8 @@
 # react-components
+A zoo of useful [React][react] components. 
 
-A zoo of useful [React][react] components.
+![](zoo.png) <span style="color:gray;font-size:smaller;">Images by [VectorOpenStock.com](https://www.vectoropenstock.com/vectors/preview/71474/cartoon-domestic-and-wild-animals-pack)</span>
+
 
 ## Usage
 
