@@ -3,9 +3,9 @@
   "plugins": ["react"],
   "parser": "babel-eslint",
   "rules": {
+    "jsx-quotes": [2, "prefer-double"],
     "no-alert": 2,
     "no-console": 2,
-    "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
     "react/jsx-space-before-closing": [2, "never"],
     "sort-imports": [2, {

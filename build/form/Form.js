@@ -145,7 +145,7 @@
     function Form(props) {
       _classCallCheck(this, Form);
 
-      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Form).call(this));
+      var _this = _possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this));
 
       _this.getValue = function (name) {
         var outerScope = _this.context.formValueScope;

@@ -98,7 +98,7 @@
         _inherits(WithClassName, _React$Component);
 
         function WithClassName() {
-          var _Object$getPrototypeO;
+          var _ref;
 
           var _temp, _this, _ret;
 
@@ -108,7 +108,7 @@
             args[_key] = arguments[_key];
           }
 
-          return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(WithClassName)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.hoistMethods = function (wrappedComponent) {
+          return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = WithClassName.__proto__ || Object.getPrototypeOf(WithClassName)).call.apply(_ref, [this].concat(args))), _this), _this.hoistMethods = function (wrappedComponent) {
             wrappedComponent && hoistedMethods.forEach(function (methodName) {
               _this[methodName] = wrappedComponent[methodName];
             });

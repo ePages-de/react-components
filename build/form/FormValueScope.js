@@ -77,7 +77,7 @@
     _inherits(FormValueScope, _React$Component);
 
     function FormValueScope() {
-      var _Object$getPrototypeO;
+      var _ref;
 
       var _temp, _this, _ret;
 
@@ -87,7 +87,7 @@
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(FormValueScope)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.getValue = function (name) {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FormValueScope.__proto__ || Object.getPrototypeOf(FormValueScope)).call.apply(_ref, [this].concat(args))), _this), _this.getValue = function (name) {
         var outerScope = _this.context.formValueScope;
         if (outerScope) {
           var ownName = _this.props.name;

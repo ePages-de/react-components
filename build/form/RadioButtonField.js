@@ -105,7 +105,7 @@
     _inherits(RadioButtonField, _React$Component);
 
     function RadioButtonField() {
-      var _Object$getPrototypeO;
+      var _ref;
 
       var _temp, _this, _ret;
 
@@ -115,7 +115,7 @@
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(RadioButtonField)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.updateValue = function (event) {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RadioButtonField.__proto__ || Object.getPrototypeOf(RadioButtonField)).call.apply(_ref, [this].concat(args))), _this), _this.updateValue = function (event) {
         var button = _this.props.buttons[parseInt(event.target.value)];
 
         _this.value = button.value;
