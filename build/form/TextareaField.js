@@ -105,7 +105,7 @@
     _inherits(TextareaField, _React$Component);
 
     function TextareaField() {
-      var _Object$getPrototypeO;
+      var _ref;
 
       var _temp, _this, _ret;
 
@@ -115,10 +115,10 @@
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(TextareaField)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.focus = function () {
-        _this.refs.textarea.focus();
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TextareaField.__proto__ || Object.getPrototypeOf(TextareaField)).call.apply(_ref, [this].concat(args))), _this), _this.focus = function () {
+        return _this.refs.textarea.focus();
       }, _this.onChange = function (event) {
-        _this.context.formValueScope.setValue(_this.props.name, event.target.value);
+        return _this.context.formValueScope.setValue(_this.props.name, event.target.value);
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 

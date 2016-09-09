@@ -22,7 +22,9 @@ function containsError (errors) {
   }
 }
 
-export default class Form extends FormValueScope {
+// kind of inherits from FormValueScope
+// make sure to mirror changes in FormValueScope here
+export default class Form extends React.Component {
   static propTypes = {
     ...FormValueScope.propTypes,
     value: PropTypes.any,
@@ -43,6 +45,16 @@ export default class Form extends FormValueScope {
     normalize: (value) => value
   }
 
+  get name () {
+    const outerScope = this.context.formValueScope
+    const ownName = this.props.name
+    if (outerScope) {
+      return `${outerScope.name}.${ownName}`
+    } else {
+      return ownName
+    }
+  }
+
   constructor (props) {
     super()
 
@@ -60,8 +72,19 @@ export default class Form extends FormValueScope {
     }
   }
 
-  setValue (name, value) {
-    const newValue1 = super.setValue(name, value)
+  getValue = (name) => {
+    const outerScope = this.context.formValueScope
+    if (outerScope) {
+      const ownName = this.props.name
+      const value = outerScope.getValue(ownName)
+      return value ? value.get(name) : undefined
+    } else {
+      return this.state.value.get(name)
+    }
+  }
+
+  setValue = (name, value) => {
+    const newValue1 = this.state.value.set(name, value)
     const newValue2 = this.props.onChange(newValue1)
 
     // validate while typing - second parameter (isOnSubmit) set to false
@@ -72,11 +95,20 @@ export default class Form extends FormValueScope {
     })
   }
 
-  submit () {
-    this.onSubmit({preventDefault: () => {}})
+  getError = (name) => {
+    const outerScope = this.context.formValueScope
+    if (outerScope) {
+      const ownName = this.props.name
+      const error = outerScope.getError(ownName)
+      return error ? error.get(name) : undefined
+    } else {
+      return this.state.errors.get(name)
+    }
   }
 
-  onSubmit (event) {
+  submit = () => this.onSubmit({preventDefault: () => {}})
+
+  onSubmit = (event) => {
     event.preventDefault()
 
     const errors = this.props.validate(this.state.value)
@@ -96,5 +128,15 @@ export default class Form extends FormValueScope {
         {typeof children === 'function' ? children(this.state.value) : children}
       </form>
     )
+  }
+
+  static childContextTypes = {
+    formValueScope: PropTypes.object
+  }
+
+  getChildContext () {
+    return {
+      formValueScope: this
+    }
   }
 }

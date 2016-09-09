@@ -107,7 +107,7 @@
     function ChoiceField() {
       _classCallCheck(this, ChoiceField);
 
-      return _possibleConstructorReturn(this, Object.getPrototypeOf(ChoiceField).apply(this, arguments));
+      return _possibleConstructorReturn(this, (ChoiceField.__proto__ || Object.getPrototypeOf(ChoiceField)).apply(this, arguments));
     }
 
     _createClass(ChoiceField, [{

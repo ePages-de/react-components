@@ -105,7 +105,7 @@
     _inherits(DropDownField, _React$Component);
 
     function DropDownField() {
-      var _Object$getPrototypeO;
+      var _ref;
 
       var _temp, _this, _ret;
 
@@ -115,7 +115,7 @@
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(DropDownField)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.onChange = function (event) {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = DropDownField.__proto__ || Object.getPrototypeOf(DropDownField)).call.apply(_ref, [this].concat(args))), _this), _this.onChange = function (event) {
         _this.value = event.target.value;
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }

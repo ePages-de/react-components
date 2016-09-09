@@ -109,7 +109,7 @@
     function IteratorField() {
       _classCallCheck(this, IteratorField);
 
-      return _possibleConstructorReturn(this, Object.getPrototypeOf(IteratorField).apply(this, arguments));
+      return _possibleConstructorReturn(this, (IteratorField.__proto__ || Object.getPrototypeOf(IteratorField)).apply(this, arguments));
     }
 
     _createClass(IteratorField, [{
