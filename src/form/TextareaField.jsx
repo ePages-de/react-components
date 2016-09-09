@@ -30,11 +30,7 @@ export default class TextareaField extends React.Component {
       ref="textarea"/>
   }
 
-  focus = () => {
-    this.refs.textarea.focus()
-  }
+  focus = () => this.refs.textarea.focus()
 
-  onChange = (event) => {
-    this.context.formValueScope.setValue(this.props.name, event.target.value)
-  }
+  onChange = (event) => this.context.formValueScope.setValue(this.props.name, event.target.value)
 }

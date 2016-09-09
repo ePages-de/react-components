@@ -33,15 +33,9 @@ export default class RangeField extends React.Component {
       onInput={this.onChange}/>
   }
 
-  onChange = (event) => {
-    this.context.formValueScope.setValue(this.props.name, this.transformValueInverse(event.target.value))
-  }
+  onChange = (event) => this.context.formValueScope.setValue(this.props.name, this.transformValueInverse(event.target.value))
 
-  transformValue = (value) => {
-    return value * this.props.multiplier
-  }
+  transformValue = (value) => value * this.props.multiplier
 
-  transformValueInverse = (value) => {
-    return value / this.props.multiplier
-  }
+  transformValueInverse = (value) => value / this.props.multiplier
 }

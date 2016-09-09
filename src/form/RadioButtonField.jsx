@@ -22,7 +22,7 @@ export default class RadioButtonField extends React.Component {
     this.context.formValueScope.setValue(this.props.name, newValue)
   }
 
-  updateValue = event => {
+  updateValue = (event) => {
     const button = this.props.buttons[parseInt(event.target.value)]
 
     this.value = button.value

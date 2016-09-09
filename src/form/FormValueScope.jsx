@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react'
 
+// is kind of inherited by Form
+// make sure to mirror changes in here also in Form
 export default class FormValueScope extends React.Component {
   static contextTypes = {
     formValueScope: PropTypes.object
@@ -35,9 +37,7 @@ export default class FormValueScope extends React.Component {
     }
   }
 
-  // gets overwritten so make sure we don't use an ES7 property
-  // TODO Don't extend `Form` with `FormValueScope`. See https://github.com/ePages-de/react-components/issues/8
-  setValue (name, value) {
+  setValue = (name, value) => {
     const outerScope = this.context.formValueScope
     if (outerScope) {
       const ownName = this.props.name

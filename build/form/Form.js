@@ -10,14 +10,14 @@
     factory(mod.exports, global.FormValueScope, global.immutable, global.react);
     global.Form = mod.exports;
   }
-})(this, function (exports, _FormValueScope2, _immutable, _react) {
+})(this, function (exports, _FormValueScope, _immutable, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
 
-  var _FormValueScope3 = _interopRequireDefault(_FormValueScope2);
+  var _FormValueScope2 = _interopRequireDefault(_FormValueScope);
 
   var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -61,6 +61,14 @@
     }
   }
 
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
+
   var _createClass = function () {
     function defineProperties(target, props) {
       for (var i = 0; i < props.length; i++) {
@@ -78,39 +86,6 @@
       return Constructor;
     };
   }();
-
-  function _possibleConstructorReturn(self, call) {
-    if (!self) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return call && (typeof call === "object" || typeof call === "function") ? call : self;
-  }
-
-  var _get = function get(object, property, receiver) {
-    if (object === null) object = Function.prototype;
-    var desc = Object.getOwnPropertyDescriptor(object, property);
-
-    if (desc === undefined) {
-      var parent = Object.getPrototypeOf(object);
-
-      if (parent === null) {
-        return undefined;
-      } else {
-        return get(parent, property, receiver);
-      }
-    } else if ("value" in desc) {
-      return desc.value;
-    } else {
-      var getter = desc.get;
-
-      if (getter === undefined) {
-        return undefined;
-      }
-
-      return getter.call(receiver);
-    }
-  };
 
   function _inherits(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
@@ -148,13 +123,80 @@
     }
   }
 
-  var Form = function (_FormValueScope) {
-    _inherits(Form, _FormValueScope);
+  // kind of inherits from FormValueScope
+  // make sure to mirror changes in FormValueScope here
+
+  var Form = function (_React$Component) {
+    _inherits(Form, _React$Component);
+
+    _createClass(Form, [{
+      key: 'name',
+      get: function get() {
+        var outerScope = this.context.formValueScope;
+        var ownName = this.props.name;
+        if (outerScope) {
+          return outerScope.name + '.' + ownName;
+        } else {
+          return ownName;
+        }
+      }
+    }]);
 
     function Form(props) {
       _classCallCheck(this, Form);
 
       var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Form).call(this));
+
+      _this.getValue = function (name) {
+        var outerScope = _this.context.formValueScope;
+        if (outerScope) {
+          var ownName = _this.props.name;
+          var value = outerScope.getValue(ownName);
+          return value ? value.get(name) : undefined;
+        } else {
+          return _this.state.value.get(name);
+        }
+      };
+
+      _this.setValue = function (name, value) {
+        var newValue1 = _this.state.value.set(name, value);
+        var newValue2 = _this.props.onChange(newValue1);
+
+        // validate while typing - second parameter (isOnSubmit) set to false
+        var errors = _this.props.validate(newValue2 || newValue1, false);
+        _this.setState({
+          errors: containsError(errors) ? errors : new _immutable2.default.Map(),
+          value: newValue2 || newValue1
+        });
+      };
+
+      _this.getError = function (name) {
+        var outerScope = _this.context.formValueScope;
+        if (outerScope) {
+          var ownName = _this.props.name;
+          var error = outerScope.getError(ownName);
+          return error ? error.get(name) : undefined;
+        } else {
+          return _this.state.errors.get(name);
+        }
+      };
+
+      _this.submit = function () {
+        return _this.onSubmit({ preventDefault: function preventDefault() {} });
+      };
+
+      _this.onSubmit = function (event) {
+        event.preventDefault();
+
+        var errors = _this.props.validate(_this.state.value);
+
+        if (containsError(errors)) {
+          _this.setState({ errors: errors });
+        } else {
+          _this.setState({ errors: new _immutable2.default.Map() });
+          _this.props.onSubmit(_this.props.normalize(_this.state.value));
+        }
+      };
 
       _this.state = {
         value: props.prepare(props.value),
@@ -170,38 +212,6 @@
       value: function componentWillReceiveProps(nextProps) {
         if (this.props.value !== nextProps.value) {
           this.setState({ value: nextProps.prepare(nextProps.value) });
-        }
-      }
-    }, {
-      key: 'setValue',
-      value: function setValue(name, value) {
-        var newValue1 = _get(Object.getPrototypeOf(Form.prototype), 'setValue', this).call(this, name, value);
-        var newValue2 = this.props.onChange(newValue1);
-
-        // validate while typing - second parameter (isOnSubmit) set to false
-        var errors = this.props.validate(newValue2 || newValue1, false);
-        this.setState({
-          errors: containsError(errors) ? errors : new _immutable2.default.Map(),
-          value: newValue2 || newValue1
-        });
-      }
-    }, {
-      key: 'submit',
-      value: function submit() {
-        this.onSubmit({ preventDefault: function preventDefault() {} });
-      }
-    }, {
-      key: 'onSubmit',
-      value: function onSubmit(event) {
-        event.preventDefault();
-
-        var errors = this.props.validate(this.state.value);
-
-        if (containsError(errors)) {
-          this.setState({ errors: errors });
-        } else {
-          this.setState({ errors: new _immutable2.default.Map() });
-          this.props.onSubmit(this.props.normalize(this.state.value));
         }
       }
     }, {
@@ -226,12 +236,19 @@
           typeof children === 'function' ? children(this.state.value) : children
         );
       }
+    }, {
+      key: 'getChildContext',
+      value: function getChildContext() {
+        return {
+          formValueScope: this
+        };
+      }
     }]);
 
     return Form;
-  }(_FormValueScope3.default);
+  }(_react2.default.Component);
 
-  Form.propTypes = _extends({}, _FormValueScope3.default.propTypes, {
+  Form.propTypes = _extends({}, _FormValueScope2.default.propTypes, {
     value: _react.PropTypes.any,
     onSubmit: _react.PropTypes.func,
     onChange: _react.PropTypes.func,
@@ -257,6 +274,9 @@
     normalize: function normalize(value) {
       return value;
     }
+  };
+  Form.childContextTypes = {
+    formValueScope: _react.PropTypes.object
   };
   exports.default = Form;
 });
