@@ -91,7 +91,7 @@
   }
 
   function withClassName(className) {
-    var hoistedMethods = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+    var hoistedMethods = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
     return function (Component) {
       var WithClassName = function (_React$Component) {
