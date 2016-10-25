@@ -115,13 +115,12 @@
     _createClass(IteratorField, [{
       key: 'render',
       value: function render() {
-        var _props = this.props;
-        var name = _props.name;
-        var skip = _props.skip;
-        var take = _props.take;
-        var children = _props.children;
-
-        var other = _objectWithoutProperties(_props, ['name', 'skip', 'take', 'children']);
+        var _props = this.props,
+            name = _props.name,
+            skip = _props.skip,
+            take = _props.take,
+            children = _props.children,
+            other = _objectWithoutProperties(_props, ['name', 'skip', 'take', 'children']);
 
         var items = this.value.skip(skip).take(take || this.value.count());
 

@@ -125,11 +125,10 @@
     _createClass(CheckboxField, [{
       key: 'render',
       value: function render() {
-        var _props = this.props;
-        var name = _props.name;
-        var negate = _props.negate;
-
-        var other = _objectWithoutProperties(_props, ['name', 'negate']);
+        var _props = this.props,
+            name = _props.name,
+            negate = _props.negate,
+            other = _objectWithoutProperties(_props, ['name', 'negate']);
 
         // eslint-disable-line no-unused-vars
         return _react2.default.createElement('input', _extends({}, other, {

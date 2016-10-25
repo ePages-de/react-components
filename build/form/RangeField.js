@@ -127,14 +127,13 @@
     _createClass(RangeField, [{
       key: 'render',
       value: function render() {
-        var _props = this.props;
-        var name = _props.name;
-        var min = _props.min;
-        var max = _props.max;
-        var step = _props.step;
-        var multiplier = _props.multiplier;
-
-        var other = _objectWithoutProperties(_props, ['name', 'min', 'max', 'step', 'multiplier']);
+        var _props = this.props,
+            name = _props.name,
+            min = _props.min,
+            max = _props.max,
+            step = _props.step,
+            multiplier = _props.multiplier,
+            other = _objectWithoutProperties(_props, ['name', 'min', 'max', 'step', 'multiplier']);
 
         // eslint-disable-line no-unused-vars
         return _react2.default.createElement('input', _extends({}, other, {

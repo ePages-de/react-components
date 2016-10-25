@@ -119,14 +119,13 @@
       value: function render() {
         var _this2 = this;
 
-        var _props = this.props;
-        var name = _props.name;
-        var type = _props.type;
-        var title = _props.title;
-        var label = _props.label;
-        var placeholder = _props.placeholder;
-
-        var other = _objectWithoutProperties(_props, ['name', 'type', 'title', 'label', 'placeholder']);
+        var _props = this.props,
+            name = _props.name,
+            type = _props.type,
+            title = _props.title,
+            label = _props.label,
+            placeholder = _props.placeholder,
+            other = _objectWithoutProperties(_props, ['name', 'type', 'title', 'label', 'placeholder']);
 
         var checkboxName = name + 'Selected';
 

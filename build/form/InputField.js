@@ -127,11 +127,10 @@
     _createClass(InputField, [{
       key: 'render',
       value: function render() {
-        var _props = this.props;
-        var name = _props.name;
-        var type = _props.type;
-
-        var other = _objectWithoutProperties(_props, ['name', 'type']);
+        var _props = this.props,
+            name = _props.name,
+            type = _props.type,
+            other = _objectWithoutProperties(_props, ['name', 'type']);
 
         return _react2.default.createElement('input', _extends({
           autoComplete: 'off',

@@ -123,11 +123,10 @@
     _createClass(DropDownField, [{
       key: 'render',
       value: function render() {
-        var _props = this.props;
-        var name = _props.name;
-        var options = _props.options;
-
-        var other = _objectWithoutProperties(_props, ['name', 'options']);
+        var _props = this.props,
+            name = _props.name,
+            options = _props.options,
+            other = _objectWithoutProperties(_props, ['name', 'options']);
 
         // eslint-disable-line no-unused-vars
 
