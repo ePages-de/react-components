@@ -127,13 +127,12 @@
       value: function render() {
         var _this2 = this;
 
-        var _props = this.props;
-        var name = _props.name;
-        var buttons = _props.buttons;
-        var disabled = _props.disabled;
-        var parseValue = _props.parseValue;
-
-        var other = _objectWithoutProperties(_props, ['name', 'buttons', 'disabled', 'parseValue']);
+        var _props = this.props,
+            name = _props.name,
+            buttons = _props.buttons,
+            disabled = _props.disabled,
+            parseValue = _props.parseValue,
+            other = _objectWithoutProperties(_props, ['name', 'buttons', 'disabled', 'parseValue']);
 
         // eslint-disable-line no-unused-vars
 

@@ -33,6 +33,7 @@ export default class Form extends React.Component {
     prepare: PropTypes.func,
     validate: PropTypes.func,
     normalize: PropTypes.func,
+    disabled: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
   }
 
@@ -42,7 +43,8 @@ export default class Form extends React.Component {
     onChange: () => null,
     prepare: (value) => value,
     validate: () => null,
-    normalize: (value) => value
+    normalize: (value) => value,
+    disabled: false
   }
 
   get name () {
@@ -60,10 +62,9 @@ export default class Form extends React.Component {
 
     this.state = {
       value: props.prepare(props.value),
-      errors: new Immutable.Map()
+      errors: new Immutable.Map(),
+      triedToSubmit: false
     }
-
-    this.onSubmit = this.onSubmit.bind(this)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -87,8 +88,7 @@ export default class Form extends React.Component {
     const newValue1 = this.state.value.set(name, value)
     const newValue2 = this.props.onChange(newValue1)
 
-    // validate while typing - second parameter (isOnSubmit) set to false
-    const errors = this.props.validate(newValue2 || newValue1, false)
+    const errors = this.props.validate(newValue2 || newValue1, this.state.triedToSubmit)
     this.setState({
       errors: containsError(errors) ? errors : new Immutable.Map(),
       value: newValue2 || newValue1
@@ -111,20 +111,22 @@ export default class Form extends React.Component {
   onSubmit = (event) => {
     event.preventDefault()
 
-    const errors = this.props.validate(this.state.value)
+    if (!this.props.disabled) {
+      const errors = this.props.validate(this.state.value, true)
 
-    if (containsError(errors)) {
-      this.setState({errors})
-    } else {
-      this.setState({errors: new Immutable.Map()})
-      this.props.onSubmit(this.props.normalize(this.state.value))
+      if (containsError(errors)) {
+        this.setState({errors, triedToSubmit: true})
+      } else {
+        this.setState({errors: new Immutable.Map()})
+        this.props.onSubmit(this.props.normalize(this.state.value))
+      }
     }
   }
 
   render () {
-    const {name, value, onSubmit, onChange, prepare, validate, normalize, children, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {name, value, onSubmit, onChange, prepare, validate, normalize, disabled, children, ...other} = this.props // eslint-disable-line no-unused-vars
     return (
-      <form {...other} name={name} onSubmit={this.onSubmit} autoComplete="off">
+      <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
         {typeof children === 'function' ? children(this.state.value) : children}
       </form>
     )

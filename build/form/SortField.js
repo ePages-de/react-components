@@ -131,19 +131,19 @@
         var _this2 = this;
 
         var self = this;
-        var _props = this.props;
-        var name = _props.name;
-        var children = _props.children;
-        var onReorder = _props.onReorder;
-        var validate = _props.validate;
-        var disabled = _props.disabled;
-        var orientation = _props.orientation;
-        var itemSize = _props.itemSize;
-        var crossAxisItemSize = _props.crossAxisItemSize;
-        var itemCount = _props.itemCount;
-        var itemSpacing = _props.itemSpacing;
 
-        var other = _objectWithoutProperties(_props, ['name', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']);
+        var _props = this.props,
+            name = _props.name,
+            children = _props.children,
+            onReorder = _props.onReorder,
+            validate = _props.validate,
+            disabled = _props.disabled,
+            orientation = _props.orientation,
+            itemSize = _props.itemSize,
+            crossAxisItemSize = _props.crossAxisItemSize,
+            itemCount = _props.itemCount,
+            itemSpacing = _props.itemSpacing,
+            other = _objectWithoutProperties(_props, ['name', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']);
 
         // eslint-disable-line no-unused-vars
         var dimension = orientation === 'horizontal' ? { width: itemSize * itemCount + itemSpacing * (itemCount - 1), height: crossAxisItemSize } : { height: itemSize * itemCount + itemSpacing * (itemCount - 1), width: crossAxisItemSize };

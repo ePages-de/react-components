@@ -115,11 +115,10 @@
       value: function render() {
         var _this2 = this;
 
-        var _props = this.props;
-        var name = _props.name;
-        var choices = _props.choices;
-
-        var other = _objectWithoutProperties(_props, ['name', 'choices']);
+        var _props = this.props,
+            name = _props.name,
+            choices = _props.choices,
+            other = _objectWithoutProperties(_props, ['name', 'choices']);
 
         // eslint-disable-line no-unused-vars
 

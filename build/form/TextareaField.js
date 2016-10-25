@@ -125,11 +125,10 @@
     _createClass(TextareaField, [{
       key: 'render',
       value: function render() {
-        var _props = this.props;
-        var name = _props.name;
-        var rows = _props.rows;
-
-        var other = _objectWithoutProperties(_props, ['name', 'rows']);
+        var _props = this.props,
+            name = _props.name,
+            rows = _props.rows,
+            other = _objectWithoutProperties(_props, ['name', 'rows']);
 
         return _react2.default.createElement('textarea', _extends({
           autoComplete: 'off',

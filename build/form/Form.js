@@ -162,8 +162,7 @@
         var newValue1 = _this.state.value.set(name, value);
         var newValue2 = _this.props.onChange(newValue1);
 
-        // validate while typing - second parameter (isOnSubmit) set to false
-        var errors = _this.props.validate(newValue2 || newValue1, false);
+        var errors = _this.props.validate(newValue2 || newValue1, _this.state.triedToSubmit);
         _this.setState({
           errors: containsError(errors) ? errors : new _immutable2.default.Map(),
           value: newValue2 || newValue1
@@ -188,22 +187,23 @@
       _this.onSubmit = function (event) {
         event.preventDefault();
 
-        var errors = _this.props.validate(_this.state.value);
+        if (!_this.props.disabled) {
+          var errors = _this.props.validate(_this.state.value, true);
 
-        if (containsError(errors)) {
-          _this.setState({ errors: errors });
-        } else {
-          _this.setState({ errors: new _immutable2.default.Map() });
-          _this.props.onSubmit(_this.props.normalize(_this.state.value));
+          if (containsError(errors)) {
+            _this.setState({ errors: errors, triedToSubmit: true });
+          } else {
+            _this.setState({ errors: new _immutable2.default.Map() });
+            _this.props.onSubmit(_this.props.normalize(_this.state.value));
+          }
         }
       };
 
       _this.state = {
         value: props.prepare(props.value),
-        errors: new _immutable2.default.Map()
+        errors: new _immutable2.default.Map(),
+        triedToSubmit: false
       };
-
-      _this.onSubmit = _this.onSubmit.bind(_this);
       return _this;
     }
 
@@ -217,22 +217,22 @@
     }, {
       key: 'render',
       value: function render() {
-        var _props = this.props;
-        var name = _props.name;
-        var value = _props.value;
-        var onSubmit = _props.onSubmit;
-        var onChange = _props.onChange;
-        var prepare = _props.prepare;
-        var validate = _props.validate;
-        var normalize = _props.normalize;
-        var children = _props.children;
-
-        var other = _objectWithoutProperties(_props, ['name', 'value', 'onSubmit', 'onChange', 'prepare', 'validate', 'normalize', 'children']);
+        var _props = this.props,
+            name = _props.name,
+            value = _props.value,
+            onSubmit = _props.onSubmit,
+            onChange = _props.onChange,
+            prepare = _props.prepare,
+            validate = _props.validate,
+            normalize = _props.normalize,
+            disabled = _props.disabled,
+            children = _props.children,
+            other = _objectWithoutProperties(_props, ['name', 'value', 'onSubmit', 'onChange', 'prepare', 'validate', 'normalize', 'disabled', 'children']);
 
         // eslint-disable-line no-unused-vars
         return _react2.default.createElement(
           'form',
-          _extends({}, other, { name: name, onSubmit: this.onSubmit, autoComplete: 'off' }),
+          _extends({ autoComplete: 'off' }, other, { name: name, onSubmit: this.onSubmit }),
           typeof children === 'function' ? children(this.state.value) : children
         );
       }
@@ -255,6 +255,7 @@
     prepare: _react.PropTypes.func,
     validate: _react.PropTypes.func,
     normalize: _react.PropTypes.func,
+    disabled: _react.PropTypes.bool,
     children: _react.PropTypes.oneOfType([_react.PropTypes.node, _react.PropTypes.func]).isRequired
   });
   Form.defaultProps = {
@@ -273,7 +274,8 @@
     },
     normalize: function normalize(value) {
       return value;
-    }
+    },
+    disabled: false
   };
   Form.childContextTypes = {
     formValueScope: _react.PropTypes.object

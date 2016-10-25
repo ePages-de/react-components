@@ -97,11 +97,10 @@
     _createClass(ErrorMessage, [{
       key: 'render',
       value: function render() {
-        var _props = this.props;
-        var name = _props.name;
-        var Component = _props.Component;
-
-        var other = _objectWithoutProperties(_props, ['name', 'Component']);
+        var _props = this.props,
+            name = _props.name,
+            Component = _props.Component,
+            other = _objectWithoutProperties(_props, ['name', 'Component']);
 
         var errorMessage = this.context.formValueScope.getError(name);
         return errorMessage ? _react2.default.createElement(
