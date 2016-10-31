@@ -20,6 +20,7 @@
   "license": "MIT",
   "main": "build/index.js",
   "peerDependencies": {
+    "classnames": "^2.2.5",
     "hoist-non-react-statics": "^1.2.0",
     "react": "^15.2.1",
     "immutable": "^3.8.1"
