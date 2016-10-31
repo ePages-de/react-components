@@ -1,18 +1,19 @@
 import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {withClassName, Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField, SelectableInput} from '../src/index'
+import {withClassName, Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField, SelectableInput, SmartInputField} from '../src/index'
 
 const initialValue = Immutable.fromJS({
   name: 'name',
   password: 'password',
-  color: '#888888',
+  color: '#ff0000',
   adult: true,
   description: 'Foo\nBar',
   size: 's',
   cut: 'loose',
   facebook: '',
-  facebookSelected: false
+  facebookSelected: false,
+  tags: ['first', 'second']
 })
 
 const sizes = [
@@ -27,12 +28,14 @@ const cuts = [
   {value: 'fit', label: 'Fit'}
 ]
 
+const getTagSuggestions = (text) => Promise.resolve(text.length > 0 ? [text + '1', text + '2'] : null)
+
 const BlueInputField = withClassName('blue', ['focus'])(InputField)
 
 class App extends React.Component {
   constructor () {
     super()
-    this.state = {formValue: new Immutable.Map()}
+    this.state = {formValue: initialValue}
   }
 
   render () {
@@ -68,6 +71,9 @@ class App extends React.Component {
               </div>
               <div>
                 <SelectableInput name="facebook" type="text" title="Selector" label="SelectorLabel" placeholder="type here"/>
+              </div>
+              <div>
+                <SmartInputField name="tags" className="smart-input" getSuggestions={getTagSuggestions}/>
               </div>
             </div>
             <button type="submit">Submit</button>
