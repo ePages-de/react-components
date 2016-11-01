@@ -16,7 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.SmartInputField = undefined;
+  exports.SmartInputFieldRaw = undefined;
 
   var _classnames4 = _interopRequireDefault(_classnames3);
 
@@ -141,21 +141,21 @@
    * a user defined suggestion function.
    */
 
-  var SmartInputField = exports.SmartInputField = function (_React$Component) {
-    _inherits(SmartInputField, _React$Component);
+  var SmartInputFieldRaw = exports.SmartInputFieldRaw = function (_React$Component) {
+    _inherits(SmartInputFieldRaw, _React$Component);
 
-    function SmartInputField() {
+    function SmartInputFieldRaw() {
       var _ref;
 
       var _temp, _this, _ret;
 
-      _classCallCheck(this, SmartInputField);
+      _classCallCheck(this, SmartInputFieldRaw);
 
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SmartInputField.__proto__ || Object.getPrototypeOf(SmartInputField)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SmartInputFieldRaw.__proto__ || Object.getPrototypeOf(SmartInputFieldRaw)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
         text: '',
         focused: false,
         loading: false,
@@ -413,7 +413,7 @@
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    _createClass(SmartInputField, [{
+    _createClass(SmartInputFieldRaw, [{
       key: 'render',
       value: function render() {
         var _classnames,
@@ -499,10 +499,10 @@
       }
     }]);
 
-    return SmartInputField;
+    return SmartInputFieldRaw;
   }(_react2.default.Component);
 
-  SmartInputField.propTypes = {
+  SmartInputFieldRaw.propTypes = {
     // current value
     value: _react.PropTypes.any.isRequired,
     // value change handler
@@ -536,7 +536,7 @@
       suggestionDisabled: _react.PropTypes.string.isRequired
     })]).isRequired
   };
-  SmartInputField.defaultProps = {
+  SmartInputFieldRaw.defaultProps = {
     suggestionDisabled: function suggestionDisabled(suggestion, index) {
       return false;
     },
@@ -564,5 +564,5 @@
     strict: false,
     autoFocus: false
   };
-  exports.default = (0, _formField2.default)()(SmartInputField);
+  exports.default = (0, _formField2.default)()(SmartInputFieldRaw);
 });

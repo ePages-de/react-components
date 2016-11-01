@@ -7,7 +7,7 @@ function swap (items, oldIndex, newIndex) {
     .set(newIndex, items.get(oldIndex))
 }
 
-class SortField extends React.Component {
+export class SortFieldRaw extends React.Component {
   static propTypes = {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -104,4 +104,4 @@ class SortField extends React.Component {
   }
 }
 
-export default formField()(SortField)
+export default formField()(SortFieldRaw)

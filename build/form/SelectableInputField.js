@@ -89,16 +89,16 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var SelectableInputField = function (_React$Component) {
-    _inherits(SelectableInputField, _React$Component);
+  var SelectableInputFieldRaw = function (_React$Component) {
+    _inherits(SelectableInputFieldRaw, _React$Component);
 
-    function SelectableInputField() {
-      _classCallCheck(this, SelectableInputField);
+    function SelectableInputFieldRaw() {
+      _classCallCheck(this, SelectableInputFieldRaw);
 
-      return _possibleConstructorReturn(this, (SelectableInputField.__proto__ || Object.getPrototypeOf(SelectableInputField)).apply(this, arguments));
+      return _possibleConstructorReturn(this, (SelectableInputFieldRaw.__proto__ || Object.getPrototypeOf(SelectableInputFieldRaw)).apply(this, arguments));
     }
 
-    _createClass(SelectableInputField, [{
+    _createClass(SelectableInputFieldRaw, [{
       key: 'render',
       value: function render() {
         var _this2 = this;
@@ -153,13 +153,13 @@
       }
     }]);
 
-    return SelectableInputField;
+    return SelectableInputFieldRaw;
   }(_react2.default.Component);
 
-  SelectableInputField.contextTypes = {
+  SelectableInputFieldRaw.contextTypes = {
     formValueScope: _react.PropTypes.any.isRequired
   };
-  SelectableInputField.propTypes = {
+  SelectableInputFieldRaw.propTypes = {
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
@@ -169,8 +169,8 @@
     label: _react.PropTypes.string,
     placeholder: _react.PropTypes.string
   };
-  SelectableInputField.defaultProps = {
+  SelectableInputFieldRaw.defaultProps = {
     type: 'text'
   };
-  exports.default = (0, _formField2.default)()(SelectableInputField);
+  exports.default = (0, _formField2.default)()(SelectableInputFieldRaw);
 });

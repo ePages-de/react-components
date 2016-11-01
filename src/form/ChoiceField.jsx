@@ -1,7 +1,7 @@
 import formField from './formField'
 import React, {PropTypes} from 'react'
 
-class ChoiceField extends React.Component {
+export class ChoiceFieldRaw extends React.Component {
   static propTypes = {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -33,4 +33,4 @@ class ChoiceField extends React.Component {
   }
 }
 
-export default formField()(ChoiceField)
+export default formField()(ChoiceFieldRaw)

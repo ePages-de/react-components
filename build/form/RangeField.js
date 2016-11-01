@@ -16,6 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.RangeFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
 
@@ -101,28 +102,28 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var RangeField = function (_React$Component) {
-    _inherits(RangeField, _React$Component);
+  var RangeFieldRaw = exports.RangeFieldRaw = function (_React$Component) {
+    _inherits(RangeFieldRaw, _React$Component);
 
-    function RangeField() {
+    function RangeFieldRaw() {
       var _ref;
 
       var _temp, _this, _ret;
 
-      _classCallCheck(this, RangeField);
+      _classCallCheck(this, RangeFieldRaw);
 
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RangeField.__proto__ || Object.getPrototypeOf(RangeField)).call.apply(_ref, [this].concat(args))), _this), _this.transformValue = function (value) {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RangeFieldRaw.__proto__ || Object.getPrototypeOf(RangeFieldRaw)).call.apply(_ref, [this].concat(args))), _this), _this.transformValue = function (value) {
         return value * _this.props.multiplier;
       }, _this.transformValueInverse = function (value) {
         return value / _this.props.multiplier;
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    _createClass(RangeField, [{
+    _createClass(RangeFieldRaw, [{
       key: 'render',
       value: function render() {
         var _this2 = this;
@@ -136,9 +137,9 @@
             max = _props.max,
             step = _props.step,
             multiplier = _props.multiplier,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'min', 'max', 'step', 'multiplier']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'min', 'max', 'step', 'multiplier']); // eslint-disable-line no-unused-vars
 
-        // eslint-disable-line no-unused-vars
+
         return _react2.default.createElement('input', _extends({}, other, {
           name: fullName,
           type: 'range',
@@ -153,10 +154,10 @@
       }
     }]);
 
-    return RangeField;
+    return RangeFieldRaw;
   }(_react2.default.Component);
 
-  RangeField.propTypes = {
+  RangeFieldRaw.propTypes = {
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
@@ -166,9 +167,9 @@
     step: _react.PropTypes.number,
     multiplier: _react.PropTypes.number
   };
-  RangeField.defaultProps = {
+  RangeFieldRaw.defaultProps = {
     step: 1,
     multiplier: 1
   };
-  exports.default = (0, _formField2.default)()(RangeField);
+  exports.default = (0, _formField2.default)()(RangeFieldRaw);
 });

@@ -89,16 +89,16 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var IteratorField = function (_React$Component) {
-    _inherits(IteratorField, _React$Component);
+  var IteratorFieldRaw = function (_React$Component) {
+    _inherits(IteratorFieldRaw, _React$Component);
 
-    function IteratorField() {
-      _classCallCheck(this, IteratorField);
+    function IteratorFieldRaw() {
+      _classCallCheck(this, IteratorFieldRaw);
 
-      return _possibleConstructorReturn(this, (IteratorField.__proto__ || Object.getPrototypeOf(IteratorField)).apply(this, arguments));
+      return _possibleConstructorReturn(this, (IteratorFieldRaw.__proto__ || Object.getPrototypeOf(IteratorFieldRaw)).apply(this, arguments));
     }
 
-    _createClass(IteratorField, [{
+    _createClass(IteratorFieldRaw, [{
       key: 'render',
       value: function render() {
         var _props = this.props,
@@ -132,10 +132,10 @@
       }
     }]);
 
-    return IteratorField;
+    return IteratorFieldRaw;
   }(_react2.default.Component);
 
-  IteratorField.propTypes = {
+  IteratorFieldRaw.propTypes = {
     // TODO: ImmutablePropTypes.list
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
@@ -145,8 +145,8 @@
     take: _react.PropTypes.number,
     children: _react.PropTypes.oneOfType([_react.PropTypes.node, _react.PropTypes.func]).isRequired
   };
-  IteratorField.defaultProps = {
+  IteratorFieldRaw.defaultProps = {
     skip: 0
   };
-  exports.default = (0, _formField2.default)()(IteratorField);
+  exports.default = (0, _formField2.default)()(IteratorFieldRaw);
 });

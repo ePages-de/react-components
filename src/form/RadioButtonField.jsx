@@ -1,7 +1,7 @@
 import formField from './formField'
 import React, {PropTypes} from 'react'
 
-class RadioButtonField extends React.Component {
+export class RadioButtonFieldRaw extends React.Component {
   static propTypes = {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -43,4 +43,4 @@ class RadioButtonField extends React.Component {
   }
 }
 
-export default formField()(RadioButtonField)
+export default formField()(RadioButtonFieldRaw)

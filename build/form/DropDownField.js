@@ -16,6 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.DropDownFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
 
@@ -101,16 +102,16 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var DropDownField = function (_React$Component) {
-    _inherits(DropDownField, _React$Component);
+  var DropDownFieldRaw = exports.DropDownFieldRaw = function (_React$Component) {
+    _inherits(DropDownFieldRaw, _React$Component);
 
-    function DropDownField() {
-      _classCallCheck(this, DropDownField);
+    function DropDownFieldRaw() {
+      _classCallCheck(this, DropDownFieldRaw);
 
-      return _possibleConstructorReturn(this, (DropDownField.__proto__ || Object.getPrototypeOf(DropDownField)).apply(this, arguments));
+      return _possibleConstructorReturn(this, (DropDownFieldRaw.__proto__ || Object.getPrototypeOf(DropDownFieldRaw)).apply(this, arguments));
     }
 
-    _createClass(DropDownField, [{
+    _createClass(DropDownFieldRaw, [{
       key: 'render',
       value: function render() {
         var _props = this.props,
@@ -119,9 +120,7 @@
             name = _props.name,
             fullName = _props.fullName,
             options = _props.options,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'options']);
-
-        // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'options']); // eslint-disable-line no-unused-vars
 
         return _react2.default.createElement(
           'select',
@@ -144,10 +143,10 @@
       }
     }]);
 
-    return DropDownField;
+    return DropDownFieldRaw;
   }(_react2.default.Component);
 
-  DropDownField.propTypes = {
+  DropDownFieldRaw.propTypes = {
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
@@ -157,5 +156,5 @@
       label: _react.PropTypes.string.isRequired
     })).isRequired
   };
-  exports.default = (0, _formField2.default)()(DropDownField);
+  exports.default = (0, _formField2.default)()(DropDownFieldRaw);
 });

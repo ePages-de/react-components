@@ -16,6 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.CheckboxFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
 
@@ -101,26 +102,26 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var CheckboxField = function (_React$Component) {
-    _inherits(CheckboxField, _React$Component);
+  var CheckboxFieldRaw = exports.CheckboxFieldRaw = function (_React$Component) {
+    _inherits(CheckboxFieldRaw, _React$Component);
 
-    function CheckboxField() {
+    function CheckboxFieldRaw() {
       var _ref;
 
       var _temp, _this, _ret;
 
-      _classCallCheck(this, CheckboxField);
+      _classCallCheck(this, CheckboxFieldRaw);
 
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CheckboxField.__proto__ || Object.getPrototypeOf(CheckboxField)).call.apply(_ref, [this].concat(args))), _this), _this.transformValue = function (value) {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CheckboxFieldRaw.__proto__ || Object.getPrototypeOf(CheckboxFieldRaw)).call.apply(_ref, [this].concat(args))), _this), _this.transformValue = function (value) {
         return _this.props.negate ? !value : value;
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    _createClass(CheckboxField, [{
+    _createClass(CheckboxFieldRaw, [{
       key: 'render',
       value: function render() {
         var _this2 = this;
@@ -131,9 +132,9 @@
             name = _props.name,
             fullName = _props.fullName,
             negate = _props.negate,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'negate']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'negate']); // eslint-disable-line no-unused-vars
 
-        // eslint-disable-line no-unused-vars
+
         return _react2.default.createElement('input', _extends({}, other, {
           name: fullName,
           type: 'checkbox',
@@ -144,18 +145,18 @@
       }
     }]);
 
-    return CheckboxField;
+    return CheckboxFieldRaw;
   }(_react2.default.Component);
 
-  CheckboxField.propTypes = {
+  CheckboxFieldRaw.propTypes = {
     value: _react.PropTypes.bool.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
     fullName: _react.PropTypes.string,
     negate: _react.PropTypes.bool
   };
-  CheckboxField.defaultProps = {
+  CheckboxFieldRaw.defaultProps = {
     negate: false
   };
-  exports.default = (0, _formField2.default)()(CheckboxField);
+  exports.default = (0, _formField2.default)()(CheckboxFieldRaw);
 });

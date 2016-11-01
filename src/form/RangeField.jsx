@@ -1,7 +1,7 @@
 import formField from './formField'
 import React, {PropTypes} from 'react'
 
-class RangeField extends React.Component {
+export class RangeFieldRaw extends React.Component {
   static propTypes = {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -36,4 +36,4 @@ class RangeField extends React.Component {
   transformValueInverse = (value) => value / this.props.multiplier
 }
 
-export default formField()(RangeField)
+export default formField()(RangeFieldRaw)

@@ -1,7 +1,7 @@
 import formField from './formField'
 import React, {PropTypes} from 'react'
 
-class CheckboxField extends React.Component {
+export class CheckboxFieldRaw extends React.Component {
   static propTypes = {
     value: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -28,4 +28,4 @@ class CheckboxField extends React.Component {
   }
 }
 
-export default formField()(CheckboxField)
+export default formField()(CheckboxFieldRaw)

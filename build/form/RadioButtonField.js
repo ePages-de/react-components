@@ -16,6 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.RadioButtonFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
 
@@ -87,16 +88,16 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var RadioButtonField = function (_React$Component) {
-    _inherits(RadioButtonField, _React$Component);
+  var RadioButtonFieldRaw = exports.RadioButtonFieldRaw = function (_React$Component) {
+    _inherits(RadioButtonFieldRaw, _React$Component);
 
-    function RadioButtonField() {
-      _classCallCheck(this, RadioButtonField);
+    function RadioButtonFieldRaw() {
+      _classCallCheck(this, RadioButtonFieldRaw);
 
-      return _possibleConstructorReturn(this, (RadioButtonField.__proto__ || Object.getPrototypeOf(RadioButtonField)).apply(this, arguments));
+      return _possibleConstructorReturn(this, (RadioButtonFieldRaw.__proto__ || Object.getPrototypeOf(RadioButtonFieldRaw)).apply(this, arguments));
     }
 
-    _createClass(RadioButtonField, [{
+    _createClass(RadioButtonFieldRaw, [{
       key: 'render',
       value: function render() {
         var _props = this.props,
@@ -106,9 +107,7 @@
             fullName = _props.fullName,
             buttons = _props.buttons,
             disabled = _props.disabled,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'buttons', 'disabled']);
-
-        // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'buttons', 'disabled']); // eslint-disable-line no-unused-vars
 
         return _react2.default.createElement(
           'div',
@@ -138,10 +137,10 @@
       }
     }]);
 
-    return RadioButtonField;
+    return RadioButtonFieldRaw;
   }(_react2.default.Component);
 
-  RadioButtonField.propTypes = {
+  RadioButtonFieldRaw.propTypes = {
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
@@ -152,8 +151,8 @@
     })).isRequired,
     disabled: _react.PropTypes.bool
   };
-  RadioButtonField.defaultProps = {
+  RadioButtonFieldRaw.defaultProps = {
     disabled: false
   };
-  exports.default = (0, _formField2.default)()(RadioButtonField);
+  exports.default = (0, _formField2.default)()(RadioButtonFieldRaw);
 });

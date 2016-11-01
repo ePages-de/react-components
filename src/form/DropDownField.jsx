@@ -1,7 +1,7 @@
 import formField from './formField'
 import React, {PropTypes} from 'react'
 
-class DropDownField extends React.Component {
+export class DropDownFieldRaw extends React.Component {
   static propTypes = {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -34,4 +34,4 @@ class DropDownField extends React.Component {
   }
 }
 
-export default formField()(DropDownField)
+export default formField()(DropDownFieldRaw)

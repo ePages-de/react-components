@@ -1,7 +1,7 @@
 import formField from './formField'
 import React, {PropTypes} from 'react'
 
-class InputField extends React.Component {
+export class InputFieldRaw extends React.Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -32,4 +32,4 @@ class InputField extends React.Component {
   focus = () => this.input && this.input.focus()
 }
 
-export default formField()(InputField)
+export default formField()(InputFieldRaw)

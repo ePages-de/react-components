@@ -1,74 +1,49 @@
-import CheckboxField from '../../src/form/CheckboxField'
+import {CheckboxFieldRaw} from '../../src/form/CheckboxField'
 import expect from 'unexpected'
-import Form from '../../src/form/Form'
 import Immutable from 'immutable'
 import React from 'react'
 import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
 
-function render ({success, negate = false} = {}) {
-  const initialValue = Immutable.fromJS({success})
-  const onSubmit = sinon.spy()
+function render ({value, negate = false} = {}) {
+  const initialValue = Immutable.fromJS({value})
+  const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <Form name="test" value={initialValue} onSubmit={onSubmit}>
-      <CheckboxField name="success" className="success" negate={negate}/>
-    </Form>
+    <CheckboxFieldRaw value={value} onChange={onChange} negate={negate}/>
   )
-  const form = TestUtils.findOne(dom, 'form')
-  const checkboxField = TestUtils.findOne(dom, '.success')
+  const checkboxField = TestUtils.findOne(dom, 'input[type="checkbox"]')
 
-  return {initialValue, onSubmit, dom, form, checkboxField}
+  return {initialValue, onChange, dom, checkboxField}
 }
 
 describe('CheckboxField', function () {
-  it('renders unchecked', function () {
-    const {dom} = render({success: false})
-    expect(dom, 'to have rendered',
-      <form>
-        <input name="test.success" type="checkbox" checked={false}/>
-      </form>
+  it('renders', function () {
+    const {dom: dom1} = render({value: false})
+    expect(dom1, 'to have rendered',
+      <input type="checkbox" checked={false}/>
     )
-  })
 
-  it('renders checked', function () {
-    const {dom} = render({success: true})
-    expect(dom, 'to have rendered',
-      <form>
-        <input name="test.success" type="checkbox" checked/>
-      </form>
+    const {dom: dom2} = render({value: true})
+    expect(dom2, 'to have rendered',
+      <input type="checkbox" checked/>
     )
   })
 
   it('returns new value', function () {
-    const {onSubmit, form, checkboxField} = render({success: false})
+    const {onChange, checkboxField} = render({value: false})
 
-    expect(onSubmit, 'was not called')
+    expect(onChange, 'was not called')
     TestUtils.Simulate.change(checkboxField, {target: {checked: true}})
-    TestUtils.Simulate.submit(form)
-    expect(onSubmit, 'was called once')
-    expect(onSubmit, 'to have calls satisfying', function () {
-      onSubmit(Immutable.fromJS({
-        success: true
-      }))
-    })
+    expect(onChange, 'to have calls satisfying', () => onChange(true))
   })
 
   it('negates value', function () {
-    const {onSubmit, dom, form, checkboxField} = render({success: false, negate: true})
+    const {onChange, dom, checkboxField} = render({value: false, negate: true})
 
     expect(dom, 'to have rendered',
-      <form>
-        <input name="test.success" type="checkbox" checked/>
-      </form>
+      <input type="checkbox" checked/>
     )
-    expect(onSubmit, 'was not called')
     TestUtils.Simulate.change(checkboxField, {target: {checked: false}})
-    TestUtils.Simulate.submit(form)
-    expect(onSubmit, 'was called once')
-    expect(onSubmit, 'to have calls satisfying', function () {
-      onSubmit(Immutable.fromJS({
-        success: true
-      }))
-    })
+    expect(onChange, 'to have calls satisfying', () => onChange(true))
   })
 })

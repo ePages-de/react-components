@@ -16,6 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.InputFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
 
@@ -101,26 +102,26 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var InputField = function (_React$Component) {
-    _inherits(InputField, _React$Component);
+  var InputFieldRaw = exports.InputFieldRaw = function (_React$Component) {
+    _inherits(InputFieldRaw, _React$Component);
 
-    function InputField() {
+    function InputFieldRaw() {
       var _ref;
 
       var _temp, _this, _ret;
 
-      _classCallCheck(this, InputField);
+      _classCallCheck(this, InputFieldRaw);
 
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = InputField.__proto__ || Object.getPrototypeOf(InputField)).call.apply(_ref, [this].concat(args))), _this), _this.focus = function () {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = InputFieldRaw.__proto__ || Object.getPrototypeOf(InputFieldRaw)).call.apply(_ref, [this].concat(args))), _this), _this.focus = function () {
         return _this.input && _this.input.focus();
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    _createClass(InputField, [{
+    _createClass(InputFieldRaw, [{
       key: 'render',
       value: function render() {
         var _this2 = this;
@@ -131,9 +132,9 @@
             name = _props.name,
             fullName = _props.fullName,
             type = _props.type,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'type']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'type']); // eslint-disable-line no-unused-vars
 
-        // eslint-disable-line no-unused-vars
+
         return _react2.default.createElement('input', _extends({
           autoComplete: 'off',
           autoCorrect: 'off',
@@ -152,18 +153,18 @@
       }
     }]);
 
-    return InputField;
+    return InputFieldRaw;
   }(_react2.default.Component);
 
-  InputField.propTypes = {
+  InputFieldRaw.propTypes = {
     value: _react.PropTypes.string.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
     fullName: _react.PropTypes.string,
     type: _react.PropTypes.string
   };
-  InputField.defaultProps = {
+  InputFieldRaw.defaultProps = {
     type: 'text'
   };
-  exports.default = (0, _formField2.default)()(InputField);
+  exports.default = (0, _formField2.default)()(InputFieldRaw);
 });

@@ -1,7 +1,7 @@
 import formField from './formField'
 import React, {PropTypes} from 'react'
 
-class TextareaField extends React.Component {
+export class TextareaFieldRaw extends React.Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -28,4 +28,4 @@ class TextareaField extends React.Component {
   focus = () => this.textarea && this.textarea.focus()
 }
 
-export default formField()(TextareaField)
+export default formField()(TextareaFieldRaw)

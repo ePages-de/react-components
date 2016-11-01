@@ -16,6 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.SortFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
 
@@ -105,27 +106,27 @@
     return items.set(oldIndex, items.get(newIndex)).set(newIndex, items.get(oldIndex));
   }
 
-  var SortField = function (_React$Component) {
-    _inherits(SortField, _React$Component);
+  var SortFieldRaw = exports.SortFieldRaw = function (_React$Component) {
+    _inherits(SortFieldRaw, _React$Component);
 
-    function SortField() {
+    function SortFieldRaw() {
       var _ref;
 
       var _temp, _this, _ret;
 
-      _classCallCheck(this, SortField);
+      _classCallCheck(this, SortFieldRaw);
 
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SortField.__proto__ || Object.getPrototypeOf(SortField)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SortFieldRaw.__proto__ || Object.getPrototypeOf(SortFieldRaw)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
         dragIndex: null,
         dropIndex: null
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    _createClass(SortField, [{
+    _createClass(SortFieldRaw, [{
       key: 'render',
       value: function render() {
         var _this2 = this;
@@ -146,9 +147,9 @@
             crossAxisItemSize = _props.crossAxisItemSize,
             itemCount = _props.itemCount,
             itemSpacing = _props.itemSpacing,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']); // eslint-disable-line no-unused-vars
 
-        // eslint-disable-line no-unused-vars
+
         var dimension = orientation === 'horizontal' ? { width: itemSize * itemCount + itemSpacing * (itemCount - 1), height: crossAxisItemSize } : { height: itemSize * itemCount + itemSpacing * (itemCount - 1), width: crossAxisItemSize };
 
         return _react2.default.createElement(
@@ -204,10 +205,10 @@
       }
     }]);
 
-    return SortField;
+    return SortFieldRaw;
   }(_react2.default.Component);
 
-  SortField.propTypes = {
+  SortFieldRaw.propTypes = {
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
@@ -222,7 +223,7 @@
     itemSpacing: _react.PropTypes.number,
     itemCount: _react.PropTypes.number.isRequired
   };
-  SortField.defaultProps = {
+  SortFieldRaw.defaultProps = {
     onReorder: function onReorder() {
       return null;
     },
@@ -234,5 +235,5 @@
     },
     itemSpacing: 0
   };
-  exports.default = (0, _formField2.default)()(SortField);
+  exports.default = (0, _formField2.default)()(SortFieldRaw);
 });

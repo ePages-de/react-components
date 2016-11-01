@@ -1,31 +1,22 @@
-import DropDownField from '../../src/form/DropDownField'
+import {DropDownFieldRaw} from '../../src/form/DropDownField'
 import expect from 'unexpected'
-import Form from '../../src/form/Form'
-import Immutable from 'immutable'
 import React from 'react'
 import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
 
-const sizes = [
-  {value: 's', label: 'Small'},
-  {value: 'm', label: 'Medium'},
-  {value: 'l', label: 'Large'}
-]
-
-function render () {
-  const initialValue = Immutable.fromJS({
-    size: 'm'
-  })
-  const onSubmit = sinon.spy()
+function render ({value = 'm'} = {}) {
+  const sizes = [
+    {value: 's', label: 'Small'},
+    {value: 'm', label: 'Medium'},
+    {value: 'l', label: 'Large'}
+  ]
+  const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <Form name="test" value={initialValue} onSubmit={onSubmit}>
-      <DropDownField name="size" className="size" options={sizes}/>
-    </Form>
+    <DropDownFieldRaw value={value} onChange={onChange} options={sizes}/>
   )
-  const form = TestUtils.findOne(dom, 'form')
-  const sizeField = TestUtils.findOne(dom, '.size')
+  const sizeField = TestUtils.findOne(dom, 'select')
 
-  return {initialValue, onSubmit, dom, form, sizeField}
+  return {onChange, dom, sizeField}
 }
 
 describe('DropDownField', function () {
@@ -33,27 +24,19 @@ describe('DropDownField', function () {
     const {dom} = render()
 
     expect(dom, 'to have rendered',
-      <form>
-        <select name="test.size" value="m">
-          <option value="0">Small</option>
-          <option value="1">Medium</option>
-          <option value="2">Large</option>
-        </select>
-      </form>
+      <select value="m">
+        <option value="0">Small</option>
+        <option value="1">Medium</option>
+        <option value="2">Large</option>
+      </select>
     )
   })
 
   it('returns new value', function () {
-    const {onSubmit, form, sizeField} = render()
+    const {onChange, sizeField} = render()
 
-    expect(onSubmit, 'was not called')
+    expect(onChange, 'was not called')
     TestUtils.Simulate.change(sizeField, {target: {value: '2'}})
-    TestUtils.Simulate.submit(form)
-    expect(onSubmit, 'was called once')
-    expect(onSubmit, 'to have calls satisfying', function () {
-      onSubmit(Immutable.fromJS({
-        size: 'l'
-      }))
-    })
+    expect(onChange, 'to have calls satisfying', () => onChange('l'))
   })
 })

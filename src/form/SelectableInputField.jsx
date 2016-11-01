@@ -2,7 +2,7 @@ import formField from './formField'
 import InputField from './InputField'
 import React, {PropTypes} from 'react'
 
-class SelectableInputField extends React.Component {
+class SelectableInputFieldRaw extends React.Component {
   static contextTypes = {
     formValueScope: PropTypes.any.isRequired
   }
@@ -53,4 +53,4 @@ class SelectableInputField extends React.Component {
   }
 }
 
-export default formField()(SelectableInputField)
+export default formField()(SelectableInputFieldRaw)

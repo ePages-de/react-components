@@ -16,6 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.TextareaFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
 
@@ -101,26 +102,26 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var TextareaField = function (_React$Component) {
-    _inherits(TextareaField, _React$Component);
+  var TextareaFieldRaw = exports.TextareaFieldRaw = function (_React$Component) {
+    _inherits(TextareaFieldRaw, _React$Component);
 
-    function TextareaField() {
+    function TextareaFieldRaw() {
       var _ref;
 
       var _temp, _this, _ret;
 
-      _classCallCheck(this, TextareaField);
+      _classCallCheck(this, TextareaFieldRaw);
 
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TextareaField.__proto__ || Object.getPrototypeOf(TextareaField)).call.apply(_ref, [this].concat(args))), _this), _this.focus = function () {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TextareaFieldRaw.__proto__ || Object.getPrototypeOf(TextareaFieldRaw)).call.apply(_ref, [this].concat(args))), _this), _this.focus = function () {
         return _this.textarea && _this.textarea.focus();
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    _createClass(TextareaField, [{
+    _createClass(TextareaFieldRaw, [{
       key: 'render',
       value: function render() {
         var _this2 = this;
@@ -131,9 +132,9 @@
             name = _props.name,
             fullName = _props.fullName,
             rows = _props.rows,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'rows']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'rows']); // eslint-disable-line no-unused-vars
 
-        // eslint-disable-line no-unused-vars
+
         return _react2.default.createElement('textarea', _extends({
           autoComplete: 'off',
           autoCorrect: 'off',
@@ -152,15 +153,15 @@
       }
     }]);
 
-    return TextareaField;
+    return TextareaFieldRaw;
   }(_react2.default.Component);
 
-  TextareaField.propTypes = {
+  TextareaFieldRaw.propTypes = {
     value: _react.PropTypes.string.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
     fullName: _react.PropTypes.string,
     rows: _react.PropTypes.number
   };
-  exports.default = (0, _formField2.default)()(TextareaField);
+  exports.default = (0, _formField2.default)()(TextareaFieldRaw);
 });

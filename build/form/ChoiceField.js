@@ -16,6 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.ChoiceFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
 
@@ -87,16 +88,16 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var ChoiceField = function (_React$Component) {
-    _inherits(ChoiceField, _React$Component);
+  var ChoiceFieldRaw = exports.ChoiceFieldRaw = function (_React$Component) {
+    _inherits(ChoiceFieldRaw, _React$Component);
 
-    function ChoiceField() {
-      _classCallCheck(this, ChoiceField);
+    function ChoiceFieldRaw() {
+      _classCallCheck(this, ChoiceFieldRaw);
 
-      return _possibleConstructorReturn(this, (ChoiceField.__proto__ || Object.getPrototypeOf(ChoiceField)).apply(this, arguments));
+      return _possibleConstructorReturn(this, (ChoiceFieldRaw.__proto__ || Object.getPrototypeOf(ChoiceFieldRaw)).apply(this, arguments));
     }
 
-    _createClass(ChoiceField, [{
+    _createClass(ChoiceFieldRaw, [{
       key: 'render',
       value: function render() {
         var _props = this.props,
@@ -105,9 +106,7 @@
             name = _props.name,
             fullName = _props.fullName,
             choices = _props.choices,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'choices']);
-
-        // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'choices']); // eslint-disable-line no-unused-vars
 
         return _react2.default.createElement(
           'div',
@@ -128,10 +127,10 @@
       }
     }]);
 
-    return ChoiceField;
+    return ChoiceFieldRaw;
   }(_react2.default.Component);
 
-  ChoiceField.propTypes = {
+  ChoiceFieldRaw.propTypes = {
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
@@ -141,5 +140,5 @@
       label: _react.PropTypes.string.isRequired
     })).isRequired
   };
-  exports.default = (0, _formField2.default)()(ChoiceField);
+  exports.default = (0, _formField2.default)()(ChoiceFieldRaw);
 });

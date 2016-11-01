@@ -1,10 +1,10 @@
 machine:
   node:
-    version: 6.3.0
+    version: 6.9.1
 
 test:
   post:
     - npm run build
     # Ensure build folder is up-to-date
-    - exit $(git -c core.filemode=false status --porcelain | wc -l)
+    - git diff && exit $(git -c core.filemode=false status --porcelain | wc -l)
     - bash <(curl -s https://codecov.io/bash)

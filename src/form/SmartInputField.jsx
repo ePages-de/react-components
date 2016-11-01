@@ -11,7 +11,7 @@ function stopPropagation (event) {
  * Values can be deduced from the entered text. Additionally this input allows autocompletion by
  * a user defined suggestion function.
  */
-export class SmartInputField extends React.Component {
+export class SmartInputFieldRaw extends React.Component {
   static propTypes = {
     // current value
     value: PropTypes.any.isRequired,
@@ -343,4 +343,4 @@ export class SmartInputField extends React.Component {
   }
 }
 
-export default formField()(SmartInputField)
+export default formField()(SmartInputFieldRaw)

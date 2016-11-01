@@ -2,7 +2,7 @@ import formField from './formField'
 import FormValueScope from './FormValueScope'
 import React, {PropTypes} from 'react'
 
-class IteratorField extends React.Component {
+class IteratorFieldRaw extends React.Component {
   static propTypes = {
     // TODO: ImmutablePropTypes.list
     value: PropTypes.any.isRequired,
@@ -36,4 +36,4 @@ class IteratorField extends React.Component {
   }
 }
 
-export default formField()(IteratorField)
+export default formField()(IteratorFieldRaw)
