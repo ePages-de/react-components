@@ -1,43 +1,29 @@
-import BaseField from './BaseField'
+import formField from './formField'
 import React, {PropTypes} from 'react'
 
-export default class ChoiceField extends React.Component {
-  static contextTypes = {
-    ...BaseField.contextTypes
-  }
-
+class ChoiceField extends React.Component {
   static propTypes = {
-    ...BaseField.propTypes,
+    value: PropTypes.any.isRequired,
+    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    fullName: PropTypes.string,
     choices: PropTypes.arrayOf(PropTypes.shape({
       value: PropTypes.any.isRequired,
       label: PropTypes.string.isRequired
     })).isRequired
   }
 
-  static defaultProps = {
-    ...BaseField.defaultProps
-  }
-
-  get value () {
-    return this.context.formValueScope.getValue(this.props.name)
-  }
-
-  set value (newValue) {
-    this.context.formValueScope.setValue(this.props.name, newValue)
-  }
-
   render () {
-    const {name, choices, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, fullName, choices, ...other} = this.props // eslint-disable-line no-unused-vars
 
     return (
       <div {...other}>
-        {choices.map((choice) => {
-          const select = () => this.value = choice.value // eslint-disable-line no-return-assign
+        {choices.map((choice, index) => {
           return (
             <div
-              key={choice.value}
-              onClick={select}
-              data-active={this.value === choice.value ? 'yes' : 'no'}>
+              key={index}
+              onClick={() => onChange(choice.value)}
+              data-active={choice.value === value ? 'yes' : 'no'}>
               {choice.label}
             </div>
           )
@@ -46,3 +32,5 @@ export default class ChoiceField extends React.Component {
     )
   }
 }
+
+export default formField()(ChoiceField)

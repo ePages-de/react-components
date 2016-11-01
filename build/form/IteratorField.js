@@ -1,23 +1,23 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', './FormValueScope', 'react'], factory);
+    define(['exports', './formField', './FormValueScope', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('./FormValueScope'), require('react'));
+    factory(exports, require('./formField'), require('./FormValueScope'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.FormValueScope, global.react);
+    factory(mod.exports, global.formField, global.FormValueScope, global.react);
     global.IteratorField = mod.exports;
   }
-})(this, function (exports, _BaseField, _FormValueScope, _react) {
+})(this, function (exports, _formField, _FormValueScope, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _FormValueScope2 = _interopRequireDefault(_FormValueScope);
 
@@ -28,20 +28,6 @@
       default: obj
     };
   }
-
-  var _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
 
   function _objectWithoutProperties(obj, keys) {
     var target = {};
@@ -116,13 +102,17 @@
       key: 'render',
       value: function render() {
         var _props = this.props,
+            value = _props.value,
+            onChange = _props.onChange,
             name = _props.name,
+            fullName = _props.fullName,
             skip = _props.skip,
             take = _props.take,
             children = _props.children,
-            other = _objectWithoutProperties(_props, ['name', 'skip', 'take', 'children']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'skip', 'take', 'children']);
 
-        var items = this.value.skip(skip).take(take || this.value.count());
+        // eslint-disable-line no-unused-vars
+        var items = value.skip(skip).take(take || value.count());
 
         return _react2.default.createElement(
           _FormValueScope2.default,
@@ -140,24 +130,23 @@
           )
         );
       }
-    }, {
-      key: 'value',
-      get: function get() {
-        return this.context.formValueScope.getValue(this.props.name);
-      }
     }]);
 
     return IteratorField;
   }(_react2.default.Component);
 
-  IteratorField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  IteratorField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  IteratorField.propTypes = {
+    // TODO: ImmutablePropTypes.list
+    value: _react.PropTypes.any.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    fullName: _react.PropTypes.string,
     skip: _react.PropTypes.number,
     take: _react.PropTypes.number,
     children: _react.PropTypes.oneOfType([_react.PropTypes.node, _react.PropTypes.func]).isRequired
-  });
-  IteratorField.defaultProps = _extends({}, _BaseField2.default.defaultProps, {
+  };
+  IteratorField.defaultProps = {
     skip: 0
-  });
-  exports.default = IteratorField;
+  };
+  exports.default = (0, _formField2.default)()(IteratorField);
 });

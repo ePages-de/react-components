@@ -1,31 +1,26 @@
-import BaseField from './BaseField'
+import formField from './formField'
 import FormValueScope from './FormValueScope'
 import React, {PropTypes} from 'react'
 
-export default class IteratorField extends React.Component {
-  static contextTypes = {
-    ...BaseField.contextTypes
-  }
-
+class IteratorField extends React.Component {
   static propTypes = {
-    ...BaseField.propTypes,
+    // TODO: ImmutablePropTypes.list
+    value: PropTypes.any.isRequired,
+    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    fullName: PropTypes.string,
     skip: PropTypes.number,
     take: PropTypes.number,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
   }
 
   static defaultProps = {
-    ...BaseField.defaultProps,
     skip: 0
   }
 
-  get value () {
-    return this.context.formValueScope.getValue(this.props.name)
-  }
-
   render () {
-    const {name, skip, take, children, ...other} = this.props
-    const items = this.value.skip(skip).take(take || this.value.count())
+    const {value, onChange, name, fullName, skip, take, children, ...other} = this.props // eslint-disable-line no-unused-vars
+    const items = value.skip(skip).take(take || value.count())
 
     return (
       <FormValueScope name={name}>
@@ -40,3 +35,5 @@ export default class IteratorField extends React.Component {
     )
   }
 }
+
+export default formField()(IteratorField)

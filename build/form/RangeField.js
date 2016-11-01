@@ -1,23 +1,23 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', 'react'], factory);
+    define(['exports', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('react'));
+    factory(exports, require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.react);
+    factory(mod.exports, global.formField, global.react);
     global.RangeField = mod.exports;
   }
-})(this, function (exports, _BaseField, _react) {
+})(this, function (exports, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -115,9 +115,7 @@
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RangeField.__proto__ || Object.getPrototypeOf(RangeField)).call.apply(_ref, [this].concat(args))), _this), _this.onChange = function (event) {
-        return _this.context.formValueScope.setValue(_this.props.name, _this.transformValueInverse(event.target.value));
-      }, _this.transformValue = function (value) {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RangeField.__proto__ || Object.getPrototypeOf(RangeField)).call.apply(_ref, [this].concat(args))), _this), _this.transformValue = function (value) {
         return value * _this.props.multiplier;
       }, _this.transformValueInverse = function (value) {
         return value / _this.props.multiplier;
@@ -127,23 +125,30 @@
     _createClass(RangeField, [{
       key: 'render',
       value: function render() {
+        var _this2 = this;
+
         var _props = this.props,
+            value = _props.value,
+            _onChange = _props.onChange,
             name = _props.name,
+            fullName = _props.fullName,
             min = _props.min,
             max = _props.max,
             step = _props.step,
             multiplier = _props.multiplier,
-            other = _objectWithoutProperties(_props, ['name', 'min', 'max', 'step', 'multiplier']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'min', 'max', 'step', 'multiplier']);
 
         // eslint-disable-line no-unused-vars
         return _react2.default.createElement('input', _extends({}, other, {
-          name: this.context.formValueScope.name + '.' + name,
+          name: fullName,
           type: 'range',
           min: min,
           max: max,
           step: step,
-          value: this.transformValue(this.context.formValueScope.getValue(name)),
-          onChange: this.onChange,
+          value: this.transformValue(value),
+          onChange: function onChange(event) {
+            return _onChange(_this2.transformValueInverse(event.target.value));
+          },
           onInput: this.onChange }));
       }
     }]);
@@ -151,16 +156,19 @@
     return RangeField;
   }(_react2.default.Component);
 
-  RangeField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  RangeField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  RangeField.propTypes = {
+    value: _react.PropTypes.any.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    fullName: _react.PropTypes.string,
     min: _react.PropTypes.number.isRequired,
     max: _react.PropTypes.number.isRequired,
     step: _react.PropTypes.number,
     multiplier: _react.PropTypes.number
-  });
-  RangeField.defaultProps = _extends({}, _BaseField2.default.defaultProps, {
+  };
+  RangeField.defaultProps = {
     step: 1,
     multiplier: 1
-  });
-  exports.default = RangeField;
+  };
+  exports.default = (0, _formField2.default)()(RangeField);
 });

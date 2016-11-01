@@ -1,23 +1,26 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './formField', 'react'], factory);
+    define(['exports', './BaseField', 'hoist-non-react-statics', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./formField'), require('react'));
+    factory(exports, require('./BaseField'), require('hoist-non-react-statics'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.formField, global.react);
-    global.InputField = mod.exports;
+    factory(mod.exports, global.BaseField, global.hoistNonReactStatics, global.react);
+    global.formField = mod.exports;
   }
-})(this, function (exports, _formField, _react) {
+})(this, function (exports, _BaseField, _hoistNonReactStatics, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.default = formField;
 
-  var _formField2 = _interopRequireDefault(_formField);
+  var _BaseField2 = _interopRequireDefault(_BaseField);
+
+  var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -101,69 +104,59 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var InputField = function (_React$Component) {
-    _inherits(InputField, _React$Component);
+  function formField() {
+    return function (Component) {
+      var FormField = function (_React$Component) {
+        _inherits(FormField, _React$Component);
 
-    function InputField() {
-      var _ref;
+        function FormField() {
+          var _ref;
 
-      var _temp, _this, _ret;
+          var _temp, _this, _ret;
 
-      _classCallCheck(this, InputField);
+          _classCallCheck(this, FormField);
 
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = InputField.__proto__ || Object.getPrototypeOf(InputField)).call.apply(_ref, [this].concat(args))), _this), _this.focus = function () {
-        return _this.input && _this.input.focus();
-      }, _temp), _possibleConstructorReturn(_this, _ret);
-    }
+          return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FormField.__proto__ || Object.getPrototypeOf(FormField)).call.apply(_ref, [this].concat(args))), _this), _this.hoistMethods = function (wrappedComponent) {
+            wrappedComponent && ['focus'].forEach(function (methodName) {
+              _this[methodName] = wrappedComponent[methodName];
+            });
+          }, _temp), _possibleConstructorReturn(_this, _ret);
+        }
 
-    _createClass(InputField, [{
-      key: 'render',
-      value: function render() {
-        var _this2 = this;
+        _createClass(FormField, [{
+          key: 'render',
+          value: function render() {
+            var formValueScope = this.context.formValueScope;
 
-        var _props = this.props,
-            value = _props.value,
-            _onChange = _props.onChange,
-            name = _props.name,
-            fullName = _props.fullName,
-            type = _props.type,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'type']);
+            var _props = this.props,
+                name = _props.name,
+                other = _objectWithoutProperties(_props, ['name']);
 
-        // eslint-disable-line no-unused-vars
-        return _react2.default.createElement('input', _extends({
-          autoComplete: 'off',
-          autoCorrect: 'off',
-          autoCapitalize: 'off',
-          spellCheck: 'false'
-        }, other, {
-          name: fullName,
-          type: type,
-          value: value,
-          onChange: function onChange(event) {
-            return _onChange(event.target.value);
-          },
-          ref: function ref(node) {
-            _this2.input = node;
-          } }));
-      }
-    }]);
+            return _react2.default.createElement(Component, _extends({}, other, {
+              value: formValueScope.getValue(name),
+              onChange: function onChange(newValue) {
+                return formValueScope.setValue(name, newValue);
+              },
+              name: name,
+              fullName: formValueScope.name + '.' + name,
+              ref: this.hoistMethods }));
+          }
+        }]);
 
-    return InputField;
-  }(_react2.default.Component);
+        return FormField;
+      }(_react2.default.Component);
 
-  InputField.propTypes = {
-    value: _react.PropTypes.string.isRequired,
-    onChange: _react.PropTypes.func.isRequired,
-    name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
-    type: _react.PropTypes.string
-  };
-  InputField.defaultProps = {
-    type: 'text'
-  };
-  exports.default = (0, _formField2.default)()(InputField);
+      FormField.displayName = 'FormField(' + (Component.displayName || Component.name || 'Component') + ')';
+      FormField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
+      FormField.propTypes = _extends({}, _BaseField2.default.propTypes);
+      FormField.defaultProps = _extends({}, _BaseField2.default.defaultProps);
+
+
+      return (0, _hoistNonReactStatics2.default)(FormField, Component);
+    };
+  }
 });

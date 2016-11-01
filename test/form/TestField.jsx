@@ -1,19 +1,12 @@
-import BaseField from '../../src/form/BaseField'
+import formField from '../../src/form/formField'
 import React, {PropTypes} from 'react'
 
-export default class TestField extends React.Component {
-  static contextTypes = {
-    ...BaseField.contextTypes
-  }
-
+class TestField extends React.Component {
   static propTypes = {
-    name: PropTypes.string.isRequired
-  }
-
-  constructor (props, context) {
-    super(props, context)
-
-    this.onChange = this.onChange.bind(this)
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    fullName: PropTypes.string.isRequired
   }
 
   onChange (event) {
@@ -21,11 +14,13 @@ export default class TestField extends React.Component {
   }
 
   render () {
-    const {name, ...other} = this.props
+    const {value, onChange, name, fullName, ...other} = this.props // eslint-disable-line no-unused-vars
     return <input {...other}
-      name={`${this.context.formValueScope.name}.${name}`}
+      name={fullName}
       type="text"
-      value={this.context.formValueScope.getValue(name)}
-      onChange={this.onChange}/>
+      value={value}
+      onChange={(event) => onChange(event.target.value)}/>
   }
 }
+
+export default formField()(TestField)

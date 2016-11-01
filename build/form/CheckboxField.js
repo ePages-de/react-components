@@ -1,23 +1,23 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', 'react'], factory);
+    define(['exports', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('react'));
+    factory(exports, require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.react);
+    factory(mod.exports, global.formField, global.react);
     global.CheckboxField = mod.exports;
   }
-})(this, function (exports, _BaseField, _react) {
+})(this, function (exports, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -115,9 +115,7 @@
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CheckboxField.__proto__ || Object.getPrototypeOf(CheckboxField)).call.apply(_ref, [this].concat(args))), _this), _this.onChange = function (event) {
-        _this.context.formValueScope.setValue(_this.props.name, _this.transformValue(event.target.checked));
-      }, _this.transformValue = function (value) {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CheckboxField.__proto__ || Object.getPrototypeOf(CheckboxField)).call.apply(_ref, [this].concat(args))), _this), _this.transformValue = function (value) {
         return _this.props.negate ? !value : value;
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
@@ -125,29 +123,39 @@
     _createClass(CheckboxField, [{
       key: 'render',
       value: function render() {
+        var _this2 = this;
+
         var _props = this.props,
+            value = _props.value,
+            _onChange = _props.onChange,
             name = _props.name,
+            fullName = _props.fullName,
             negate = _props.negate,
-            other = _objectWithoutProperties(_props, ['name', 'negate']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'negate']);
 
         // eslint-disable-line no-unused-vars
         return _react2.default.createElement('input', _extends({}, other, {
-          name: this.context.formValueScope.name + '.' + name,
+          name: fullName,
           type: 'checkbox',
-          checked: this.transformValue(this.context.formValueScope.getValue(name)),
-          onChange: this.onChange }));
+          checked: this.transformValue(value),
+          onChange: function onChange(event) {
+            return _onChange(_this2.transformValue(event.target.checked));
+          } }));
       }
     }]);
 
     return CheckboxField;
   }(_react2.default.Component);
 
-  CheckboxField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  CheckboxField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  CheckboxField.propTypes = {
+    value: _react.PropTypes.bool.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    fullName: _react.PropTypes.string,
     negate: _react.PropTypes.bool
-  });
-  CheckboxField.defaultProps = _extends({}, _BaseField2.default.defaultProps, {
+  };
+  CheckboxField.defaultProps = {
     negate: false
-  });
-  exports.default = CheckboxField;
+  };
+  exports.default = (0, _formField2.default)()(CheckboxField);
 });

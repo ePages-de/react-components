@@ -35,9 +35,9 @@ describe('DropDownField', function () {
     expect(dom, 'to have rendered',
       <form>
         <select name="test.size" value="m">
-          <option value="s">Small</option>
-          <option value="m">Medium</option>
-          <option value="l">Large</option>
+          <option value="0">Small</option>
+          <option value="1">Medium</option>
+          <option value="2">Large</option>
         </select>
       </form>
     )
@@ -47,7 +47,7 @@ describe('DropDownField', function () {
     const {onSubmit, form, sizeField} = render()
 
     expect(onSubmit, 'was not called')
-    TestUtils.Simulate.change(sizeField, {target: {value: 'l'}})
+    TestUtils.Simulate.change(sizeField, {target: {value: '2'}})
     TestUtils.Simulate.submit(form)
     expect(onSubmit, 'was called once')
     expect(onSubmit, 'to have calls satisfying', function () {

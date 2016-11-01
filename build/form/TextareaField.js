@@ -1,23 +1,23 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', 'react'], factory);
+    define(['exports', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('react'));
+    factory(exports, require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.react);
+    factory(mod.exports, global.formField, global.react);
     global.TextareaField = mod.exports;
   }
-})(this, function (exports, _BaseField, _react) {
+})(this, function (exports, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -116,41 +116,51 @@
       }
 
       return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TextareaField.__proto__ || Object.getPrototypeOf(TextareaField)).call.apply(_ref, [this].concat(args))), _this), _this.focus = function () {
-        return _this.refs.textarea.focus();
-      }, _this.onChange = function (event) {
-        return _this.context.formValueScope.setValue(_this.props.name, event.target.value);
+        return _this.textarea && _this.textarea.focus();
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(TextareaField, [{
       key: 'render',
       value: function render() {
-        var _props = this.props,
-            name = _props.name,
-            rows = _props.rows,
-            other = _objectWithoutProperties(_props, ['name', 'rows']);
+        var _this2 = this;
 
+        var _props = this.props,
+            value = _props.value,
+            _onChange = _props.onChange,
+            name = _props.name,
+            fullName = _props.fullName,
+            rows = _props.rows,
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'rows']);
+
+        // eslint-disable-line no-unused-vars
         return _react2.default.createElement('textarea', _extends({
           autoComplete: 'off',
           autoCorrect: 'off',
           autoCapitalize: 'off',
           spellCheck: 'false'
         }, other, {
-          name: this.context.formValueScope.name + '.' + name,
+          name: fullName,
           rows: rows,
-          value: this.context.formValueScope.getValue(name),
-          onChange: this.onChange,
-          ref: 'textarea' }));
+          value: value,
+          onChange: function onChange(event) {
+            return _onChange(event.target.value);
+          },
+          ref: function ref(node) {
+            _this2.textarea = node;
+          } }));
       }
     }]);
 
     return TextareaField;
   }(_react2.default.Component);
 
-  TextareaField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  TextareaField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  TextareaField.propTypes = {
+    value: _react.PropTypes.string.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    fullName: _react.PropTypes.string,
     rows: _react.PropTypes.number
-  });
-  TextareaField.defaultProps = _extends({}, _BaseField2.default.defaultProps);
-  exports.default = TextareaField;
+  };
+  exports.default = (0, _formField2.default)()(TextareaField);
 });

@@ -1,13 +1,12 @@
-import BaseField from './BaseField'
+import formField from './formField'
 import React, {PropTypes} from 'react'
 
-export default class RangeField extends React.Component {
-  static contextTypes = {
-    ...BaseField.contextTypes
-  }
-
+class RangeField extends React.Component {
   static propTypes = {
-    ...BaseField.propTypes,
+    value: PropTypes.any.isRequired,
+    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    fullName: PropTypes.string,
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
     step: PropTypes.number,
@@ -15,27 +14,26 @@ export default class RangeField extends React.Component {
   }
 
   static defaultProps = {
-    ...BaseField.defaultProps,
     step: 1,
     multiplier: 1
   }
 
   render () {
-    const {name, min, max, step, multiplier, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, fullName, min, max, step, multiplier, ...other} = this.props // eslint-disable-line no-unused-vars
     return <input {...other}
-      name={`${this.context.formValueScope.name}.${name}`}
+      name={fullName}
       type="range"
       min={min}
       max={max}
       step={step}
-      value={this.transformValue(this.context.formValueScope.getValue(name))}
-      onChange={this.onChange}
+      value={this.transformValue(value)}
+      onChange={(event) => onChange(this.transformValueInverse(event.target.value))}
       onInput={this.onChange}/>
   }
-
-  onChange = (event) => this.context.formValueScope.setValue(this.props.name, this.transformValueInverse(event.target.value))
 
   transformValue = (value) => value * this.props.multiplier
 
   transformValueInverse = (value) => value / this.props.multiplier
 }
+
+export default formField()(RangeField)

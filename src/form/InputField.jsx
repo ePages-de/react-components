@@ -1,47 +1,35 @@
-import BaseField from './BaseField'
+import formField from './formField'
 import React, {PropTypes} from 'react'
 
-export default class InputField extends React.Component {
-  static contextTypes = {
-    ...BaseField.contextTypes
-  }
-
+class InputField extends React.Component {
   static propTypes = {
-    ...BaseField.propTypes,
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    fullName: PropTypes.string,
     type: PropTypes.string
   }
 
   static defaultProps = {
-    ...BaseField.defaultProps,
     type: 'text'
   }
 
-  get value () {
-    return this.context.formValueScope.getValue(this.props.name)
-  }
-
-  set value (newValue) {
-    this.context.formValueScope.setValue(this.props.name, newValue)
-  }
-
   render () {
-    const {name, type, ...other} = this.props
+    const {value, onChange, name, fullName, type, ...other} = this.props // eslint-disable-line no-unused-vars
     return <input
       autoComplete="off"
       autoCorrect="off"
       autoCapitalize="off"
       spellCheck="false"
       {...other}
-      name={`${this.context.formValueScope.name}.${name}`}
+      name={fullName}
       type={type}
-      value={this.value}
-      onChange={this.onChange}
-      ref={this.setRef}/>
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      ref={(node) => { this.input = node }}/>
   }
 
-  setRef = (input) => { this.input = input }
-
   focus = () => this.input && this.input.focus()
-
-  onChange = (event) => { this.value = event.target.value }
 }
+
+export default formField()(InputField)

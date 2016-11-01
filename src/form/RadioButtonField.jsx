@@ -1,52 +1,46 @@
-import BaseField from './BaseField'
+import formField from './formField'
 import React, {PropTypes} from 'react'
 
-export default class RadioButtonField extends React.Component {
-  static contextTypes = {...BaseField.contextTypes}
-
-  static defaultProps = {...BaseField.defaultProps}
-
+class RadioButtonField extends React.Component {
   static propTypes = {
-    ...BaseField.propTypes,
+    value: PropTypes.any.isRequired,
+    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    fullName: PropTypes.string,
     buttons: PropTypes.arrayOf(PropTypes.shape({
       value: PropTypes.any.isRequired,
       label: PropTypes.string.isRequired
-    })).isRequired
+    })).isRequired,
+    disabled: PropTypes.bool
   }
 
-  get value () {
-    return this.context.formValueScope.getValue(this.props.name)
-  }
-
-  set value (newValue) {
-    this.context.formValueScope.setValue(this.props.name, newValue)
-  }
-
-  updateValue = (event) => {
-    const button = this.props.buttons[parseInt(event.target.value)]
-
-    this.value = button.value
+  static defaultProps = {
+    disabled: false
   }
 
   render () {
-    const {name, buttons, disabled, parseValue, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, fullName, buttons, disabled, ...other} = this.props // eslint-disable-line no-unused-vars
 
     return (
       <div {...other}>
-        {buttons.map((button, ix) => (
+        {buttons.map((button, index) => (
           <span key={button.value}>
             <input
-              id={`${name}.${ix}`}
-              name={`${this.context.formValueScope.name}.${name}`}
+              id={fullName + '.' + index}
+              name={fullName}
               type="radio"
-              value={ix}
-              onChange={this.updateValue}
-              checked={this.value === button.value}
+              value={index}
+              onChange={(event) => onChange(buttons[parseInt(event.target.value)].value)}
+              checked={value === button.value}
               disabled={disabled}/>
-            <label htmlFor={`${name}.${ix}`}>{button.label}</label>
+            <label htmlFor={fullName + '.' + index}>
+              {button.label}
+            </label>
           </span>
         ))}
       </div>
     )
   }
 }
+
+export default formField()(RadioButtonField)

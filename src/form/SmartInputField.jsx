@@ -1,5 +1,5 @@
-import BaseField from './BaseField'
 import classnames from 'classnames'
+import formField from './formField'
 import React, {PropTypes} from 'react'
 
 function stopPropagation (event) {
@@ -11,7 +11,7 @@ function stopPropagation (event) {
  * Values can be deduced from the entered text. Additionally this input allows autocompletion by
  * a user defined suggestion function.
  */
-export class SmartInput extends React.Component {
+export class SmartInputField extends React.Component {
   static propTypes = {
     // current value
     value: PropTypes.any.isRequired,
@@ -121,7 +121,7 @@ export class SmartInput extends React.Component {
             autoCapitalize={false}
             spellCheck={false}
             className={styles.inputText}
-            ref="input"/>
+            ref={(node) => { this.input = node }}/>
         </div>
         {suggestionsVisible && (
           <div className={styles.suggestions} ref="suggestions">
@@ -233,7 +233,7 @@ export class SmartInput extends React.Component {
 
     // input is visually the whole container, even though the actual HTML input is not spanning the whole container,
     // so we trigger focusing the input here
-    this.refs.input.focus()
+    this.input && this.input.focus()
   }
 
   handleClickValueRemove = (index) => {
@@ -343,50 +343,4 @@ export class SmartInput extends React.Component {
   }
 }
 
-/**
- * Wraps the SmartInput component to work with the form framework.
- */
-export default class SmartInputField extends React.Component {
-  static contextTypes = {
-    ...BaseField.contextTypes
-  }
-
-  static propTypes = {
-    ...BaseField.propTypes
-  }
-
-  static defaultProps = {
-    ...BaseField.defaultProps
-  }
-
-  get value () {
-    return this.context.formValueScope.getValue(this.props.name)
-  }
-
-  set value (newValue) {
-    this.context.formValueScope.setValue(this.props.name, newValue)
-  }
-
-  focus = () => {
-    if (this.smartInput) {
-      this.smartInput.focus()
-    }
-  }
-
-  render () {
-    const {name, ...other} = this.props // eslint-disable-line no-unused-vars
-    return <SmartInput
-      {...other}
-      value={this.value}
-      onChange={this.handleChange}
-      ref={this.smartInputRef}/>
-  }
-
-  handleChange = (newValue) => {
-    this.value = newValue
-  }
-
-  smartInputRef = (smartInput) => {
-    this.smartInput = smartInput
-  }
-}
+export default formField()(SmartInputField)

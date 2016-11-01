@@ -36,16 +36,18 @@ describe('RadioButtonField', function () {
         <div>
           <span>
             <input
+              id="test.visibility.0"
               name="test.visibility"
               type="radio"/>
-            <label htmlFor="visibility.0">Yes</label>
+            <label htmlFor="test.visibility.0">Yes</label>
           </span>
           <span>
             <input
               checked
+              id="test.visibility.1"
               name="test.visibility"
               type="radio"/>
-            <label htmlFor="visibility.1">No</label>
+            <label htmlFor="test.visibility.1">No</label>
           </span>
         </div>
       </form>

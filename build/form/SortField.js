@@ -1,23 +1,23 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', 'react'], factory);
+    define(['exports', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('react'));
+    factory(exports, require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.react);
+    factory(mod.exports, global.formField, global.react);
     global.SortField = mod.exports;
   }
-})(this, function (exports, _BaseField, _react) {
+})(this, function (exports, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -133,7 +133,10 @@
         var self = this;
 
         var _props = this.props,
+            value = _props.value,
+            onChange = _props.onChange,
             name = _props.name,
+            fullName = _props.fullName,
             children = _props.children,
             onReorder = _props.onReorder,
             validate = _props.validate,
@@ -143,7 +146,7 @@
             crossAxisItemSize = _props.crossAxisItemSize,
             itemCount = _props.itemCount,
             itemSpacing = _props.itemSpacing,
-            other = _objectWithoutProperties(_props, ['name', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']);
 
         // eslint-disable-line no-unused-vars
         var dimension = orientation === 'horizontal' ? { width: itemSize * itemCount + itemSpacing * (itemCount - 1), height: crossAxisItemSize } : { height: itemSize * itemCount + itemSpacing * (itemCount - 1), width: crossAxisItemSize };
@@ -151,8 +154,8 @@
         return _react2.default.createElement(
           'div',
           _extends({}, other, { style: _extends({ position: 'relative' }, dimension) }),
-          this.value.map(function (item, index) {
-            var itemWithDndInfo = item.set('__isSource', _this2.state.dragIndex === index).set('__isTarget', _this2.state.dropIndex === index).set('__isDragging', _this2.state.dragIndex !== null).set('__isDisabled', disabled(item, index, _this2.value));
+          value.map(function (item, index) {
+            var itemWithDndInfo = item.set('__isSource', _this2.state.dragIndex === index).set('__isTarget', _this2.state.dropIndex === index).set('__isDragging', _this2.state.dragIndex !== null).set('__isDisabled', disabled(item, index, value));
             var itemPosition = orientation === 'horizontal' ? { left: index * (itemSize + itemSpacing), top: 0 } : { top: index * (itemSize + itemSpacing), left: 0 };
             var itemDimension = orientation === 'horizontal' ? { width: itemSize, height: crossAxisItemSize } : { height: itemSize, width: crossAxisItemSize };
 
@@ -174,12 +177,12 @@
                   self.setState({ dragIndex: null });
                 },
                 onDragEnter: function onDragEnter() {
-                  if (self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(self.value, self.state.dragIndex, index))) {
+                  if (self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(value, self.state.dragIndex, index))) {
                     self.setState({ dropIndex: index });
                   }
                 },
                 onDragOver: function onDragOver(event) {
-                  if (!itemWithDndInfo.get('__isDisabled') && self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(self.value, self.state.dragIndex, index))) {
+                  if (!itemWithDndInfo.get('__isDisabled') && self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(value, self.state.dragIndex, index))) {
                     event.preventDefault();
                   }
                 },
@@ -191,29 +194,24 @@
                 onDrop: function onDrop(event) {
                   event.preventDefault();
                   self.setState({ dragIndex: null, dropIndex: null });
-                  self.value = swap(self.value, self.state.dragIndex, index);
                   self.props.onReorder(self.state.dragIndex, index);
+                  onChange(swap(value, self.state.dragIndex, index));
                 } },
-              _this2.props.children(itemWithDndInfo, index, _this2.value)
+              _this2.props.children(itemWithDndInfo, index, value)
             );
           })
         );
-      }
-    }, {
-      key: 'value',
-      get: function get() {
-        return this.context.formValueScope.getValue(this.props.name);
-      },
-      set: function set(val) {
-        this.context.formValueScope.setValue(this.props.name, val);
       }
     }]);
 
     return SortField;
   }(_react2.default.Component);
 
-  SortField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  SortField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  SortField.propTypes = {
+    value: _react.PropTypes.any.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    fullName: _react.PropTypes.string,
     children: _react.PropTypes.func.isRequired,
     onReorder: _react.PropTypes.func,
     validate: _react.PropTypes.func,
@@ -223,8 +221,8 @@
     crossAxisItemSize: _react.PropTypes.number.isRequired,
     itemSpacing: _react.PropTypes.number,
     itemCount: _react.PropTypes.number.isRequired
-  });
-  SortField.defaultProps = _extends({}, _BaseField2.default.defaultProps, {
+  };
+  SortField.defaultProps = {
     onReorder: function onReorder() {
       return null;
     },
@@ -235,6 +233,6 @@
       return false;
     },
     itemSpacing: 0
-  });
-  exports.default = SortField;
+  };
+  exports.default = (0, _formField2.default)()(SortField);
 });
