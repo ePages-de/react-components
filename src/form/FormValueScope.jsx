@@ -4,7 +4,7 @@ import React, {PropTypes} from 'react'
 // make sure to mirror changes in here also in Form
 export default class FormValueScope extends React.Component {
   static contextTypes = {
-    formValueScope: PropTypes.object
+    formValueScope: PropTypes.object.isRequired
   }
 
   static propTypes = {
@@ -15,11 +15,7 @@ export default class FormValueScope extends React.Component {
   get name () {
     const outerScope = this.context.formValueScope
     const ownName = this.props.name
-    if (outerScope) {
-      return `${outerScope.name}.${ownName}`
-    } else {
-      return ownName
-    }
+    return `${outerScope.name}.${ownName}`
   }
 
   render () {
@@ -28,36 +24,32 @@ export default class FormValueScope extends React.Component {
 
   getValue = (name) => {
     const outerScope = this.context.formValueScope
-    if (outerScope) {
-      const ownName = this.props.name
-      const value = outerScope.getValue(ownName)
+    const ownName = this.props.name
+    const value = outerScope.getValue(ownName)
+
+    if (name !== undefined && name !== null) {
       return value ? value.get(name) : undefined
     } else {
-      return this.state.value.get(name)
+      return value
     }
   }
 
   setValue = (name, value) => {
     const outerScope = this.context.formValueScope
-    if (outerScope) {
-      const ownName = this.props.name
+    const ownName = this.props.name
+
+    if (name !== undefined && name !== null) {
       return outerScope.setValue(ownName, outerScope.getValue(ownName).set(name, value))
     } else {
-      const newValue = this.state.value.set(name, value)
-      this.setState({value: newValue})
-      return newValue
+      return outerScope.setValue(ownName, value)
     }
   }
 
   getError = (name) => {
     const outerScope = this.context.formValueScope
-    if (outerScope) {
-      const ownName = this.props.name
-      const error = outerScope.getError(ownName)
-      return error ? error.get(name) : undefined
-    } else {
-      return this.state.errors.get(name)
-    }
+    const ownName = this.props.name
+    const error = outerScope.getError(ownName)
+    return error ? error.get(name) : undefined
   }
 
   static childContextTypes = {

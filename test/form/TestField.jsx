@@ -9,10 +9,6 @@ class TestField extends React.Component {
     scopedName: PropTypes.string.isRequired
   }
 
-  onChange (event) {
-    this.context.formValueScope.setValue(this.props.name, event.target.value)
-  }
-
   render () {
     const {value, onChange, name, scopedName, ...other} = this.props // eslint-disable-line no-unused-vars
     return <input {...other}
