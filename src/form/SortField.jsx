@@ -37,8 +37,8 @@ export class SortFieldRaw extends React.Component {
   }
 
   render () {
-    const self = this
     const {value, onChange, name, scopedName, children, onReorder, validate, disabled, orientation, itemSize, crossAxisItemSize, itemCount, itemSpacing, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {dragIndex, dropIndex} = this.state
     const dimension = orientation === 'horizontal'
       ? {width: itemSize * itemCount + (itemSpacing * (itemCount - 1)), height: crossAxisItemSize}
       : {height: itemSize * itemCount + (itemSpacing * (itemCount - 1)), width: crossAxisItemSize}
@@ -47,9 +47,9 @@ export class SortFieldRaw extends React.Component {
       <div {...other} style={{position: 'relative', ...dimension}}>
         {value.map((item, index) => {
           const itemWithDndInfo = item
-            .set('__isSource', this.state.dragIndex === index)
-            .set('__isTarget', this.state.dropIndex === index)
-            .set('__isDragging', this.state.dragIndex !== null)
+            .set('__isSource', dragIndex === index)
+            .set('__isTarget', dropIndex === index)
+            .set('__isDragging', dragIndex !== null)
             .set('__isDisabled', disabled(item, index, value))
           const itemPosition = orientation === 'horizontal'
             ? {left: index * (itemSize + itemSpacing), top: 0}
@@ -63,39 +63,39 @@ export class SortFieldRaw extends React.Component {
               key={index}
               draggable
               style={{position: 'absolute', ...itemPosition, ...itemDimension}}
-              onDragStart={function (event) {
+              onDragStart={(event) => {
                 if (!itemWithDndInfo.get('__isDisabled')) {
                   if (event.dataTransfer) event.dataTransfer.setData('Url', '#')
-                  self.setState({dragIndex: index})
+                  this.setState({dragIndex: index})
                 } else {
                   event.preventDefault()
                 }
               }}
-              onDragEnd={function () {
-                self.setState({dragIndex: null})
+              onDragEnd={() => {
+                this.setState({dragIndex: null})
               }}
-              onDragEnter={function () {
-                if (self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(value, self.state.dragIndex, index))) {
-                  self.setState({dropIndex: index})
+              onDragEnter={() => {
+                if (dragIndex !== null && dragIndex !== index && validate(swap(value, dragIndex, index))) {
+                  this.setState({dropIndex: index})
                 }
               }}
-              onDragOver={function (event) {
-                if (!itemWithDndInfo.get('__isDisabled') && self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(value, self.state.dragIndex, index))) {
+              onDragOver={(event) => {
+                if (!itemWithDndInfo.get('__isDisabled') && dragIndex !== null && dragIndex !== index && validate(swap(value, dragIndex, index))) {
                   event.preventDefault()
                 }
               }}
-              onDragLeave={function () {
-                if (self.state.dropIndex === index) {
-                  self.setState({dropIndex: null})
+              onDragLeave={() => {
+                if (dropIndex === index) {
+                  this.setState({dropIndex: null})
                 }
               }}
-              onDrop={function (event) {
+              onDrop={(event) => {
                 event.preventDefault()
-                self.setState({dragIndex: null, dropIndex: null})
-                self.props.onReorder(self.state.dragIndex, index)
-                onChange(swap(value, self.state.dragIndex, index))
+                this.setState({dragIndex: null, dropIndex: null})
+                this.props.onReorder(dragIndex, index)
+                onChange(swap(value, dragIndex, index))
               }}>
-              {this.props.children(itemWithDndInfo, index, value)}
+              {children(itemWithDndInfo, index, value)}
             </div>
           )
         })}

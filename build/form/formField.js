@@ -121,9 +121,9 @@
           }
 
           return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FormField.__proto__ || Object.getPrototypeOf(FormField)).call.apply(_ref, [this].concat(args))), _this), _this.hoistMethods = function (wrappedComponent) {
-            wrappedComponent && ['focus'].forEach(function (methodName) {
-              _this[methodName] = wrappedComponent[methodName];
-            });
+            if (wrappedComponent) {
+              _this.focus = wrappedComponent.focus;
+            }
           }, _temp), _possibleConstructorReturn(_this, _ret);
         }
 

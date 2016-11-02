@@ -131,8 +131,6 @@
       value: function render() {
         var _this2 = this;
 
-        var self = this;
-
         var _props = this.props,
             value = _props.value,
             onChange = _props.onChange,
@@ -150,13 +148,17 @@
             other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']); // eslint-disable-line no-unused-vars
 
 
+        var _state = this.state,
+            dragIndex = _state.dragIndex,
+            dropIndex = _state.dropIndex;
+
         var dimension = orientation === 'horizontal' ? { width: itemSize * itemCount + itemSpacing * (itemCount - 1), height: crossAxisItemSize } : { height: itemSize * itemCount + itemSpacing * (itemCount - 1), width: crossAxisItemSize };
 
         return _react2.default.createElement(
           'div',
           _extends({}, other, { style: _extends({ position: 'relative' }, dimension) }),
           value.map(function (item, index) {
-            var itemWithDndInfo = item.set('__isSource', _this2.state.dragIndex === index).set('__isTarget', _this2.state.dropIndex === index).set('__isDragging', _this2.state.dragIndex !== null).set('__isDisabled', disabled(item, index, value));
+            var itemWithDndInfo = item.set('__isSource', dragIndex === index).set('__isTarget', dropIndex === index).set('__isDragging', dragIndex !== null).set('__isDisabled', disabled(item, index, value));
             var itemPosition = orientation === 'horizontal' ? { left: index * (itemSize + itemSpacing), top: 0 } : { top: index * (itemSize + itemSpacing), left: 0 };
             var itemDimension = orientation === 'horizontal' ? { width: itemSize, height: crossAxisItemSize } : { height: itemSize, width: crossAxisItemSize };
 
@@ -169,36 +171,36 @@
                 onDragStart: function onDragStart(event) {
                   if (!itemWithDndInfo.get('__isDisabled')) {
                     if (event.dataTransfer) event.dataTransfer.setData('Url', '#');
-                    self.setState({ dragIndex: index });
+                    _this2.setState({ dragIndex: index });
                   } else {
                     event.preventDefault();
                   }
                 },
                 onDragEnd: function onDragEnd() {
-                  self.setState({ dragIndex: null });
+                  _this2.setState({ dragIndex: null });
                 },
                 onDragEnter: function onDragEnter() {
-                  if (self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(value, self.state.dragIndex, index))) {
-                    self.setState({ dropIndex: index });
+                  if (dragIndex !== null && dragIndex !== index && validate(swap(value, dragIndex, index))) {
+                    _this2.setState({ dropIndex: index });
                   }
                 },
                 onDragOver: function onDragOver(event) {
-                  if (!itemWithDndInfo.get('__isDisabled') && self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(value, self.state.dragIndex, index))) {
+                  if (!itemWithDndInfo.get('__isDisabled') && dragIndex !== null && dragIndex !== index && validate(swap(value, dragIndex, index))) {
                     event.preventDefault();
                   }
                 },
                 onDragLeave: function onDragLeave() {
-                  if (self.state.dropIndex === index) {
-                    self.setState({ dropIndex: null });
+                  if (dropIndex === index) {
+                    _this2.setState({ dropIndex: null });
                   }
                 },
                 onDrop: function onDrop(event) {
                   event.preventDefault();
-                  self.setState({ dragIndex: null, dropIndex: null });
-                  self.props.onReorder(self.state.dragIndex, index);
-                  onChange(swap(value, self.state.dragIndex, index));
+                  _this2.setState({ dragIndex: null, dropIndex: null });
+                  _this2.props.onReorder(dragIndex, index);
+                  onChange(swap(value, dragIndex, index));
                 } },
-              _this2.props.children(itemWithDndInfo, index, value)
+              children(itemWithDndInfo, index, value)
             );
           })
         );

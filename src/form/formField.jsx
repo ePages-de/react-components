@@ -33,9 +33,9 @@ export default function formField () {
       }
 
       hoistMethods = (wrappedComponent) => {
-        wrappedComponent && ['focus'].forEach((methodName) => {
-          this[methodName] = wrappedComponent[methodName]
-        })
+        if (wrappedComponent) {
+          this.focus = wrappedComponent.focus
+        }
       }
     }
 
