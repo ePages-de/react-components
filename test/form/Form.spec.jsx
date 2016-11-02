@@ -117,4 +117,25 @@ describe('Form', function () {
       validate(Immutable.fromJS({firstName: '1234', lastName: ''}), true)
     })
   })
+
+  it('sets and gets the top-level value', function () {
+    const {dom: formComponent} = render()
+
+    expect(formComponent.getValue('firstName'), 'to equal', '')
+    formComponent.setValue('firstName', 'a')
+    expect(formComponent.getValue('firstName'), 'to equal', 'a')
+
+    expect(formComponent.getValue(), 'to equal', Immutable.fromJS({
+      firstName: 'a',
+      lastName: ''
+    }))
+    formComponent.setValue(undefined, Immutable.fromJS({
+      firstName: 'A',
+      lastName: 'B'
+    }))
+    expect(formComponent.getValue(undefined), 'to equal', Immutable.fromJS({
+      firstName: 'A',
+      lastName: 'B'
+    }))
+  })
 })

@@ -78,14 +78,25 @@ export default class Form extends React.Component {
     if (outerScope) {
       const ownName = this.props.name
       const value = outerScope.getValue(ownName)
-      return value ? value.get(name) : undefined
+
+      if (name !== undefined && name !== null) {
+        return value ? value.get(name) : undefined
+      } else {
+        return value
+      }
     } else {
-      return this.state.value.get(name)
+      if (name !== undefined && name !== null) {
+        return this.state.value.get(name)
+      } else {
+        return this.state.value
+      }
     }
   }
 
   setValue = (name, value) => {
-    const newValue1 = this.state.value.set(name, value)
+    const newValue1 = name !== undefined && name !== null
+      ? this.state.value.set(name, value)
+      : value
     const newValue2 = this.props.onChange(newValue1)
 
     const errors = this.props.validate(newValue2 || newValue1, this.state.triedToSubmit)

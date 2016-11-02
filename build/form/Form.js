@@ -152,14 +152,23 @@
         if (outerScope) {
           var ownName = _this.props.name;
           var value = outerScope.getValue(ownName);
-          return value ? value.get(name) : undefined;
+
+          if (name !== undefined && name !== null) {
+            return value ? value.get(name) : undefined;
+          } else {
+            return value;
+          }
         } else {
-          return _this.state.value.get(name);
+          if (name !== undefined && name !== null) {
+            return _this.state.value.get(name);
+          } else {
+            return _this.state.value;
+          }
         }
       };
 
       _this.setValue = function (name, value) {
-        var newValue1 = _this.state.value.set(name, value);
+        var newValue1 = name !== undefined && name !== null ? _this.state.value.set(name, value) : value;
         var newValue2 = _this.props.onChange(newValue1);
 
         var errors = _this.props.validate(newValue2 || newValue1, _this.state.triedToSubmit);

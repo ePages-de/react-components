@@ -89,32 +89,28 @@
 
       return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FormValueScope.__proto__ || Object.getPrototypeOf(FormValueScope)).call.apply(_ref, [this].concat(args))), _this), _this.getValue = function (name) {
         var outerScope = _this.context.formValueScope;
-        if (outerScope) {
-          var ownName = _this.props.name;
-          var value = outerScope.getValue(ownName);
+        var ownName = _this.props.name;
+        var value = outerScope.getValue(ownName);
+
+        if (name !== undefined && name !== null) {
           return value ? value.get(name) : undefined;
         } else {
-          return _this.state.value.get(name);
+          return value;
         }
       }, _this.setValue = function (name, value) {
         var outerScope = _this.context.formValueScope;
-        if (outerScope) {
-          var ownName = _this.props.name;
+        var ownName = _this.props.name;
+
+        if (name !== undefined && name !== null) {
           return outerScope.setValue(ownName, outerScope.getValue(ownName).set(name, value));
         } else {
-          var newValue = _this.state.value.set(name, value);
-          _this.setState({ value: newValue });
-          return newValue;
+          return outerScope.setValue(ownName, value);
         }
       }, _this.getError = function (name) {
         var outerScope = _this.context.formValueScope;
-        if (outerScope) {
-          var ownName = _this.props.name;
-          var error = outerScope.getError(ownName);
-          return error ? error.get(name) : undefined;
-        } else {
-          return _this.state.errors.get(name);
-        }
+        var ownName = _this.props.name;
+        var error = outerScope.getError(ownName);
+        return error ? error.get(name) : undefined;
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
@@ -135,11 +131,7 @@
       get: function get() {
         var outerScope = this.context.formValueScope;
         var ownName = this.props.name;
-        if (outerScope) {
-          return outerScope.name + '.' + ownName;
-        } else {
-          return ownName;
-        }
+        return outerScope.name + '.' + ownName;
       }
     }]);
 
@@ -147,7 +139,7 @@
   }(_react2.default.Component);
 
   FormValueScope.contextTypes = {
-    formValueScope: _react.PropTypes.object
+    formValueScope: _react.PropTypes.object.isRequired
   };
   FormValueScope.propTypes = {
     name: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]).isRequired,
