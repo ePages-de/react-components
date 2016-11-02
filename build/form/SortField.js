@@ -137,7 +137,7 @@
             value = _props.value,
             onChange = _props.onChange,
             name = _props.name,
-            fullName = _props.fullName,
+            scopedName = _props.scopedName,
             children = _props.children,
             onReorder = _props.onReorder,
             validate = _props.validate,
@@ -147,7 +147,7 @@
             crossAxisItemSize = _props.crossAxisItemSize,
             itemCount = _props.itemCount,
             itemSpacing = _props.itemSpacing,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']); // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']); // eslint-disable-line no-unused-vars
 
 
         var dimension = orientation === 'horizontal' ? { width: itemSize * itemCount + itemSpacing * (itemCount - 1), height: crossAxisItemSize } : { height: itemSize * itemCount + itemSpacing * (itemCount - 1), width: crossAxisItemSize };
@@ -212,7 +212,7 @@
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     children: _react.PropTypes.func.isRequired,
     onReorder: _react.PropTypes.func,
     validate: _react.PropTypes.func,

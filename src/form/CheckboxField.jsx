@@ -6,7 +6,7 @@ export class CheckboxFieldRaw extends React.Component {
     value: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    fullName: PropTypes.string,
+    scopedName: PropTypes.string,
     negate: PropTypes.bool
   }
 
@@ -15,9 +15,9 @@ export class CheckboxFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, fullName, negate, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, negate, ...other} = this.props // eslint-disable-line no-unused-vars
     return <input {...other}
-      name={fullName}
+      name={scopedName}
       type="checkbox"
       checked={this.transformValue(value)}
       onChange={(event) => onChange(this.transformValue(event.target.checked))}/>

@@ -6,7 +6,7 @@ export class RangeFieldRaw extends React.Component {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    fullName: PropTypes.string,
+    scopedName: PropTypes.string,
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
     step: PropTypes.number,
@@ -19,9 +19,9 @@ export class RangeFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, fullName, min, max, step, multiplier, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, min, max, step, multiplier, ...other} = this.props // eslint-disable-line no-unused-vars
     return <input {...other}
-      name={fullName}
+      name={scopedName}
       type="range"
       min={min}
       max={max}

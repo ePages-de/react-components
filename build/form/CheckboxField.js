@@ -130,13 +130,13 @@
             value = _props.value,
             _onChange = _props.onChange,
             name = _props.name,
-            fullName = _props.fullName,
+            scopedName = _props.scopedName,
             negate = _props.negate,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'negate']); // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'negate']); // eslint-disable-line no-unused-vars
 
 
         return _react2.default.createElement('input', _extends({}, other, {
-          name: fullName,
+          name: scopedName,
           type: 'checkbox',
           checked: this.transformValue(value),
           onChange: function onChange(event) {
@@ -152,7 +152,7 @@
     value: _react.PropTypes.bool.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     negate: _react.PropTypes.bool
   };
   CheckboxFieldRaw.defaultProps = {

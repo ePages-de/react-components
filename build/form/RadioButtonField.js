@@ -104,10 +104,10 @@
             value = _props.value,
             _onChange = _props.onChange,
             name = _props.name,
-            fullName = _props.fullName,
+            scopedName = _props.scopedName,
             buttons = _props.buttons,
             disabled = _props.disabled,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'buttons', 'disabled']); // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'buttons', 'disabled']); // eslint-disable-line no-unused-vars
 
         return _react2.default.createElement(
           'div',
@@ -117,8 +117,8 @@
               'span',
               { key: button.value },
               _react2.default.createElement('input', {
-                id: fullName + '.' + index,
-                name: fullName,
+                id: scopedName + '.' + index,
+                name: scopedName,
                 type: 'radio',
                 value: index,
                 onChange: function onChange(event) {
@@ -128,7 +128,7 @@
                 disabled: disabled }),
               _react2.default.createElement(
                 'label',
-                { htmlFor: fullName + '.' + index },
+                { htmlFor: scopedName + '.' + index },
                 button.label
               )
             );
@@ -144,7 +144,7 @@
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     buttons: _react.PropTypes.arrayOf(_react.PropTypes.shape({
       value: _react.PropTypes.any.isRequired,
       label: _react.PropTypes.string.isRequired

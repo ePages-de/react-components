@@ -6,7 +6,7 @@ export class InputFieldRaw extends React.Component {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    fullName: PropTypes.string,
+    scopedName: PropTypes.string,
     type: PropTypes.string
   }
 
@@ -15,14 +15,14 @@ export class InputFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, fullName, type, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, type, ...other} = this.props // eslint-disable-line no-unused-vars
     return <input
       autoComplete="off"
       autoCorrect="off"
       autoCapitalize="off"
       spellCheck="false"
       {...other}
-      name={fullName}
+      name={scopedName}
       type={type}
       value={value}
       onChange={(event) => onChange(event.target.value)}

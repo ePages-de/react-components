@@ -109,16 +109,16 @@
             value = _props.value,
             onChange = _props.onChange,
             name = _props.name,
-            fullName = _props.fullName,
+            scopedName = _props.scopedName,
             type = _props.type,
             title = _props.title,
             label = _props.label,
             placeholder = _props.placeholder,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'type', 'title', 'label', 'placeholder']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'type', 'title', 'label', 'placeholder']);
 
         // eslint-disable-line no-unused-vars
         var checkboxName = name + 'Selected';
-        var checkboxFullName = fullName + 'Selected';
+        var checkboxFullName = scopedName + 'Selected';
 
         return _react2.default.createElement(
           'div',
@@ -163,7 +163,7 @@
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     type: _react.PropTypes.string,
     title: _react.PropTypes.string,
     label: _react.PropTypes.string,

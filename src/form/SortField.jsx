@@ -12,7 +12,7 @@ export class SortFieldRaw extends React.Component {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    fullName: PropTypes.string,
+    scopedName: PropTypes.string,
     children: PropTypes.func.isRequired,
     onReorder: PropTypes.func,
     validate: PropTypes.func,
@@ -38,7 +38,7 @@ export class SortFieldRaw extends React.Component {
 
   render () {
     const self = this
-    const {value, onChange, name, fullName, children, onReorder, validate, disabled, orientation, itemSize, crossAxisItemSize, itemCount, itemSpacing, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, children, onReorder, validate, disabled, orientation, itemSize, crossAxisItemSize, itemCount, itemSpacing, ...other} = this.props // eslint-disable-line no-unused-vars
     const dimension = orientation === 'horizontal'
       ? {width: itemSize * itemCount + (itemSpacing * (itemCount - 1)), height: crossAxisItemSize}
       : {height: itemSize * itemCount + (itemSpacing * (itemCount - 1)), width: crossAxisItemSize}

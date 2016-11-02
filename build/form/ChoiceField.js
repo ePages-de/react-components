@@ -104,9 +104,9 @@
             value = _props.value,
             onChange = _props.onChange,
             name = _props.name,
-            fullName = _props.fullName,
+            scopedName = _props.scopedName,
             choices = _props.choices,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'choices']); // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'choices']); // eslint-disable-line no-unused-vars
 
         return _react2.default.createElement(
           'div',
@@ -134,7 +134,7 @@
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     choices: _react.PropTypes.arrayOf(_react.PropTypes.shape({
       value: _react.PropTypes.any.isRequired,
       label: _react.PropTypes.string.isRequired

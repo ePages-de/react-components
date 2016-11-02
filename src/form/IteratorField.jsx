@@ -8,7 +8,7 @@ class IteratorFieldRaw extends React.Component {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    fullName: PropTypes.string,
+    scopedName: PropTypes.string,
     skip: PropTypes.number,
     take: PropTypes.number,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
@@ -19,7 +19,7 @@ class IteratorFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, fullName, skip, take, children, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, skip, take, children, ...other} = this.props // eslint-disable-line no-unused-vars
     const items = value.skip(skip).take(take || value.count())
 
     return (

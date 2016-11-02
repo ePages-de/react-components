@@ -105,11 +105,11 @@
             value = _props.value,
             onChange = _props.onChange,
             name = _props.name,
-            fullName = _props.fullName,
+            scopedName = _props.scopedName,
             skip = _props.skip,
             take = _props.take,
             children = _props.children,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'skip', 'take', 'children']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'skip', 'take', 'children']);
 
         // eslint-disable-line no-unused-vars
         var items = value.skip(skip).take(take || value.count());
@@ -140,7 +140,7 @@
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     skip: _react.PropTypes.number,
     take: _react.PropTypes.number,
     children: _react.PropTypes.oneOfType([_react.PropTypes.node, _react.PropTypes.func]).isRequired

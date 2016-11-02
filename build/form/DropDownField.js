@@ -118,14 +118,14 @@
             value = _props.value,
             _onChange = _props.onChange,
             name = _props.name,
-            fullName = _props.fullName,
+            scopedName = _props.scopedName,
             options = _props.options,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'options']); // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'options']); // eslint-disable-line no-unused-vars
 
         return _react2.default.createElement(
           'select',
           _extends({}, other, {
-            name: fullName,
+            name: scopedName,
             value: value,
             onChange: function onChange(event) {
               return _onChange(options[parseInt(event.target.value)].value);
@@ -150,7 +150,7 @@
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
       value: _react.PropTypes.any.isRequired,
       label: _react.PropTypes.string.isRequired

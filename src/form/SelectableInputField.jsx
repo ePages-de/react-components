@@ -11,7 +11,7 @@ class SelectableInputFieldRaw extends React.Component {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    fullName: PropTypes.string,
+    scopedName: PropTypes.string,
     type: PropTypes.string,
     title: PropTypes.string,
     label: PropTypes.string,
@@ -24,9 +24,9 @@ class SelectableInputFieldRaw extends React.Component {
 
   render () {
     const {formValueScope} = this.context
-    const {value, onChange, name, fullName, type, title, label, placeholder, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, type, title, label, placeholder, ...other} = this.props // eslint-disable-line no-unused-vars
     const checkboxName = `${name}Selected`
-    const checkboxFullName = `${fullName}Selected`
+    const checkboxFullName = `${scopedName}Selected`
 
     return <div {...other}>
       <label title={title}>

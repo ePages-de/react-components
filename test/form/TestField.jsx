@@ -6,7 +6,7 @@ class TestField extends React.Component {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
-    fullName: PropTypes.string.isRequired
+    scopedName: PropTypes.string.isRequired
   }
 
   onChange (event) {
@@ -14,9 +14,9 @@ class TestField extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, fullName, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, ...other} = this.props // eslint-disable-line no-unused-vars
     return <input {...other}
-      name={fullName}
+      name={scopedName}
       type="text"
       value={value}
       onChange={(event) => onChange(event.target.value)}/>

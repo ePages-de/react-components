@@ -11,7 +11,7 @@ function render ({value} = {}) {
   ]
   const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <RadioButtonFieldRaw value={value} onChange={onChange} name="visibility" fullName="test.visibility" buttons={buttons}/>
+    <RadioButtonFieldRaw value={value} onChange={onChange} name="visibility" scopedName="test.visibility" buttons={buttons}/>
   )
   const radioButtons = TestUtils.find(dom, 'input')
 

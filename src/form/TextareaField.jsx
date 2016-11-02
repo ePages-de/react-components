@@ -6,19 +6,19 @@ export class TextareaFieldRaw extends React.Component {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    fullName: PropTypes.string,
+    scopedName: PropTypes.string,
     rows: PropTypes.number
   }
 
   render () {
-    const {value, onChange, name, fullName, rows, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, rows, ...other} = this.props // eslint-disable-line no-unused-vars
     return <textarea
       autoComplete="off"
       autoCorrect="off"
       autoCapitalize="off"
       spellCheck="false"
       {...other}
-      name={fullName}
+      name={scopedName}
       rows={rows}
       value={value}
       onChange={(event) => onChange(event.target.value)}

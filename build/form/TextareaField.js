@@ -130,9 +130,9 @@
             value = _props.value,
             _onChange = _props.onChange,
             name = _props.name,
-            fullName = _props.fullName,
+            scopedName = _props.scopedName,
             rows = _props.rows,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'rows']); // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'rows']); // eslint-disable-line no-unused-vars
 
 
         return _react2.default.createElement('textarea', _extends({
@@ -141,7 +141,7 @@
           autoCapitalize: 'off',
           spellCheck: 'false'
         }, other, {
-          name: fullName,
+          name: scopedName,
           rows: rows,
           value: value,
           onChange: function onChange(event) {
@@ -160,7 +160,7 @@
     value: _react.PropTypes.string.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     rows: _react.PropTypes.number
   };
   exports.default = (0, _formField2.default)()(TextareaFieldRaw);

@@ -28,7 +28,7 @@ export default function formField () {
           value={formValueScope.getValue(name)}
           onChange={(newValue) => formValueScope.setValue(name, newValue)}
           name={name}
-          fullName={formValueScope.name + '.' + name}
+          scopedName={formValueScope.name + '.' + name}
           ref={this.hoistMethods}/>
       }
 

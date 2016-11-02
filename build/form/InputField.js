@@ -130,9 +130,9 @@
             value = _props.value,
             _onChange = _props.onChange,
             name = _props.name,
-            fullName = _props.fullName,
+            scopedName = _props.scopedName,
             type = _props.type,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'type']); // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'type']); // eslint-disable-line no-unused-vars
 
 
         return _react2.default.createElement('input', _extends({
@@ -141,7 +141,7 @@
           autoCapitalize: 'off',
           spellCheck: 'false'
         }, other, {
-          name: fullName,
+          name: scopedName,
           type: type,
           value: value,
           onChange: function onChange(event) {
@@ -160,7 +160,7 @@
     value: _react.PropTypes.string.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     type: _react.PropTypes.string
   };
   InputFieldRaw.defaultProps = {

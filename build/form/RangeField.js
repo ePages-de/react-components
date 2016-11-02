@@ -132,16 +132,16 @@
             value = _props.value,
             _onChange = _props.onChange,
             name = _props.name,
-            fullName = _props.fullName,
+            scopedName = _props.scopedName,
             min = _props.min,
             max = _props.max,
             step = _props.step,
             multiplier = _props.multiplier,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'fullName', 'min', 'max', 'step', 'multiplier']); // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'min', 'max', 'step', 'multiplier']); // eslint-disable-line no-unused-vars
 
 
         return _react2.default.createElement('input', _extends({}, other, {
-          name: fullName,
+          name: scopedName,
           type: 'range',
           min: min,
           max: max,
@@ -161,7 +161,7 @@
     value: _react.PropTypes.any.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     name: _react.PropTypes.string,
-    fullName: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     min: _react.PropTypes.number.isRequired,
     max: _react.PropTypes.number.isRequired,
     step: _react.PropTypes.number,

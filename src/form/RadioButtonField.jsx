@@ -6,7 +6,7 @@ export class RadioButtonFieldRaw extends React.Component {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    fullName: PropTypes.string,
+    scopedName: PropTypes.string,
     buttons: PropTypes.arrayOf(PropTypes.shape({
       value: PropTypes.any.isRequired,
       label: PropTypes.string.isRequired
@@ -19,21 +19,21 @@ export class RadioButtonFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, fullName, buttons, disabled, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, buttons, disabled, ...other} = this.props // eslint-disable-line no-unused-vars
 
     return (
       <div {...other}>
         {buttons.map((button, index) => (
           <span key={button.value}>
             <input
-              id={fullName + '.' + index}
-              name={fullName}
+              id={scopedName + '.' + index}
+              name={scopedName}
               type="radio"
               value={index}
               onChange={(event) => onChange(buttons[parseInt(event.target.value)].value)}
               checked={value === button.value}
               disabled={disabled}/>
-            <label htmlFor={fullName + '.' + index}>
+            <label htmlFor={scopedName + '.' + index}>
               {button.label}
             </label>
           </span>

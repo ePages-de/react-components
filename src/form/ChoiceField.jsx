@@ -6,7 +6,7 @@ export class ChoiceFieldRaw extends React.Component {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    fullName: PropTypes.string,
+    scopedName: PropTypes.string,
     choices: PropTypes.arrayOf(PropTypes.shape({
       value: PropTypes.any.isRequired,
       label: PropTypes.string.isRequired
@@ -14,7 +14,7 @@ export class ChoiceFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, fullName, choices, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, choices, ...other} = this.props // eslint-disable-line no-unused-vars
 
     return (
       <div {...other}>
