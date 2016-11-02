@@ -1,23 +1,24 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', 'react'], factory);
+    define(['exports', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('react'));
+    factory(exports, require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.react);
+    factory(mod.exports, global.formField, global.react);
     global.ChoiceField = mod.exports;
   }
-})(this, function (exports, _BaseField, _react) {
+})(this, function (exports, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.ChoiceFieldRaw = undefined;
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -26,20 +27,6 @@
       default: obj
     };
   }
-
-  var _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
 
   function _objectWithoutProperties(obj, keys) {
     var target = {};
@@ -101,65 +88,57 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var ChoiceField = function (_React$Component) {
-    _inherits(ChoiceField, _React$Component);
+  var ChoiceFieldRaw = exports.ChoiceFieldRaw = function (_React$Component) {
+    _inherits(ChoiceFieldRaw, _React$Component);
 
-    function ChoiceField() {
-      _classCallCheck(this, ChoiceField);
+    function ChoiceFieldRaw() {
+      _classCallCheck(this, ChoiceFieldRaw);
 
-      return _possibleConstructorReturn(this, (ChoiceField.__proto__ || Object.getPrototypeOf(ChoiceField)).apply(this, arguments));
+      return _possibleConstructorReturn(this, (ChoiceFieldRaw.__proto__ || Object.getPrototypeOf(ChoiceFieldRaw)).apply(this, arguments));
     }
 
-    _createClass(ChoiceField, [{
+    _createClass(ChoiceFieldRaw, [{
       key: 'render',
       value: function render() {
-        var _this2 = this;
-
         var _props = this.props,
+            value = _props.value,
+            onChange = _props.onChange,
             name = _props.name,
+            scopedName = _props.scopedName,
             choices = _props.choices,
-            other = _objectWithoutProperties(_props, ['name', 'choices']);
-
-        // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'choices']); // eslint-disable-line no-unused-vars
 
         return _react2.default.createElement(
           'div',
           other,
-          choices.map(function (choice) {
-            var select = function select() {
-              return _this2.value = choice.value;
-            }; // eslint-disable-line no-return-assign
+          choices.map(function (choice, index) {
             return _react2.default.createElement(
               'div',
               {
-                key: choice.value,
-                onClick: select,
-                'data-active': _this2.value === choice.value ? 'yes' : 'no' },
+                key: index,
+                onClick: function onClick() {
+                  return onChange(choice.value);
+                },
+                'data-active': choice.value === value ? 'yes' : 'no' },
               choice.label
             );
           })
         );
       }
-    }, {
-      key: 'value',
-      get: function get() {
-        return this.context.formValueScope.getValue(this.props.name);
-      },
-      set: function set(newValue) {
-        this.context.formValueScope.setValue(this.props.name, newValue);
-      }
     }]);
 
-    return ChoiceField;
+    return ChoiceFieldRaw;
   }(_react2.default.Component);
 
-  ChoiceField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  ChoiceField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  ChoiceFieldRaw.propTypes = {
+    value: _react.PropTypes.any.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     choices: _react.PropTypes.arrayOf(_react.PropTypes.shape({
       value: _react.PropTypes.any.isRequired,
       label: _react.PropTypes.string.isRequired
     })).isRequired
-  });
-  ChoiceField.defaultProps = _extends({}, _BaseField2.default.defaultProps);
-  exports.default = ChoiceField;
+  };
+  exports.default = (0, _formField2.default)()(ChoiceFieldRaw);
 });

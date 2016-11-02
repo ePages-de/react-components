@@ -1,26 +1,26 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', 'classnames', 'react'], factory);
+    define(['exports', 'classnames', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('classnames'), require('react'));
+    factory(exports, require('classnames'), require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.classnames, global.react);
+    factory(mod.exports, global.classnames, global.formField, global.react);
     global.SmartInputField = mod.exports;
   }
-})(this, function (exports, _BaseField, _classnames3, _react) {
+})(this, function (exports, _classnames3, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.SmartInput = undefined;
-
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  exports.SmartInputFieldRaw = undefined;
 
   var _classnames4 = _interopRequireDefault(_classnames3);
+
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -28,32 +28,6 @@
     return obj && obj.__esModule ? obj : {
       default: obj
     };
-  }
-
-  var _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  function _objectWithoutProperties(obj, keys) {
-    var target = {};
-
-    for (var i in obj) {
-      if (keys.indexOf(i) >= 0) continue;
-      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
-      target[i] = obj[i];
-    }
-
-    return target;
   }
 
   function _defineProperty(obj, key, value) {
@@ -167,21 +141,21 @@
    * a user defined suggestion function.
    */
 
-  var SmartInput = exports.SmartInput = function (_React$Component) {
-    _inherits(SmartInput, _React$Component);
+  var SmartInputFieldRaw = exports.SmartInputFieldRaw = function (_React$Component) {
+    _inherits(SmartInputFieldRaw, _React$Component);
 
-    function SmartInput() {
+    function SmartInputFieldRaw() {
       var _ref;
 
       var _temp, _this, _ret;
 
-      _classCallCheck(this, SmartInput);
+      _classCallCheck(this, SmartInputFieldRaw);
 
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SmartInput.__proto__ || Object.getPrototypeOf(SmartInput)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SmartInputFieldRaw.__proto__ || Object.getPrototypeOf(SmartInputFieldRaw)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
         text: '',
         focused: false,
         loading: false,
@@ -291,7 +265,7 @@
 
         // input is visually the whole container, even though the actual HTML input is not spanning the whole container,
         // so we trigger focusing the input here
-        _this.refs.input.focus();
+        _this.input && _this.input.focus();
       }, _this.handleClickValueRemove = function (index) {
         var _this$props2 = _this.props,
             value = _this$props2.value,
@@ -439,7 +413,7 @@
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    _createClass(SmartInput, [{
+    _createClass(SmartInputFieldRaw, [{
       key: 'render',
       value: function render() {
         var _classnames,
@@ -500,7 +474,9 @@
               autoCapitalize: false,
               spellCheck: false,
               className: styles.inputText,
-              ref: 'input' })
+              ref: function ref(node) {
+                _this2.input = node;
+              } })
           ),
           suggestionsVisible && _react2.default.createElement(
             'div',
@@ -523,10 +499,10 @@
       }
     }]);
 
-    return SmartInput;
+    return SmartInputFieldRaw;
   }(_react2.default.Component);
 
-  SmartInput.propTypes = {
+  SmartInputFieldRaw.propTypes = {
     // current value
     value: _react.PropTypes.any.isRequired,
     // value change handler
@@ -560,7 +536,7 @@
       suggestionDisabled: _react.PropTypes.string.isRequired
     })]).isRequired
   };
-  SmartInput.defaultProps = {
+  SmartInputFieldRaw.defaultProps = {
     suggestionDisabled: function suggestionDisabled(suggestion, index) {
       return false;
     },
@@ -588,60 +564,5 @@
     strict: false,
     autoFocus: false
   };
-
-  var SmartInputField = function (_React$Component2) {
-    _inherits(SmartInputField, _React$Component2);
-
-    function SmartInputField() {
-      var _ref10;
-
-      var _temp2, _this3, _ret2;
-
-      _classCallCheck(this, SmartInputField);
-
-      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
-
-      return _ret2 = (_temp2 = (_this3 = _possibleConstructorReturn(this, (_ref10 = SmartInputField.__proto__ || Object.getPrototypeOf(SmartInputField)).call.apply(_ref10, [this].concat(args))), _this3), _this3.focus = function () {
-        if (_this3.smartInput) {
-          _this3.smartInput.focus();
-        }
-      }, _this3.handleChange = function (newValue) {
-        _this3.value = newValue;
-      }, _this3.smartInputRef = function (smartInput) {
-        _this3.smartInput = smartInput;
-      }, _temp2), _possibleConstructorReturn(_this3, _ret2);
-    }
-
-    _createClass(SmartInputField, [{
-      key: 'render',
-      value: function render() {
-        var _props2 = this.props,
-            name = _props2.name,
-            other = _objectWithoutProperties(_props2, ['name']);
-
-        // eslint-disable-line no-unused-vars
-        return _react2.default.createElement(SmartInput, _extends({}, other, {
-          value: this.value,
-          onChange: this.handleChange,
-          ref: this.smartInputRef }));
-      }
-    }, {
-      key: 'value',
-      get: function get() {
-        return this.context.formValueScope.getValue(this.props.name);
-      },
-      set: function set(newValue) {
-        this.context.formValueScope.setValue(this.props.name, newValue);
-      }
-    }]);
-
-    return SmartInputField;
-  }(_react2.default.Component);
-
-  SmartInputField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  SmartInputField.propTypes = _extends({}, _BaseField2.default.propTypes);
-  SmartInputField.defaultProps = _extends({}, _BaseField2.default.defaultProps);
-  exports.default = SmartInputField;
+  exports.default = (0, _formField2.default)()(SmartInputFieldRaw);
 });

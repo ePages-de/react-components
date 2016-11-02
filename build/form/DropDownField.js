@@ -1,23 +1,24 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', 'react'], factory);
+    define(['exports', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('react'));
+    factory(exports, require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.react);
+    factory(mod.exports, global.formField, global.react);
     global.DropDownField = mod.exports;
   }
-})(this, function (exports, _BaseField, _react) {
+})(this, function (exports, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.DropDownFieldRaw = undefined;
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -101,70 +102,59 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var DropDownField = function (_React$Component) {
-    _inherits(DropDownField, _React$Component);
+  var DropDownFieldRaw = exports.DropDownFieldRaw = function (_React$Component) {
+    _inherits(DropDownFieldRaw, _React$Component);
 
-    function DropDownField() {
-      var _ref;
+    function DropDownFieldRaw() {
+      _classCallCheck(this, DropDownFieldRaw);
 
-      var _temp, _this, _ret;
-
-      _classCallCheck(this, DropDownField);
-
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = DropDownField.__proto__ || Object.getPrototypeOf(DropDownField)).call.apply(_ref, [this].concat(args))), _this), _this.onChange = function (event) {
-        _this.value = event.target.value;
-      }, _temp), _possibleConstructorReturn(_this, _ret);
+      return _possibleConstructorReturn(this, (DropDownFieldRaw.__proto__ || Object.getPrototypeOf(DropDownFieldRaw)).apply(this, arguments));
     }
 
-    _createClass(DropDownField, [{
+    _createClass(DropDownFieldRaw, [{
       key: 'render',
       value: function render() {
         var _props = this.props,
+            value = _props.value,
+            _onChange = _props.onChange,
             name = _props.name,
+            scopedName = _props.scopedName,
             options = _props.options,
-            other = _objectWithoutProperties(_props, ['name', 'options']);
-
-        // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'options']); // eslint-disable-line no-unused-vars
 
         return _react2.default.createElement(
           'select',
           _extends({}, other, {
-            name: this.context.formValueScope.name + '.' + name,
-            value: this.value,
-            onChange: this.onChange }),
+            name: scopedName,
+            value: value,
+            onChange: function onChange(event) {
+              return _onChange(options[parseInt(event.target.value)].value);
+            } }),
           options.map(function (option, index) {
             return _react2.default.createElement(
               'option',
-              { key: index, value: option.value },
+              {
+                key: index,
+                value: index.toString() },
               option.label
             );
           })
         );
       }
-    }, {
-      key: 'value',
-      get: function get() {
-        return this.context.formValueScope.getValue(this.props.name);
-      },
-      set: function set(newValue) {
-        this.context.formValueScope.setValue(this.props.name, newValue);
-      }
     }]);
 
-    return DropDownField;
+    return DropDownFieldRaw;
   }(_react2.default.Component);
 
-  DropDownField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  DropDownField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  DropDownFieldRaw.propTypes = {
+    value: _react.PropTypes.any.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
       value: _react.PropTypes.any.isRequired,
       label: _react.PropTypes.string.isRequired
     })).isRequired
-  });
-  DropDownField.defaultProps = _extends({}, _BaseField2.default.defaultProps);
-  exports.default = DropDownField;
+  };
+  exports.default = (0, _formField2.default)()(DropDownFieldRaw);
 });

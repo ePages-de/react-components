@@ -1,23 +1,24 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', 'react'], factory);
+    define(['exports', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('react'));
+    factory(exports, require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.react);
+    factory(mod.exports, global.formField, global.react);
     global.InputField = mod.exports;
   }
-})(this, function (exports, _BaseField, _react) {
+})(this, function (exports, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.InputFieldRaw = undefined;
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -101,36 +102,38 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var InputField = function (_React$Component) {
-    _inherits(InputField, _React$Component);
+  var InputFieldRaw = exports.InputFieldRaw = function (_React$Component) {
+    _inherits(InputFieldRaw, _React$Component);
 
-    function InputField() {
+    function InputFieldRaw() {
       var _ref;
 
       var _temp, _this, _ret;
 
-      _classCallCheck(this, InputField);
+      _classCallCheck(this, InputFieldRaw);
 
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = InputField.__proto__ || Object.getPrototypeOf(InputField)).call.apply(_ref, [this].concat(args))), _this), _this.setRef = function (input) {
-        _this.input = input;
-      }, _this.focus = function () {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = InputFieldRaw.__proto__ || Object.getPrototypeOf(InputFieldRaw)).call.apply(_ref, [this].concat(args))), _this), _this.focus = function () {
         return _this.input && _this.input.focus();
-      }, _this.onChange = function (event) {
-        _this.value = event.target.value;
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    _createClass(InputField, [{
+    _createClass(InputFieldRaw, [{
       key: 'render',
       value: function render() {
+        var _this2 = this;
+
         var _props = this.props,
+            value = _props.value,
+            _onChange = _props.onChange,
             name = _props.name,
+            scopedName = _props.scopedName,
             type = _props.type,
-            other = _objectWithoutProperties(_props, ['name', 'type']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'type']); // eslint-disable-line no-unused-vars
+
 
         return _react2.default.createElement('input', _extends({
           autoComplete: 'off',
@@ -138,31 +141,30 @@
           autoCapitalize: 'off',
           spellCheck: 'false'
         }, other, {
-          name: this.context.formValueScope.name + '.' + name,
+          name: scopedName,
           type: type,
-          value: this.value,
-          onChange: this.onChange,
-          ref: this.setRef }));
-      }
-    }, {
-      key: 'value',
-      get: function get() {
-        return this.context.formValueScope.getValue(this.props.name);
-      },
-      set: function set(newValue) {
-        this.context.formValueScope.setValue(this.props.name, newValue);
+          value: value,
+          onChange: function onChange(event) {
+            return _onChange(event.target.value);
+          },
+          ref: function ref(node) {
+            _this2.input = node;
+          } }));
       }
     }]);
 
-    return InputField;
+    return InputFieldRaw;
   }(_react2.default.Component);
 
-  InputField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  InputField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  InputFieldRaw.propTypes = {
+    value: _react.PropTypes.string.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     type: _react.PropTypes.string
-  });
-  InputField.defaultProps = _extends({}, _BaseField2.default.defaultProps, {
+  };
+  InputFieldRaw.defaultProps = {
     type: 'text'
-  });
-  exports.default = InputField;
+  };
+  exports.default = (0, _formField2.default)()(InputFieldRaw);
 });

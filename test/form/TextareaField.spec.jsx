@@ -1,49 +1,33 @@
 import expect from 'unexpected'
-import Form from '../../src/form/Form'
-import Immutable from 'immutable'
 import React from 'react'
 import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
-import TextareaField from '../../src/form/TextareaField'
+import {TextareaFieldRaw} from '../../src/form/TextareaField'
 
-function render () {
-  const initialValue = Immutable.fromJS({
-    description: 'foo\nbar'
-  })
-  const onSubmit = sinon.spy()
+function render ({value} = {}) {
+  const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <Form name="test" value={initialValue} onSubmit={onSubmit}>
-      <TextareaField name="description" className="description"/>
-    </Form>
+    <TextareaFieldRaw value={value} onChange={onChange}/>
   )
-  const form = TestUtils.findOne(dom, 'form')
-  const descriptionField = TestUtils.findOne(dom, '.description')
+  const textarea = TestUtils.findOne(dom, 'textarea')
 
-  return {initialValue, onSubmit, dom, form, descriptionField}
+  return {onChange, dom, textarea}
 }
 
 describe('TextareaField', function () {
   it('renders', function () {
-    const {dom} = render()
+    const {dom} = render({value: 'foo\nbar'})
 
     expect(dom, 'to have rendered',
-      <form>
-        <textarea name="test.description" value={'foo\nbar'}/>
-      </form>
+      <textarea value={'foo\nbar'}/>
     )
   })
 
   it('returns new value', function () {
-    const {onSubmit, form, descriptionField} = render()
+    const {onChange, textarea} = render({value: 'foobar1'})
 
-    expect(onSubmit, 'was not called')
-    TestUtils.Simulate.change(descriptionField, {target: {value: 'foobar2'}})
-    TestUtils.Simulate.submit(form)
-    expect(onSubmit, 'was called once')
-    expect(onSubmit, 'to have calls satisfying', function () {
-      onSubmit(Immutable.fromJS({
-        description: 'foobar2'
-      }))
-    })
+    expect(onChange, 'was not called')
+    TestUtils.Simulate.change(textarea, {target: {value: 'foobar2'}})
+    expect(onChange, 'to have calls satisfying', () => onChange('foobar2'))
   })
 })

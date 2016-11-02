@@ -1,23 +1,24 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', 'react'], factory);
+    define(['exports', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('react'));
+    factory(exports, require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.react);
+    factory(mod.exports, global.formField, global.react);
     global.RadioButtonField = mod.exports;
   }
-})(this, function (exports, _BaseField, _react) {
+})(this, function (exports, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.RadioButtonFieldRaw = undefined;
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -26,20 +27,6 @@
       default: obj
     };
   }
-
-  var _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
 
   function _objectWithoutProperties(obj, keys) {
     var target = {};
@@ -101,85 +88,71 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var RadioButtonField = function (_React$Component) {
-    _inherits(RadioButtonField, _React$Component);
+  var RadioButtonFieldRaw = exports.RadioButtonFieldRaw = function (_React$Component) {
+    _inherits(RadioButtonFieldRaw, _React$Component);
 
-    function RadioButtonField() {
-      var _ref;
+    function RadioButtonFieldRaw() {
+      _classCallCheck(this, RadioButtonFieldRaw);
 
-      var _temp, _this, _ret;
-
-      _classCallCheck(this, RadioButtonField);
-
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RadioButtonField.__proto__ || Object.getPrototypeOf(RadioButtonField)).call.apply(_ref, [this].concat(args))), _this), _this.updateValue = function (event) {
-        var button = _this.props.buttons[parseInt(event.target.value)];
-
-        _this.value = button.value;
-      }, _temp), _possibleConstructorReturn(_this, _ret);
+      return _possibleConstructorReturn(this, (RadioButtonFieldRaw.__proto__ || Object.getPrototypeOf(RadioButtonFieldRaw)).apply(this, arguments));
     }
 
-    _createClass(RadioButtonField, [{
+    _createClass(RadioButtonFieldRaw, [{
       key: 'render',
       value: function render() {
-        var _this2 = this;
-
         var _props = this.props,
+            value = _props.value,
+            _onChange = _props.onChange,
             name = _props.name,
+            scopedName = _props.scopedName,
             buttons = _props.buttons,
             disabled = _props.disabled,
-            parseValue = _props.parseValue,
-            other = _objectWithoutProperties(_props, ['name', 'buttons', 'disabled', 'parseValue']);
-
-        // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'buttons', 'disabled']); // eslint-disable-line no-unused-vars
 
         return _react2.default.createElement(
           'div',
           other,
-          buttons.map(function (button, ix) {
+          buttons.map(function (button, index) {
             return _react2.default.createElement(
               'span',
               { key: button.value },
               _react2.default.createElement('input', {
-                id: name + '.' + ix,
-                name: _this2.context.formValueScope.name + '.' + name,
+                id: scopedName + '.' + index,
+                name: scopedName,
                 type: 'radio',
-                value: ix,
-                onChange: _this2.updateValue,
-                checked: _this2.value === button.value,
+                value: index,
+                onChange: function onChange(event) {
+                  return _onChange(buttons[parseInt(event.target.value)].value);
+                },
+                checked: value === button.value,
                 disabled: disabled }),
               _react2.default.createElement(
                 'label',
-                { htmlFor: name + '.' + ix },
+                { htmlFor: scopedName + '.' + index },
                 button.label
               )
             );
           })
         );
       }
-    }, {
-      key: 'value',
-      get: function get() {
-        return this.context.formValueScope.getValue(this.props.name);
-      },
-      set: function set(newValue) {
-        this.context.formValueScope.setValue(this.props.name, newValue);
-      }
     }]);
 
-    return RadioButtonField;
+    return RadioButtonFieldRaw;
   }(_react2.default.Component);
 
-  RadioButtonField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  RadioButtonField.defaultProps = _extends({}, _BaseField2.default.defaultProps);
-  RadioButtonField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  RadioButtonFieldRaw.propTypes = {
+    value: _react.PropTypes.any.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     buttons: _react.PropTypes.arrayOf(_react.PropTypes.shape({
       value: _react.PropTypes.any.isRequired,
       label: _react.PropTypes.string.isRequired
-    })).isRequired
-  });
-  exports.default = RadioButtonField;
+    })).isRequired,
+    disabled: _react.PropTypes.bool
+  };
+  RadioButtonFieldRaw.defaultProps = {
+    disabled: false
+  };
+  exports.default = (0, _formField2.default)()(RadioButtonFieldRaw);
 });

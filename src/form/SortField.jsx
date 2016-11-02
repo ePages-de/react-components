@@ -1,4 +1,4 @@
-import BaseField from './BaseField'
+import formField from './formField'
 import React, {PropTypes} from 'react'
 
 function swap (items, oldIndex, newIndex) {
@@ -7,13 +7,12 @@ function swap (items, oldIndex, newIndex) {
     .set(newIndex, items.get(oldIndex))
 }
 
-export default class SortField extends React.Component {
-  static contextTypes = {
-    ...BaseField.contextTypes
-  }
-
+export class SortFieldRaw extends React.Component {
   static propTypes = {
-    ...BaseField.propTypes,
+    value: PropTypes.any.isRequired,
+    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    scopedName: PropTypes.string,
     children: PropTypes.func.isRequired,
     onReorder: PropTypes.func,
     validate: PropTypes.func,
@@ -26,7 +25,6 @@ export default class SortField extends React.Component {
   }
 
   static defaultProps = {
-    ...BaseField.defaultProps,
     onReorder: () => null,
     validate: () => true,
     disabled: () => false,
@@ -38,29 +36,21 @@ export default class SortField extends React.Component {
     dropIndex: null
   }
 
-  get value () {
-    return this.context.formValueScope.getValue(this.props.name)
-  }
-
-  set value (val) {
-    this.context.formValueScope.setValue(this.props.name, val)
-  }
-
   render () {
-    const self = this
-    const {name, children, onReorder, validate, disabled, orientation, itemSize, crossAxisItemSize, itemCount, itemSpacing, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {value, onChange, name, scopedName, children, onReorder, validate, disabled, orientation, itemSize, crossAxisItemSize, itemCount, itemSpacing, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {dragIndex, dropIndex} = this.state
     const dimension = orientation === 'horizontal'
       ? {width: itemSize * itemCount + (itemSpacing * (itemCount - 1)), height: crossAxisItemSize}
       : {height: itemSize * itemCount + (itemSpacing * (itemCount - 1)), width: crossAxisItemSize}
 
     return (
       <div {...other} style={{position: 'relative', ...dimension}}>
-        {this.value.map((item, index) => {
+        {value.map((item, index) => {
           const itemWithDndInfo = item
-            .set('__isSource', this.state.dragIndex === index)
-            .set('__isTarget', this.state.dropIndex === index)
-            .set('__isDragging', this.state.dragIndex !== null)
-            .set('__isDisabled', disabled(item, index, this.value))
+            .set('__isSource', dragIndex === index)
+            .set('__isTarget', dropIndex === index)
+            .set('__isDragging', dragIndex !== null)
+            .set('__isDisabled', disabled(item, index, value))
           const itemPosition = orientation === 'horizontal'
             ? {left: index * (itemSize + itemSpacing), top: 0}
             : {top: index * (itemSize + itemSpacing), left: 0}
@@ -73,39 +63,39 @@ export default class SortField extends React.Component {
               key={index}
               draggable
               style={{position: 'absolute', ...itemPosition, ...itemDimension}}
-              onDragStart={function (event) {
+              onDragStart={(event) => {
                 if (!itemWithDndInfo.get('__isDisabled')) {
                   if (event.dataTransfer) event.dataTransfer.setData('Url', '#')
-                  self.setState({dragIndex: index})
+                  this.setState({dragIndex: index})
                 } else {
                   event.preventDefault()
                 }
               }}
-              onDragEnd={function () {
-                self.setState({dragIndex: null})
+              onDragEnd={() => {
+                this.setState({dragIndex: null})
               }}
-              onDragEnter={function () {
-                if (self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(self.value, self.state.dragIndex, index))) {
-                  self.setState({dropIndex: index})
+              onDragEnter={() => {
+                if (dragIndex !== null && dragIndex !== index && validate(swap(value, dragIndex, index))) {
+                  this.setState({dropIndex: index})
                 }
               }}
-              onDragOver={function (event) {
-                if (!itemWithDndInfo.get('__isDisabled') && self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(self.value, self.state.dragIndex, index))) {
+              onDragOver={(event) => {
+                if (!itemWithDndInfo.get('__isDisabled') && dragIndex !== null && dragIndex !== index && validate(swap(value, dragIndex, index))) {
                   event.preventDefault()
                 }
               }}
-              onDragLeave={function () {
-                if (self.state.dropIndex === index) {
-                  self.setState({dropIndex: null})
+              onDragLeave={() => {
+                if (dropIndex === index) {
+                  this.setState({dropIndex: null})
                 }
               }}
-              onDrop={function (event) {
+              onDrop={(event) => {
                 event.preventDefault()
-                self.setState({dragIndex: null, dropIndex: null})
-                self.value = swap(self.value, self.state.dragIndex, index)
-                self.props.onReorder(self.state.dragIndex, index)
+                this.setState({dragIndex: null, dropIndex: null})
+                this.props.onReorder(dragIndex, index)
+                onChange(swap(value, dragIndex, index))
               }}>
-              {this.props.children(itemWithDndInfo, index, this.value)}
+              {children(itemWithDndInfo, index, value)}
             </div>
           )
         })}
@@ -113,3 +103,5 @@ export default class SortField extends React.Component {
     )
   }
 }
+
+export default formField()(SortFieldRaw)

@@ -2,7 +2,7 @@ import expect from 'unexpected'
 import Form from '../../src/form/Form'
 import Immutable from 'immutable'
 import React from 'react'
-import SelectableInput from '../../src/form/SelectableInput.jsx'
+import SelectableInputField from '../../src/form/SelectableInputField'
 import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
 
@@ -14,7 +14,7 @@ function render () {
   const onSubmit = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
     <Form name="testform" value={initialValue} onSubmit={onSubmit}>
-      <SelectableInput name="facebook" type="text" title="mySelectableInput" label="mySelectableInputLabel" placeholder="type here"/>
+      <SelectableInputField name="facebook" type="text" title="mySelectableInput" label="mySelectableInputLabel" placeholder="type here"/>
     </Form>
   )
   const form = TestUtils.findOne(dom, 'form')
@@ -24,7 +24,7 @@ function render () {
   return {initialValue, onSubmit, dom, form, inputField0, inputField1}
 }
 
-describe('SelectableInput', function () {
+describe('SelectableInputField', function () {
   it('renders', function () {
     const {dom} = render()
 

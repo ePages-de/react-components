@@ -1,68 +1,53 @@
 import expect from 'unexpected'
-import Form from '../../src/form/Form'
-import Immutable from 'immutable'
-import RadioButtonField from '../../src/form/RadioButtonField'
+import {RadioButtonFieldRaw} from '../../src/form/RadioButtonField'
 import React from 'react'
 import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
 
-const radioButtons = [
-  {label: 'Yes', value: true},
-  {label: 'No', value: false}
-]
-
-function render ({visibility} = {}) {
-  const initialValue = Immutable.fromJS({visibility})
-  const onSubmit = sinon.spy()
-
+function render ({value} = {}) {
+  const buttons = [
+    {label: 'Yes', value: true},
+    {label: 'No', value: false}
+  ]
+  const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <Form name="test" value={initialValue} onSubmit={onSubmit}>
-      <RadioButtonField
-        name="visibility"
-        buttons={radioButtons}/>
-    </Form>
+    <RadioButtonFieldRaw value={value} onChange={onChange} name="visibility" scopedName="test.visibility" buttons={buttons}/>
   )
-  const form = TestUtils.findOne(dom, 'form')
-  const buttons = TestUtils.find(dom, 'input')
+  const radioButtons = TestUtils.find(dom, 'input')
 
-  return {initialValue, onSubmit, dom, form, buttons}
+  return {onChange, dom, radioButtons}
 }
 
 describe('RadioButtonField', function () {
   it('renders with initial value', function () {
-    const {dom} = render({visibility: false})
+    const {dom} = render({value: false})
     expect(dom, 'to have rendered',
-      <form>
-        <div>
-          <span>
-            <input
-              name="test.visibility"
-              type="radio"/>
-            <label htmlFor="visibility.0">Yes</label>
-          </span>
-          <span>
-            <input
-              checked
-              name="test.visibility"
-              type="radio"/>
-            <label htmlFor="visibility.1">No</label>
-          </span>
-        </div>
-      </form>
+      <div>
+        <span>
+          <input
+            id="test.visibility.0"
+            name="test.visibility"
+            type="radio"/>
+          <label htmlFor="test.visibility.0">Yes</label>
+        </span>
+        <span>
+          <input
+            checked
+            id="test.visibility.1"
+            name="test.visibility"
+            type="radio"/>
+          <label htmlFor="test.visibility.1">No</label>
+        </span>
+      </div>
     )
   })
 
   it('returns new value', function () {
-    const {onSubmit, form, buttons} = render({visibility: true})
+    const {onChange, radioButtons} = render({value: true})
 
-    TestUtils.Simulate.click(buttons[1])
-    TestUtils.Simulate.change(buttons[1])
-    TestUtils.Simulate.submit(form)
+    TestUtils.Simulate.click(radioButtons[1])
+    TestUtils.Simulate.change(radioButtons[1])
 
-    expect(onSubmit, 'to have calls satisfying', function () {
-      onSubmit(Immutable.fromJS({
-        visibility: false
-      }))
-    })
+    expect(onChange, 'to have calls satisfying', () => onChange(false))
   })
 })

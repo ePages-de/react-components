@@ -1,25 +1,23 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', './CheckboxField', './InputField', 'react'], factory);
+    define(['exports', './formField', './InputField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('./CheckboxField'), require('./InputField'), require('react'));
+    factory(exports, require('./formField'), require('./InputField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.CheckboxField, global.InputField, global.react);
-    global.SelectableInput = mod.exports;
+    factory(mod.exports, global.formField, global.InputField, global.react);
+    global.SelectableInputField = mod.exports;
   }
-})(this, function (exports, _BaseField, _CheckboxField, _InputField, _react) {
+})(this, function (exports, _formField, _InputField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
-
-  var _CheckboxField2 = _interopRequireDefault(_CheckboxField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _InputField2 = _interopRequireDefault(_InputField);
 
@@ -30,20 +28,6 @@
       default: obj
     };
   }
-
-  var _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
 
   function _objectWithoutProperties(obj, keys) {
     var target = {};
@@ -105,78 +89,88 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
-  var SelectableInput = function (_React$Component) {
-    _inherits(SelectableInput, _React$Component);
+  var SelectableInputFieldRaw = function (_React$Component) {
+    _inherits(SelectableInputFieldRaw, _React$Component);
 
-    function SelectableInput() {
-      _classCallCheck(this, SelectableInput);
+    function SelectableInputFieldRaw() {
+      _classCallCheck(this, SelectableInputFieldRaw);
 
-      return _possibleConstructorReturn(this, (SelectableInput.__proto__ || Object.getPrototypeOf(SelectableInput)).apply(this, arguments));
+      return _possibleConstructorReturn(this, (SelectableInputFieldRaw.__proto__ || Object.getPrototypeOf(SelectableInputFieldRaw)).apply(this, arguments));
     }
 
-    _createClass(SelectableInput, [{
+    _createClass(SelectableInputFieldRaw, [{
       key: 'render',
       value: function render() {
         var _this2 = this;
 
+        var formValueScope = this.context.formValueScope;
+
         var _props = this.props,
+            value = _props.value,
+            onChange = _props.onChange,
             name = _props.name,
+            scopedName = _props.scopedName,
             type = _props.type,
             title = _props.title,
             label = _props.label,
             placeholder = _props.placeholder,
-            other = _objectWithoutProperties(_props, ['name', 'type', 'title', 'label', 'placeholder']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'type', 'title', 'label', 'placeholder']);
 
+        // eslint-disable-line no-unused-vars
         var checkboxName = name + 'Selected';
+        var checkboxFullName = scopedName + 'Selected';
 
         return _react2.default.createElement(
           'div',
           other,
           _react2.default.createElement(
             'label',
-            {
-              title: title
-            },
-            _react2.default.createElement(_CheckboxField2.default, { name: checkboxName }),
+            { title: title },
+            _react2.default.createElement('input', {
+              name: checkboxFullName,
+              type: 'checkbox',
+              checked: formValueScope.getValue(checkboxName),
+              onChange: function onChange(event) {
+                formValueScope.setValue(checkboxName, event.target.checked);
+                if (event.target.checked) {
+                  // give time for the input field to be enabled
+                  window.setTimeout(function () {
+                    return _this2.inputField && _this2.inputField.focus();
+                  }, 0);
+                }
+              } }),
             label
           ),
           _react2.default.createElement(_InputField2.default, {
             name: name,
             type: type,
             placeholder: placeholder,
-            ref: function ref(node) {
-              _this2.input = node;
-            },
-            disabled: !this.context.formValueScope.getValue(checkboxName) })
+            disabled: !this.context.formValueScope.getValue(checkboxName),
+            ref: function ref(component) {
+              _this2.inputField = component;
+            } })
         );
-      }
-    }, {
-      key: 'componentDidUpdate',
-      value: function componentDidUpdate() {
-        this.input.focus();
-      }
-    }, {
-      key: 'value',
-      get: function get() {
-        return this.context.formValueScope.getValue(this.props.name);
-      },
-      set: function set(newValue) {
-        this.context.formValueScope.setValue(this.props.name, newValue);
       }
     }]);
 
-    return SelectableInput;
+    return SelectableInputFieldRaw;
   }(_react2.default.Component);
 
-  SelectableInput.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  SelectableInput.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  SelectableInputFieldRaw.contextTypes = {
+    formValueScope: _react.PropTypes.any.isRequired
+  };
+  SelectableInputFieldRaw.propTypes = {
+    value: _react.PropTypes.any.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     type: _react.PropTypes.string,
     title: _react.PropTypes.string,
     label: _react.PropTypes.string,
     placeholder: _react.PropTypes.string
-  });
-  SelectableInput.defaultProps = _extends({}, _BaseField2.default.defaultProps, {
+  };
+  SelectableInputFieldRaw.defaultProps = {
     type: 'text'
-  });
-  exports.default = SelectableInput;
+  };
+  exports.default = (0, _formField2.default)()(SelectableInputFieldRaw);
 });

@@ -1,23 +1,24 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './BaseField', 'react'], factory);
+    define(['exports', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./BaseField'), require('react'));
+    factory(exports, require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.BaseField, global.react);
+    factory(mod.exports, global.formField, global.react);
     global.SortField = mod.exports;
   }
-})(this, function (exports, _BaseField, _react) {
+})(this, function (exports, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.SortFieldRaw = undefined;
 
-  var _BaseField2 = _interopRequireDefault(_BaseField);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -105,35 +106,36 @@
     return items.set(oldIndex, items.get(newIndex)).set(newIndex, items.get(oldIndex));
   }
 
-  var SortField = function (_React$Component) {
-    _inherits(SortField, _React$Component);
+  var SortFieldRaw = exports.SortFieldRaw = function (_React$Component) {
+    _inherits(SortFieldRaw, _React$Component);
 
-    function SortField() {
+    function SortFieldRaw() {
       var _ref;
 
       var _temp, _this, _ret;
 
-      _classCallCheck(this, SortField);
+      _classCallCheck(this, SortFieldRaw);
 
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SortField.__proto__ || Object.getPrototypeOf(SortField)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SortFieldRaw.__proto__ || Object.getPrototypeOf(SortFieldRaw)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
         dragIndex: null,
         dropIndex: null
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    _createClass(SortField, [{
+    _createClass(SortFieldRaw, [{
       key: 'render',
       value: function render() {
         var _this2 = this;
 
-        var self = this;
-
         var _props = this.props,
+            value = _props.value,
+            onChange = _props.onChange,
             name = _props.name,
+            scopedName = _props.scopedName,
             children = _props.children,
             onReorder = _props.onReorder,
             validate = _props.validate,
@@ -143,16 +145,20 @@
             crossAxisItemSize = _props.crossAxisItemSize,
             itemCount = _props.itemCount,
             itemSpacing = _props.itemSpacing,
-            other = _objectWithoutProperties(_props, ['name', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']);
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']); // eslint-disable-line no-unused-vars
 
-        // eslint-disable-line no-unused-vars
+
+        var _state = this.state,
+            dragIndex = _state.dragIndex,
+            dropIndex = _state.dropIndex;
+
         var dimension = orientation === 'horizontal' ? { width: itemSize * itemCount + itemSpacing * (itemCount - 1), height: crossAxisItemSize } : { height: itemSize * itemCount + itemSpacing * (itemCount - 1), width: crossAxisItemSize };
 
         return _react2.default.createElement(
           'div',
           _extends({}, other, { style: _extends({ position: 'relative' }, dimension) }),
-          this.value.map(function (item, index) {
-            var itemWithDndInfo = item.set('__isSource', _this2.state.dragIndex === index).set('__isTarget', _this2.state.dropIndex === index).set('__isDragging', _this2.state.dragIndex !== null).set('__isDisabled', disabled(item, index, _this2.value));
+          value.map(function (item, index) {
+            var itemWithDndInfo = item.set('__isSource', dragIndex === index).set('__isTarget', dropIndex === index).set('__isDragging', dragIndex !== null).set('__isDisabled', disabled(item, index, value));
             var itemPosition = orientation === 'horizontal' ? { left: index * (itemSize + itemSpacing), top: 0 } : { top: index * (itemSize + itemSpacing), left: 0 };
             var itemDimension = orientation === 'horizontal' ? { width: itemSize, height: crossAxisItemSize } : { height: itemSize, width: crossAxisItemSize };
 
@@ -165,55 +171,50 @@
                 onDragStart: function onDragStart(event) {
                   if (!itemWithDndInfo.get('__isDisabled')) {
                     if (event.dataTransfer) event.dataTransfer.setData('Url', '#');
-                    self.setState({ dragIndex: index });
+                    _this2.setState({ dragIndex: index });
                   } else {
                     event.preventDefault();
                   }
                 },
                 onDragEnd: function onDragEnd() {
-                  self.setState({ dragIndex: null });
+                  _this2.setState({ dragIndex: null });
                 },
                 onDragEnter: function onDragEnter() {
-                  if (self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(self.value, self.state.dragIndex, index))) {
-                    self.setState({ dropIndex: index });
+                  if (dragIndex !== null && dragIndex !== index && validate(swap(value, dragIndex, index))) {
+                    _this2.setState({ dropIndex: index });
                   }
                 },
                 onDragOver: function onDragOver(event) {
-                  if (!itemWithDndInfo.get('__isDisabled') && self.state.dragIndex !== null && self.state.dragIndex !== index && validate(swap(self.value, self.state.dragIndex, index))) {
+                  if (!itemWithDndInfo.get('__isDisabled') && dragIndex !== null && dragIndex !== index && validate(swap(value, dragIndex, index))) {
                     event.preventDefault();
                   }
                 },
                 onDragLeave: function onDragLeave() {
-                  if (self.state.dropIndex === index) {
-                    self.setState({ dropIndex: null });
+                  if (dropIndex === index) {
+                    _this2.setState({ dropIndex: null });
                   }
                 },
                 onDrop: function onDrop(event) {
                   event.preventDefault();
-                  self.setState({ dragIndex: null, dropIndex: null });
-                  self.value = swap(self.value, self.state.dragIndex, index);
-                  self.props.onReorder(self.state.dragIndex, index);
+                  _this2.setState({ dragIndex: null, dropIndex: null });
+                  _this2.props.onReorder(dragIndex, index);
+                  onChange(swap(value, dragIndex, index));
                 } },
-              _this2.props.children(itemWithDndInfo, index, _this2.value)
+              children(itemWithDndInfo, index, value)
             );
           })
         );
       }
-    }, {
-      key: 'value',
-      get: function get() {
-        return this.context.formValueScope.getValue(this.props.name);
-      },
-      set: function set(val) {
-        this.context.formValueScope.setValue(this.props.name, val);
-      }
     }]);
 
-    return SortField;
+    return SortFieldRaw;
   }(_react2.default.Component);
 
-  SortField.contextTypes = _extends({}, _BaseField2.default.contextTypes);
-  SortField.propTypes = _extends({}, _BaseField2.default.propTypes, {
+  SortFieldRaw.propTypes = {
+    value: _react.PropTypes.any.isRequired,
+    onChange: _react.PropTypes.func.isRequired,
+    name: _react.PropTypes.string,
+    scopedName: _react.PropTypes.string,
     children: _react.PropTypes.func.isRequired,
     onReorder: _react.PropTypes.func,
     validate: _react.PropTypes.func,
@@ -223,8 +224,8 @@
     crossAxisItemSize: _react.PropTypes.number.isRequired,
     itemSpacing: _react.PropTypes.number,
     itemCount: _react.PropTypes.number.isRequired
-  });
-  SortField.defaultProps = _extends({}, _BaseField2.default.defaultProps, {
+  };
+  SortFieldRaw.defaultProps = {
     onReorder: function onReorder() {
       return null;
     },
@@ -235,6 +236,6 @@
       return false;
     },
     itemSpacing: 0
-  });
-  exports.default = SortField;
+  };
+  exports.default = (0, _formField2.default)()(SortFieldRaw);
 });

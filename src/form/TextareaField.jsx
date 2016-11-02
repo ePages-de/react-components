@@ -1,36 +1,31 @@
-import BaseField from './BaseField'
+import formField from './formField'
 import React, {PropTypes} from 'react'
 
-export default class TextareaField extends React.Component {
-  static contextTypes = {
-    ...BaseField.contextTypes
-  }
-
+export class TextareaFieldRaw extends React.Component {
   static propTypes = {
-    ...BaseField.propTypes,
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    scopedName: PropTypes.string,
     rows: PropTypes.number
   }
 
-  static defaultProps = {
-    ...BaseField.defaultProps
-  }
-
   render () {
-    const {name, rows, ...other} = this.props
+    const {value, onChange, name, scopedName, rows, ...other} = this.props // eslint-disable-line no-unused-vars
     return <textarea
       autoComplete="off"
       autoCorrect="off"
       autoCapitalize="off"
       spellCheck="false"
       {...other}
-      name={`${this.context.formValueScope.name}.${name}`}
+      name={scopedName}
       rows={rows}
-      value={this.context.formValueScope.getValue(name)}
-      onChange={this.onChange}
-      ref="textarea"/>
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      ref={(node) => { this.textarea = node }}/>
   }
 
-  focus = () => this.refs.textarea.focus()
-
-  onChange = (event) => this.context.formValueScope.setValue(this.props.name, event.target.value)
+  focus = () => this.textarea && this.textarea.focus()
 }
+
+export default formField()(TextareaFieldRaw)
