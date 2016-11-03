@@ -24,21 +24,22 @@ class SelectableInputFieldRaw extends React.Component {
 
   render () {
     const {formValueScope} = this.context
-    const {value, onChange, name, scopedName, type, title, label, placeholder, ...other} = this.props // eslint-disable-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
+    const {value, onChange, name, scopedName, type, title, label, placeholder, ...other} = this.props
     const checkboxName = `${name}Selected`
-    const checkboxFullName = `${scopedName}Selected`
+    const scopedCheckboxName = `${scopedName}Selected`
 
     return <div {...other}>
       <label title={title}>
         <input
-          name={checkboxFullName}
+          name={scopedCheckboxName}
           type="checkbox"
           checked={formValueScope.getValue(checkboxName)}
           onChange={(event) => {
             formValueScope.setValue(checkboxName, event.target.checked)
             if (event.target.checked) {
               // give time for the input field to be enabled
-              window.setTimeout(() => this.inputField && this.inputField.focus(), 0)
+              window.setTimeout(() => this.inputField.focus(), 0)
             }
           }}/>
         {label}
