@@ -6,7 +6,7 @@ import SelectableInputField from '../../src/form/SelectableInputField'
 import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
 
-function render () {
+function render (props = {}) {
   const initialValue = Immutable.fromJS({
     facebook: 'testvalue',
     facebookSelected: false
@@ -14,7 +14,14 @@ function render () {
   const onSubmit = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
     <Form name="testform" value={initialValue} onSubmit={onSubmit}>
-      <SelectableInputField name="facebook" type="text" title="mySelectableInput" label="mySelectableInputLabel" placeholder="type here"/>
+      <SelectableInputField
+        name="facebook"
+        type="text"
+        title="mySelectableInput"
+        label="mySelectableInputLabel"
+        placeholder="type here"
+        {...props}
+      />
     </Form>
   )
   const form = TestUtils.findOne(dom, 'form')
@@ -47,6 +54,12 @@ describe('SelectableInputField', function () {
         </div>
       </form>
     )
+  })
+
+  it('renders in selected state', function () {
+    const {inputField0, inputField1} = render({selected: true})
+    expect(inputField0.checked, 'to be', true)
+    expect(inputField1.disabled, 'to be', false)
   })
 
   it('returns new value', function () {

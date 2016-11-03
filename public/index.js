@@ -70,7 +70,7 @@ class App extends React.Component {
                 <RadioButtonField name="cut" buttons={cuts}/>
               </div>
               <div>
-                <SelectableInput name="facebook" type="text" title="Selector" label="SelectorLabel" placeholder="type here"/>
+                <SelectableInput selected name="facebook" type="text" title="Selector" label="SelectorLabel" placeholder="type here"/>
               </div>
               <div>
                 <SmartInputField name="tags" className="smart-input" getSuggestions={getTagSuggestions}/>

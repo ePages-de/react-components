@@ -15,31 +15,45 @@ class SelectableInputFieldRaw extends React.Component {
     type: PropTypes.string,
     title: PropTypes.string,
     label: PropTypes.string,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    selected: PropTypes.bool
   }
 
   static defaultProps = {
     type: 'text'
   }
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      isSelected: props.selected
+    }
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    if (this.state.isSelected !== prevState.isSelected) {
+      this.context.formValueScope.setValue(`${this.props.name}Selected`, this.state.isSelected)
+    }
+  }
+
   render () {
-    const {formValueScope} = this.context
-    const {value, onChange, name, scopedName, type, title, label, placeholder, ...other} = this.props // eslint-disable-line no-unused-vars
-    const checkboxName = `${name}Selected`
-    const checkboxFullName = `${scopedName}Selected`
+    // eslint-disable-next-line no-unused-vars
+    const {value, onChange, name, scopedName, type, title, label, placeholder, selected, ...other} = this.props
+    const scopedCheckboxName = `${scopedName}Selected`
 
     return <div {...other}>
       <label title={title}>
         <input
-          name={checkboxFullName}
+          name={scopedCheckboxName}
           type="checkbox"
-          checked={formValueScope.getValue(checkboxName)}
+          defaultChecked={this.state.isSelected}
           onChange={(event) => {
-            formValueScope.setValue(checkboxName, event.target.checked)
-            if (event.target.checked) {
+            const isSelected = event.target.checked
+            if (isSelected) {
               // give time for the input field to be enabled
-              window.setTimeout(() => this.inputField && this.inputField.focus(), 0)
+              window.setTimeout(() => this.inputField.focus(), 0)
             }
+            this.setState({isSelected})
           }}/>
         {label}
       </label>
@@ -47,7 +61,7 @@ class SelectableInputFieldRaw extends React.Component {
         name={name}
         type={type}
         placeholder={placeholder}
-        disabled={!this.context.formValueScope.getValue(checkboxName)}
+        disabled={!this.state.isSelected}
         ref={(component) => { this.inputField = component }}/>
     </div>
   }
