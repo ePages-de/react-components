@@ -106,7 +106,7 @@
       return _interopRequireDefault(_ChoiceField).default;
     }
   });
-  Object.defineProperty(exports, 'SelectableInput', {
+  Object.defineProperty(exports, 'SelectableInputField', {
     enumerable: true,
     get: function () {
       return _interopRequireDefault(_SelectableInputField).default;

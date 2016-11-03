@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {withClassName, Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField, SelectableInput, SmartInputField} from '../src/index'
+import {withClassName, Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField, SelectableInputField, SmartInputField} from '../src/index'
 
 const initialValue = Immutable.fromJS({
   name: 'name',
@@ -70,7 +70,7 @@ class App extends React.Component {
                 <RadioButtonField name="cut" buttons={cuts}/>
               </div>
               <div>
-                <SelectableInput name="facebook" type="text" title="Selector" label="SelectorLabel" placeholder="type here"/>
+                <SelectableInputField name="facebook" type="text" title="Selector" label="SelectorLabel" placeholder="type here"/>
               </div>
               <div>
                 <SmartInputField name="tags" className="smart-input" getSuggestions={getTagSuggestions}/>

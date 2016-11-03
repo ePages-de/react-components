@@ -116,9 +116,8 @@
             placeholder = _props.placeholder,
             other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'type', 'title', 'label', 'placeholder']);
 
-        // eslint-disable-line no-unused-vars
         var checkboxName = name + 'Selected';
-        var checkboxFullName = scopedName + 'Selected';
+        var scopedCheckboxName = scopedName + 'Selected';
 
         return _react2.default.createElement(
           'div',
@@ -127,7 +126,7 @@
             'label',
             { title: title },
             _react2.default.createElement('input', {
-              name: checkboxFullName,
+              name: scopedCheckboxName,
               type: 'checkbox',
               checked: formValueScope.getValue(checkboxName),
               onChange: function onChange(event) {
@@ -135,7 +134,7 @@
                 if (event.target.checked) {
                   // give time for the input field to be enabled
                   window.setTimeout(function () {
-                    return _this2.inputField && _this2.inputField.focus();
+                    return _this2.inputField.focus();
                   }, 0);
                 }
               } }),
