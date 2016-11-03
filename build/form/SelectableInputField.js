@@ -92,18 +92,28 @@
   var SelectableInputFieldRaw = function (_React$Component) {
     _inherits(SelectableInputFieldRaw, _React$Component);
 
-    function SelectableInputFieldRaw() {
+    function SelectableInputFieldRaw(props) {
       _classCallCheck(this, SelectableInputFieldRaw);
 
-      return _possibleConstructorReturn(this, (SelectableInputFieldRaw.__proto__ || Object.getPrototypeOf(SelectableInputFieldRaw)).apply(this, arguments));
+      var _this = _possibleConstructorReturn(this, (SelectableInputFieldRaw.__proto__ || Object.getPrototypeOf(SelectableInputFieldRaw)).call(this, props));
+
+      _this.state = {
+        isSelected: props.selected
+      };
+      return _this;
     }
 
     _createClass(SelectableInputFieldRaw, [{
+      key: 'componentDidUpdate',
+      value: function componentDidUpdate(prevProps, prevState) {
+        if (this.state.isSelected !== prevState.isSelected) {
+          this.context.formValueScope.setValue(this.props.name + 'Selected', this.state.isSelected);
+        }
+      }
+    }, {
       key: 'render',
       value: function render() {
         var _this2 = this;
-
-        var formValueScope = this.context.formValueScope;
 
         var _props = this.props,
             value = _props.value,
@@ -114,11 +124,10 @@
             title = _props.title,
             label = _props.label,
             placeholder = _props.placeholder,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'type', 'title', 'label', 'placeholder']);
+            selected = _props.selected,
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'type', 'title', 'label', 'placeholder', 'selected']);
 
-        // eslint-disable-line no-unused-vars
-        var checkboxName = name + 'Selected';
-        var checkboxFullName = scopedName + 'Selected';
+        var scopedCheckboxName = scopedName + 'Selected';
 
         return _react2.default.createElement(
           'div',
@@ -127,17 +136,18 @@
             'label',
             { title: title },
             _react2.default.createElement('input', {
-              name: checkboxFullName,
+              name: scopedCheckboxName,
               type: 'checkbox',
-              checked: formValueScope.getValue(checkboxName),
+              defaultChecked: this.state.isSelected,
               onChange: function onChange(event) {
-                formValueScope.setValue(checkboxName, event.target.checked);
-                if (event.target.checked) {
+                var isSelected = event.target.checked;
+                if (isSelected) {
                   // give time for the input field to be enabled
                   window.setTimeout(function () {
-                    return _this2.inputField && _this2.inputField.focus();
+                    return _this2.inputField.focus();
                   }, 0);
                 }
+                _this2.setState({ isSelected: isSelected });
               } }),
             label
           ),
@@ -145,7 +155,7 @@
             name: name,
             type: type,
             placeholder: placeholder,
-            disabled: !this.context.formValueScope.getValue(checkboxName),
+            disabled: !this.state.isSelected,
             ref: function ref(component) {
               _this2.inputField = component;
             } })
@@ -167,7 +177,8 @@
     type: _react.PropTypes.string,
     title: _react.PropTypes.string,
     label: _react.PropTypes.string,
-    placeholder: _react.PropTypes.string
+    placeholder: _react.PropTypes.string,
+    selected: _react.PropTypes.bool
   };
   SelectableInputFieldRaw.defaultProps = {
     type: 'text'
