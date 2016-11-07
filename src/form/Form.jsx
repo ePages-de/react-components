@@ -95,7 +95,7 @@ export default class Form extends React.Component {
   }
 
   getError = (name) => {
-    return this.state.errors.get(name)
+    return this.state.errors.getIn(parseName(name))
   }
 
   submit = () => this.onSubmit({preventDefault: () => {}})

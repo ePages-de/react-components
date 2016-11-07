@@ -167,7 +167,7 @@
       };
 
       _this.getError = function (name) {
-        return _this.state.errors.get(name);
+        return _this.state.errors.getIn(parseName(name));
       };
 
       _this.submit = function () {
