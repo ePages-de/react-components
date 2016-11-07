@@ -73,6 +73,15 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
+  function parseName(name) {
+    // only split string names by dots, but keep non string names (for example number names
+    // like in IteratorField) as they are
+    return typeof name === 'string' ? name.split(/\./g) : [name];
+  }
+
+  // is kind of inherited by Form
+  // make sure to mirror changes in here also in Form
+
   var FormValueScope = function (_React$Component) {
     _inherits(FormValueScope, _React$Component);
 
@@ -93,7 +102,7 @@
         var value = outerScope.getValue(ownName);
 
         if (name !== undefined && name !== null) {
-          return value ? value.get(name) : undefined;
+          return value ? value.getIn(parseName(name)) : undefined;
         } else {
           return value;
         }
@@ -102,7 +111,7 @@
         var ownName = _this.props.name;
 
         if (name !== undefined && name !== null) {
-          return outerScope.setValue(ownName, outerScope.getValue(ownName).set(name, value));
+          return outerScope.setValue(ownName, outerScope.getValue(ownName).setIn(parseName(name), value));
         } else {
           return outerScope.setValue(ownName, value);
         }
@@ -110,7 +119,7 @@
         var outerScope = _this.context.formValueScope;
         var ownName = _this.props.name;
         var error = outerScope.getError(ownName);
-        return error ? error.get(name) : undefined;
+        return error ? error.getIn(parseName(name)) : undefined;
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 

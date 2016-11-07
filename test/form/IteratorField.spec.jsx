@@ -11,8 +11,8 @@ import TestUtils from 'react-testutils-additions'
 function render ({validate, skip, take} = {}) {
   const initialValue = Immutable.fromJS({
     tags: [
-      {name: 'first'},
-      {name: 'second'}
+      {name: 'first', color: {hex: '#ff0000'}},
+      {name: 'second', color: {hex: '#00ff00'}}
     ]
   })
   const onSubmit = sinon.spy()
@@ -22,6 +22,7 @@ function render ({validate, skip, take} = {}) {
         <IteratorField name="tags" skip={skip} take={take}>
           <div>
             <TestField name="name" className="tagName"/>
+            <TestField name="color.hex" className="tagColor"/>
             <ErrorMessage name="name" className="tagName-error"/>
           </div>
         </IteratorField>
@@ -41,8 +42,14 @@ describe('IteratorField', function () {
     expect(dom, 'to have rendered',
       <form>
         <div>
-          <div><input name="test.tags.0.name" value="first"/></div>
-          <div><input name="test.tags.1.name" value="second"/></div>
+          <div>
+            <input name="test.tags.0.name" value="first"/>
+            <input name="test.tags.0.color.hex" value="#ff0000"/>
+          </div>
+          <div>
+            <input name="test.tags.1.name" value="second"/>
+            <input name="test.tags.1.color.hex" value="#00ff00"/>
+          </div>
         </div>
       </form>
     )
@@ -84,8 +91,8 @@ describe('IteratorField', function () {
     expect(onSubmit, 'to have calls satisfying', function () {
       onSubmit(Immutable.fromJS({
         tags: [
-          {name: 'first-new'},
-          {name: 'second-new'}
+          {name: 'first-new', color: {hex: '#ff0000'}},
+          {name: 'second-new', color: {hex: '#00ff00'}}
         ]
       }))
     })

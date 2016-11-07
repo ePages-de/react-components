@@ -22,6 +22,12 @@ function containsError (errors) {
   }
 }
 
+function parseName (name) {
+  // only split string names by dots, but keep non string names (for example number names
+  // like in IteratorField) as they are
+  return typeof name === 'string' ? name.split(/\./g) : [name]
+}
+
 // kind of inherits from FormValueScope
 // make sure to mirror changes in FormValueScope here
 export default class Form extends React.Component {
@@ -80,13 +86,13 @@ export default class Form extends React.Component {
       const value = outerScope.getValue(ownName)
 
       if (name !== undefined && name !== null) {
-        return value ? value.get(name) : undefined
+        return value ? value.getIn(parseName(name)) : undefined
       } else {
         return value
       }
     } else {
       if (name !== undefined && name !== null) {
-        return this.state.value.get(name)
+        return this.state.value.getIn(parseName(name))
       } else {
         return this.state.value
       }
@@ -95,7 +101,7 @@ export default class Form extends React.Component {
 
   setValue = (name, value) => {
     const newValue1 = name !== undefined && name !== null
-      ? this.state.value.set(name, value)
+      ? this.state.value.setIn(parseName(name), value)
       : value
     const newValue2 = this.props.onChange(newValue1)
 
