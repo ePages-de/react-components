@@ -128,7 +128,7 @@ describe('Form', function () {
     })
   })
 
-  it('sets and gets the top-level value', function () {
+  it('sets and gets values', function () {
     const {dom: formComponent} = render()
 
     expect(formComponent.getValue('firstName'), 'to equal', '')
@@ -138,11 +138,15 @@ describe('Form', function () {
     expect(formComponent.getValue('address.street'), 'to equal', '')
     formComponent.setValue('address.street', 'c')
     expect(formComponent.getValue('address.street'), 'to equal', 'c')
+  })
+
+  it('sets and gets the top-level value', function () {
+    const {dom: formComponent} = render()
 
     expect(formComponent.getValue(), 'to equal', Immutable.fromJS({
-      firstName: 'a',
+      firstName: '',
       lastName: '',
-      address: {street: 'c'}
+      address: {street: ''}
     }))
     formComponent.setValue(undefined, Immutable.fromJS({
       firstName: 'A',

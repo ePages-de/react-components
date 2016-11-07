@@ -54,13 +54,7 @@ export default class Form extends React.Component {
   }
 
   get name () {
-    const outerScope = this.context.formValueScope
-    const ownName = this.props.name
-    if (outerScope) {
-      return `${outerScope.name}.${ownName}`
-    } else {
-      return ownName
-    }
+    return this.props.name
   }
 
   constructor (props) {
@@ -80,22 +74,10 @@ export default class Form extends React.Component {
   }
 
   getValue = (name) => {
-    const outerScope = this.context.formValueScope
-    if (outerScope) {
-      const ownName = this.props.name
-      const value = outerScope.getValue(ownName)
-
-      if (name !== undefined && name !== null) {
-        return value ? value.getIn(parseName(name)) : undefined
-      } else {
-        return value
-      }
+    if (name !== undefined && name !== null) {
+      return this.state.value.getIn(parseName(name))
     } else {
-      if (name !== undefined && name !== null) {
-        return this.state.value.getIn(parseName(name))
-      } else {
-        return this.state.value
-      }
+      return this.state.value
     }
   }
 
@@ -113,14 +95,7 @@ export default class Form extends React.Component {
   }
 
   getError = (name) => {
-    const outerScope = this.context.formValueScope
-    if (outerScope) {
-      const ownName = this.props.name
-      const error = outerScope.getError(ownName)
-      return error ? error.get(name) : undefined
-    } else {
-      return this.state.errors.get(name)
-    }
+    return this.state.errors.get(name)
   }
 
   submit = () => this.onSubmit({preventDefault: () => {}})

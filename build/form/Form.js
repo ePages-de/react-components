@@ -138,13 +138,7 @@
     _createClass(Form, [{
       key: 'name',
       get: function get() {
-        var outerScope = this.context.formValueScope;
-        var ownName = this.props.name;
-        if (outerScope) {
-          return outerScope.name + '.' + ownName;
-        } else {
-          return ownName;
-        }
+        return this.props.name;
       }
     }]);
 
@@ -154,22 +148,10 @@
       var _this = _possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this));
 
       _this.getValue = function (name) {
-        var outerScope = _this.context.formValueScope;
-        if (outerScope) {
-          var ownName = _this.props.name;
-          var value = outerScope.getValue(ownName);
-
-          if (name !== undefined && name !== null) {
-            return value ? value.getIn(parseName(name)) : undefined;
-          } else {
-            return value;
-          }
+        if (name !== undefined && name !== null) {
+          return _this.state.value.getIn(parseName(name));
         } else {
-          if (name !== undefined && name !== null) {
-            return _this.state.value.getIn(parseName(name));
-          } else {
-            return _this.state.value;
-          }
+          return _this.state.value;
         }
       };
 
@@ -185,14 +167,7 @@
       };
 
       _this.getError = function (name) {
-        var outerScope = _this.context.formValueScope;
-        if (outerScope) {
-          var ownName = _this.props.name;
-          var error = outerScope.getError(ownName);
-          return error ? error.get(name) : undefined;
-        } else {
-          return _this.state.errors.get(name);
-        }
+        return _this.state.errors.get(name);
       };
 
       _this.submit = function () {
