@@ -1,5 +1,11 @@
 import React, {PropTypes} from 'react'
 
+function parseName (name) {
+  // only split string names by dots, but keep non string names (for example number names
+  // like in IteratorField) as they are
+  return typeof name === 'string' ? name.split(/\./g) : [name]
+}
+
 // is kind of inherited by Form
 // make sure to mirror changes in here also in Form
 export default class FormValueScope extends React.Component {
@@ -28,7 +34,7 @@ export default class FormValueScope extends React.Component {
     const value = outerScope.getValue(ownName)
 
     if (name !== undefined && name !== null) {
-      return value ? value.get(name) : undefined
+      return value ? value.getIn(parseName(name)) : undefined
     } else {
       return value
     }
@@ -39,7 +45,7 @@ export default class FormValueScope extends React.Component {
     const ownName = this.props.name
 
     if (name !== undefined && name !== null) {
-      return outerScope.setValue(ownName, outerScope.getValue(ownName).set(name, value))
+      return outerScope.setValue(ownName, outerScope.getValue(ownName).setIn(parseName(name), value))
     } else {
       return outerScope.setValue(ownName, value)
     }
@@ -49,7 +55,7 @@ export default class FormValueScope extends React.Component {
     const outerScope = this.context.formValueScope
     const ownName = this.props.name
     const error = outerScope.getError(ownName)
-    return error ? error.get(name) : undefined
+    return error ? error.getIn(parseName(name)) : undefined
   }
 
   static childContextTypes = {

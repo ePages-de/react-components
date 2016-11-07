@@ -123,6 +123,12 @@
     }
   }
 
+  function parseName(name) {
+    // only split string names by dots, but keep non string names (for example number names
+    // like in IteratorField) as they are
+    return typeof name === 'string' ? name.split(/\./g) : [name];
+  }
+
   // kind of inherits from FormValueScope
   // make sure to mirror changes in FormValueScope here
 
@@ -154,13 +160,13 @@
           var value = outerScope.getValue(ownName);
 
           if (name !== undefined && name !== null) {
-            return value ? value.get(name) : undefined;
+            return value ? value.getIn(parseName(name)) : undefined;
           } else {
             return value;
           }
         } else {
           if (name !== undefined && name !== null) {
-            return _this.state.value.get(name);
+            return _this.state.value.getIn(parseName(name));
           } else {
             return _this.state.value;
           }
@@ -168,7 +174,7 @@
       };
 
       _this.setValue = function (name, value) {
-        var newValue1 = name !== undefined && name !== null ? _this.state.value.set(name, value) : value;
+        var newValue1 = name !== undefined && name !== null ? _this.state.value.setIn(parseName(name), value) : value;
         var newValue2 = _this.props.onChange(newValue1);
 
         var errors = _this.props.validate(newValue2 || newValue1, _this.state.triedToSubmit);

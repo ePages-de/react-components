@@ -9,7 +9,10 @@ import TestUtils from 'react-testutils-additions'
 function render ({validate, disabled = false} = {}) {
   const initialValue = Immutable.fromJS({
     firstName: '',
-    lastName: ''
+    lastName: '',
+    address: {
+      street: ''
+    }
   })
   const onSubmit = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
@@ -19,14 +22,16 @@ function render ({validate, disabled = false} = {}) {
         <div>
           <TestField name="lastName" className="lastName"/>
         </div>
+        <TestField name="address.street" className="street"/>
       </div>
     </Form>
   )
   const form = TestUtils.findOne(dom, 'form')
   const firstNameField = TestUtils.findOne(dom, '.firstName')
   const lastNameField = TestUtils.findOne(dom, '.lastName')
+  const streetField = TestUtils.findOne(dom, '.street')
 
-  return {initialValue, onSubmit, dom, form, firstNameField, lastNameField}
+  return {initialValue, onSubmit, dom, form, firstNameField, lastNameField, streetField}
 }
 
 describe('Form', function () {
@@ -40,6 +45,7 @@ describe('Form', function () {
           <div>
             <input name="test.lastName" className="lastName"/>
           </div>
+          <input name="test.address.street" className="street"/>
         </div>
       </form>
     )
@@ -54,16 +60,20 @@ describe('Form', function () {
   })
 
   it('returns new value', function () {
-    const {onSubmit, form, firstNameField, lastNameField} = render()
+    const {onSubmit, form, firstNameField, lastNameField, streetField} = render()
 
     TestUtils.Simulate.change(firstNameField, {target: {value: 'foo'}})
     TestUtils.Simulate.change(lastNameField, {target: {value: 'bar'}})
+    TestUtils.Simulate.change(streetField, {target: {value: 'apple'}})
     TestUtils.Simulate.submit(form)
     expect(onSubmit, 'was called once')
     expect(onSubmit, 'to have calls satisfying', function () {
-      onSubmit(new Immutable.Map({
+      onSubmit(Immutable.fromJS({
         firstName: 'foo',
-        lastName: 'bar'
+        lastName: 'bar',
+        address: {
+          street: 'apple'
+        }
       }))
     })
   })
@@ -110,11 +120,11 @@ describe('Form', function () {
     TestUtils.Simulate.change(firstNameField, {target: {value: '1234'}})
 
     expect(onSubmit, 'to have calls satisfying', () => {
-      validate(Immutable.fromJS({firstName: '1', lastName: ''}), false)
-      validate(Immutable.fromJS({firstName: '12', lastName: ''}), false)
-      validate(Immutable.fromJS({firstName: '12', lastName: ''}), true)
-      validate(Immutable.fromJS({firstName: '123', lastName: ''}), true)
-      validate(Immutable.fromJS({firstName: '1234', lastName: ''}), true)
+      validate(Immutable.fromJS({firstName: '1', lastName: '', address: {street: ''}}), false)
+      validate(Immutable.fromJS({firstName: '12', lastName: '', address: {street: ''}}), false)
+      validate(Immutable.fromJS({firstName: '12', lastName: '', address: {street: ''}}), true)
+      validate(Immutable.fromJS({firstName: '123', lastName: '', address: {street: ''}}), true)
+      validate(Immutable.fromJS({firstName: '1234', lastName: '', address: {street: ''}}), true)
     })
   })
 
@@ -125,17 +135,24 @@ describe('Form', function () {
     formComponent.setValue('firstName', 'a')
     expect(formComponent.getValue('firstName'), 'to equal', 'a')
 
+    expect(formComponent.getValue('address.street'), 'to equal', '')
+    formComponent.setValue('address.street', 'c')
+    expect(formComponent.getValue('address.street'), 'to equal', 'c')
+
     expect(formComponent.getValue(), 'to equal', Immutable.fromJS({
       firstName: 'a',
-      lastName: ''
+      lastName: '',
+      address: {street: 'c'}
     }))
     formComponent.setValue(undefined, Immutable.fromJS({
       firstName: 'A',
-      lastName: 'B'
+      lastName: 'B',
+      address: {street: 'C'}
     }))
     expect(formComponent.getValue(undefined), 'to equal', Immutable.fromJS({
       firstName: 'A',
-      lastName: 'B'
+      lastName: 'B',
+      address: {street: 'C'}
     }))
   })
 })
