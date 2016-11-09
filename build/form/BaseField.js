@@ -21,7 +21,7 @@
       formValueScope: _react.PropTypes.object.isRequired
     },
     propTypes: {
-      name: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]).isRequired
+      name: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number])
     }
   };
 });

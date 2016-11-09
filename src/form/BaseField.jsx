@@ -5,6 +5,6 @@ export default {
     formValueScope: PropTypes.object.isRequired
   },
   propTypes: {
-    name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    name: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
   }
 }

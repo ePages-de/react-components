@@ -126,7 +126,9 @@
           'select',
           _extends({}, other, {
             name: scopedName,
-            value: value,
+            value: options.findIndex(function (opt) {
+              return opt.value === value;
+            }),
             onChange: function onChange(event) {
               return _onChange(options[parseInt(event.target.value)].value);
             } }),
@@ -135,7 +137,7 @@
               'option',
               {
                 key: index,
-                value: index.toString() },
+                value: index },
               option.label
             );
           })

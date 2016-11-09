@@ -24,10 +24,10 @@ describe('DropDownField', function () {
     const {dom} = render()
 
     expect(dom, 'to have rendered',
-      <select value="m">
-        <option value="0">Small</option>
-        <option value="1">Medium</option>
-        <option value="2">Large</option>
+      <select value={1}>
+        <option value={0}>Small</option>
+        <option value={1}>Medium</option>
+        <option value={2}>Large</option>
       </select>
     )
   })

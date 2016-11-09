@@ -9,7 +9,7 @@ const initialValue = Immutable.fromJS({
   color: '#ff0000',
   adult: true,
   description: 'Foo\nBar',
-  size: 's',
+  size: 'm',
   cut: 'loose',
   facebook: '',
   facebookSelected: false,
