@@ -42,6 +42,18 @@
     return target;
   };
 
+  function _objectWithoutProperties(obj, keys) {
+    var target = {};
+
+    for (var i in obj) {
+      if (keys.indexOf(i) >= 0) continue;
+      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+      target[i] = obj[i];
+    }
+
+    return target;
+  }
+
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -118,8 +130,12 @@
         _createClass(WithClassName, [{
           key: 'render',
           value: function render() {
-            return _react2.default.createElement(Component, _extends({}, this.props, {
-              className: className,
+            var _props = this.props,
+                additionalClassName = _props.className,
+                other = _objectWithoutProperties(_props, ['className']);
+
+            return _react2.default.createElement(Component, _extends({}, other, {
+              className: additionalClassName ? className + ' ' + additionalClassName : className,
               ref: this.hoistMethods }));
           }
         }]);
@@ -128,6 +144,9 @@
       }(_react2.default.Component);
 
       WithClassName.displayName = 'WithClassName(' + (Component.displayName || Component.name || 'Component') + ')';
+      WithClassName.propTypes = {
+        className: _react.PropTypes.string
+      };
 
 
       return (0, _hoistNonReactStatics2.default)(WithClassName, Component);
