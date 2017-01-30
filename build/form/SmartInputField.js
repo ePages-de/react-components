@@ -294,6 +294,16 @@
             self.getSuggestions('', newValue);
           }
         };
+      }, _this.handleMouseEnterSuggestion = function (suggestion, index) {
+        var self = _this;
+        var suggestionDisabled = _this.props.suggestionDisabled;
+
+
+        return function () {
+          if (!suggestionDisabled(suggestion, index)) {
+            self.selectSuggestion(index);
+          }
+        };
       }, _this.resetText = function () {
         _this.setState({
           text: '',
@@ -489,6 +499,7 @@
                 {
                   key: index,
                   onClick: _this2.handleClickSuggestion(suggestion, index),
+                  onMouseEnter: _this2.handleMouseEnterSuggestion(suggestion, index),
                   className: (0, _classnames4.default)(styles.suggestion, (_classnames2 = {}, _defineProperty(_classnames2, styles.suggestionActive, activeSuggestionIndex === index), _defineProperty(_classnames2, styles.suggestionDisabled, suggestionDisabled(suggestion, index)), _classnames2)),
                   ref: 'suggestion-' + index },
                 renderSuggestion(suggestion)

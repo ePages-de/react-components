@@ -129,6 +129,7 @@ export class SmartInputFieldRaw extends React.Component {
               <div
                 key={index}
                 onClick={this.handleClickSuggestion(suggestion, index)}
+                onMouseEnter={this.handleMouseEnterSuggestion(suggestion, index)}
                 className={classnames(styles.suggestion, {[styles.suggestionActive]: activeSuggestionIndex === index, [styles.suggestionDisabled]: suggestionDisabled(suggestion, index)})}
                 ref={`suggestion-${index}`}>
                 {renderSuggestion(suggestion)}
@@ -256,6 +257,17 @@ export class SmartInputFieldRaw extends React.Component {
         onChange(newValue)
         self.resetText()
         self.getSuggestions('', newValue)
+      }
+    }
+  }
+
+  handleMouseEnterSuggestion = (suggestion, index) => {
+    const self = this
+    const {suggestionDisabled} = this.props
+
+    return function () {
+      if (!suggestionDisabled(suggestion, index)) {
+        self.selectSuggestion(index)
       }
     }
   }
