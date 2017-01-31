@@ -33,6 +33,8 @@ export class SmartInputFieldRaw extends React.Component {
     renderValue: PropTypes.func,
     // how to render a suggestion
     renderSuggestion: PropTypes.func,
+    // whether to hide the already selected values
+    hideValues: PropTypes.bool,
     className: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.shape({
@@ -62,7 +64,8 @@ export class SmartInputFieldRaw extends React.Component {
     ),
     renderSuggestion: (suggestion) => suggestion.toString(),
     strict: false,
-    autoFocus: false
+    autoFocus: false,
+    hideValues: false
   }
 
   state = {
@@ -80,7 +83,7 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, suggestionDisabled, autoFocus, renderValue, renderSuggestion, className} = this.props
+    const {value, suggestionDisabled, autoFocus, renderValue, renderSuggestion, hideValues, className} = this.props
     const {text, focused, suggestions, activeSuggestionIndex} = this.state
     const suggestionsVisible = suggestions && suggestions.length > 0
 
@@ -102,7 +105,7 @@ export class SmartInputFieldRaw extends React.Component {
     return (
       <div className={classnames(styles.base, {[styles.baseFocused]: focused, [styles.baseWithSuggestions]: suggestionsVisible})} onMouseDown={this.handleMouseDownContainer}>
         <div className={styles.input}>
-          {value.map((value, index) =>
+          {!hideValues && value.map((value, index) =>
             <div key={index} onMouseDown={stopPropagation} className={styles.inputValue}>
               {renderValue(value, this.handleClickValueRemove(index))}
             </div>
@@ -150,7 +153,7 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   handleKeyDown = (event) => {
-    const {value, onChange, convertTextToValue, convertSuggestionToValue, strict} = this.props
+    const {value, onChange, convertTextToValue, convertSuggestionToValue, strict, hideValues} = this.props
     const {text, suggestions, activeSuggestionIndex} = this.state
 
     switch (event.keyCode) {
@@ -187,7 +190,7 @@ export class SmartInputFieldRaw extends React.Component {
       // backspace
       case 8: {
         // if text is empty, then drop the last value from the list
-        if (text.length === 0 && value.count() > 0) {
+        if (!hideValues && text.length === 0 && value.count() > 0) {
           const newValue = value.slice(0, value.count() - 1)
           onChange(newValue)
           this.resetText()

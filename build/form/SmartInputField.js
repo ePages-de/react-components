@@ -177,7 +177,8 @@
             onChange = _this$props.onChange,
             convertTextToValue = _this$props.convertTextToValue,
             convertSuggestionToValue = _this$props.convertSuggestionToValue,
-            strict = _this$props.strict;
+            strict = _this$props.strict,
+            hideValues = _this$props.hideValues;
         var _this$state = _this.state,
             text = _this$state.text,
             suggestions = _this$state.suggestions,
@@ -221,7 +222,7 @@
           case 8:
             {
               // if text is empty, then drop the last value from the list
-              if (text.length === 0 && value.count() > 0) {
+              if (!hideValues && text.length === 0 && value.count() > 0) {
                 var _newValue = value.slice(0, value.count() - 1);
                 onChange(_newValue);
                 _this.resetText();
@@ -435,6 +436,7 @@
             autoFocus = _props.autoFocus,
             renderValue = _props.renderValue,
             renderSuggestion = _props.renderSuggestion,
+            hideValues = _props.hideValues,
             className = _props.className;
         var _state = this.state,
             text = _state.text,
@@ -463,7 +465,7 @@
           _react2.default.createElement(
             'div',
             { className: styles.input },
-            value.map(function (value, index) {
+            !hideValues && value.map(function (value, index) {
               return _react2.default.createElement(
                 'div',
                 { key: index, onMouseDown: stopPropagation, className: styles.inputValue },
@@ -534,6 +536,8 @@
     renderValue: _react.PropTypes.func,
     // how to render a suggestion
     renderSuggestion: _react.PropTypes.func,
+    // whether to hide the already selected values
+    hideValues: _react.PropTypes.bool,
     className: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.shape({
       base: _react.PropTypes.string.isRequired,
       baseFocused: _react.PropTypes.string.isRequired,
@@ -573,7 +577,8 @@
       return suggestion.toString();
     },
     strict: false,
-    autoFocus: false
+    autoFocus: false,
+    hideValues: false
   };
   exports.default = (0, _formField2.default)()(SmartInputFieldRaw);
 });
