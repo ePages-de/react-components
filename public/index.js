@@ -1,19 +1,21 @@
 import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {withClassName, Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField, SelectableInputField, SmartInputField} from '../src/index'
+import tinycolor from 'tinycolor2'
+import {withClassName, Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField, SelectableInputField, SmartInputField, ColorpickerField} from '../src/index'
 
 const initialValue = Immutable.fromJS({
   name: 'name',
   password: 'password',
-  color: '#ff0000',
+  comment: 'Nothing here',
   adult: true,
   description: 'Foo\nBar',
   size: 'm',
   cut: 'loose',
   facebook: '',
   facebookSelected: false,
-  tags: ['first', 'second']
+  tags: ['first', 'second'],
+  color: '#28cc42'
 })
 
 const sizes = [
@@ -29,7 +31,8 @@ const cuts = [
 ]
 
 const getTagSuggestions = (text) => Promise.resolve(text.length > 0 ? [text + '1', text + '2'] : null)
-
+const prepare = (value) => value.update('color', color => tinycolor(color).toHsv())
+const normalize = (value) => value.update('color', color => tinycolor(color).toHexString())
 const BlueInputField = withClassName('blue', ['focus'])(InputField)
 
 class App extends React.Component {
@@ -43,7 +46,7 @@ class App extends React.Component {
       <div>
         <h1>Form</h1>
         <div>
-          <Form name="form" value={initialValue} onSubmit={this.onSubmit} onChange={this.debugOnChange}>
+          <Form name="form" value={initialValue} onSubmit={this.onSubmit} onChange={this.debugOnChange} prepare={prepare} normalize={normalize}>
             <div>
               <div>
                 <BlueInputField name="name" type="text" autoFocus/>
@@ -52,7 +55,7 @@ class App extends React.Component {
                 <InputField name="password" type="password"/>
               </div>
               <div>
-                <InputField name="color" type="color"/>
+                <InputField name="comment" type="text"/>
               </div>
               <div>
                 <CheckboxField name="adult"/>
@@ -75,6 +78,9 @@ class App extends React.Component {
               <div>
                 <SmartInputField name="tags" className="smart-input" getSuggestions={getTagSuggestions}/>
               </div>
+              <div>
+                <ColorpickerField name="color" className="colorpicker"/>
+              </div>
             </div>
             <button type="submit">Submit</button>
           </Form>
@@ -86,7 +92,9 @@ class App extends React.Component {
     )
   }
 
-  debugOnChange = (newValue) => this.setState({formValue: newValue})
+  debugOnChange = (newValue) => {
+    this.setState({formValue: newValue})
+  }
 
   onSubmit = (value) => {
     console.log(value.toJS()) // eslint-disable-line no-console
