@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './withClassName', './form/BaseField', './form/Form', './form/formField', './form/FormValueScope', './form/CheckboxField', './form/DropDownField', './form/ErrorMessage', './form/InputField', './form/IteratorField', './form/RadioButtonField', './form/RangeField', './form/SortField', './form/TextareaField', './form/ChoiceField', './form/SelectableInputField', './form/SmartInputField'], factory);
+    define(['exports', './withClassName', './form/BaseField', './form/Form', './form/formField', './form/FormValueScope', './form/CheckboxField', './form/DropDownField', './form/ErrorMessage', './form/InputField', './form/IteratorField', './form/RadioButtonField', './form/RangeField', './form/SortField', './form/TextareaField', './form/ChoiceField', './form/SelectableInputField', './form/SmartInputField', './form/ColorpickerField'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./withClassName'), require('./form/BaseField'), require('./form/Form'), require('./form/formField'), require('./form/FormValueScope'), require('./form/CheckboxField'), require('./form/DropDownField'), require('./form/ErrorMessage'), require('./form/InputField'), require('./form/IteratorField'), require('./form/RadioButtonField'), require('./form/RangeField'), require('./form/SortField'), require('./form/TextareaField'), require('./form/ChoiceField'), require('./form/SelectableInputField'), require('./form/SmartInputField'));
+    factory(exports, require('./withClassName'), require('./form/BaseField'), require('./form/Form'), require('./form/formField'), require('./form/FormValueScope'), require('./form/CheckboxField'), require('./form/DropDownField'), require('./form/ErrorMessage'), require('./form/InputField'), require('./form/IteratorField'), require('./form/RadioButtonField'), require('./form/RangeField'), require('./form/SortField'), require('./form/TextareaField'), require('./form/ChoiceField'), require('./form/SelectableInputField'), require('./form/SmartInputField'), require('./form/ColorpickerField'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.withClassName, global.BaseField, global.Form, global.formField, global.FormValueScope, global.CheckboxField, global.DropDownField, global.ErrorMessage, global.InputField, global.IteratorField, global.RadioButtonField, global.RangeField, global.SortField, global.TextareaField, global.ChoiceField, global.SelectableInputField, global.SmartInputField);
+    factory(mod.exports, global.withClassName, global.BaseField, global.Form, global.formField, global.FormValueScope, global.CheckboxField, global.DropDownField, global.ErrorMessage, global.InputField, global.IteratorField, global.RadioButtonField, global.RangeField, global.SortField, global.TextareaField, global.ChoiceField, global.SelectableInputField, global.SmartInputField, global.ColorpickerField);
     global.index = mod.exports;
   }
-})(this, function (exports, _withClassName, _BaseField, _Form, _formField, _FormValueScope, _CheckboxField, _DropDownField, _ErrorMessage, _InputField, _IteratorField, _RadioButtonField, _RangeField, _SortField, _TextareaField, _ChoiceField, _SelectableInputField, _SmartInputField) {
+})(this, function (exports, _withClassName, _BaseField, _Form, _formField, _FormValueScope, _CheckboxField, _DropDownField, _ErrorMessage, _InputField, _IteratorField, _RadioButtonField, _RangeField, _SortField, _TextareaField, _ChoiceField, _SelectableInputField, _SmartInputField, _ColorpickerField) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -116,6 +116,12 @@
     enumerable: true,
     get: function () {
       return _interopRequireDefault(_SmartInputField).default;
+    }
+  });
+  Object.defineProperty(exports, 'ColorpickerField', {
+    enumerable: true,
+    get: function () {
+      return _interopRequireDefault(_ColorpickerField).default;
     }
   });
 
