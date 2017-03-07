@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './formField', 'tinycolor2', 'react'], factory);
+    define(['exports', 'color', './formField', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./formField'), require('tinycolor2'), require('react'));
+    factory(exports, require('color'), require('./formField'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.formField, global.tinycolor2, global.react);
+    factory(mod.exports, global.color, global.formField, global.react);
     global.ColorpickerField = mod.exports;
   }
-})(this, function (exports, _formField, _tinycolor, _react) {
+})(this, function (exports, _color, _formField, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -18,9 +18,9 @@
   });
   exports.ColorpickerFieldRaw = undefined;
 
-  var _formField2 = _interopRequireDefault(_formField);
+  var _color2 = _interopRequireDefault(_color);
 
-  var _tinycolor2 = _interopRequireDefault(_tinycolor);
+  var _formField2 = _interopRequireDefault(_formField);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -81,18 +81,6 @@
       }
     };
   }();
-
-  function _objectWithoutProperties(obj, keys) {
-    var target = {};
-
-    for (var i in obj) {
-      if (keys.indexOf(i) >= 0) continue;
-      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
-      target[i] = obj[i];
-    }
-
-    return target;
-  }
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -206,7 +194,7 @@
             width = _props.width,
             height = _props.height,
             style = _props.style,
-            other = _objectWithoutProperties(_props, ['coords', 'children', 'width', 'height', 'style']);
+            className = _props.className;
 
         var _coords = _slicedToArray(coords, 2),
             rx = _coords[0],
@@ -215,7 +203,8 @@
         var x = rx * width;
         var y = ry * height;
 
-        return _react2.default.createElement('div', _extends({}, other, {
+        return _react2.default.createElement('div', {
+          className: className,
           style: _extends({}, style || {}, { width: width, height: height }),
           ref: function ref(node) {
             _this2.node = node;
@@ -224,7 +213,7 @@
           onTouchMove: this.handleCoordChange,
           onTouchStart: this.handleCoordChange,
           children: children({ x: x, y: y, rx: rx, ry: ry, width: width, height: height })
-        }));
+        });
       }
     }]);
 
@@ -237,7 +226,8 @@
     height: _react.PropTypes.number.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     children: _react.PropTypes.func.isRequired,
-    style: _react.PropTypes.object
+    style: _react.PropTypes.object,
+    className: _react.PropTypes.string
   };
 
   var ColorpickerFieldRaw = exports.ColorpickerFieldRaw = function (_Component) {
@@ -257,37 +247,23 @@
       return _ret2 = (_temp2 = (_this3 = _possibleConstructorReturn(this, (_ref3 = ColorpickerFieldRaw.__proto__ || Object.getPrototypeOf(ColorpickerFieldRaw)).call.apply(_ref3, [this].concat(args))), _this3), _this3.state = {
         intermediateHexInput: null
       }, _this3.changeColor = function (color) {
-        _this3.setState({ intermediateHexInput: (0, _tinycolor2.default)(color).toHexString() });
-        _this3.props.onChange(color);
+        _this3.setState({ intermediateHexInput: color.hex() });
+
+        _this3.props.onChange(color.hsl().string());
       }, _this3.handleSvChange = function (_ref4) {
         var _ref5 = _slicedToArray(_ref4, 2),
-            s = _ref5[0],
-            darkness = _ref5[1];
+            x = _ref5[0],
+            y = _ref5[1];
 
-        var h = _this3.props.value.h;
-        // for anyone wondering:
-        // `v` stands for `value` and is actually the same as `brightness`
-
-        var v = 1 - darkness;
-
-        _this3.changeColor({ h: h, s: s, v: v });
+        _this3.changeColor(_this3.color.saturationv(x * 100).value(100 - y * 100));
       }, _this3.handleHueChange = function (_ref6) {
         var _ref7 = _slicedToArray(_ref6, 2),
-            _ = _ref7[0],
-            hue = _ref7[1];
+            _x = _ref7[0],
+            y = _ref7[1];
 
-        var _this3$props$value = _this3.props.value,
-            s = _this3$props$value.s,
-            v = _this3$props$value.v;
-
-        var h = hue * 360;
-
-        _this3.changeColor({ h: h, s: s, v: v });
+        _this3.changeColor(_this3.color.hue(y * 360));
       }, _temp2), _possibleConstructorReturn(_this3, _ret2);
     }
-
-    // eslint-disable-next-line no-unused-vars
-
 
     _createClass(ColorpickerFieldRaw, [{
       key: 'render',
@@ -302,11 +278,11 @@
             hueWidth = _props2$dimensions.hueWidth,
             spacing = _props2$dimensions.spacing;
         var intermediateHexInput = this.state.intermediateHexInput;
-        var _props$value = this.props.value,
-            h = _props$value.h,
-            s = _props$value.s,
-            v = _props$value.v;
 
+        var _color$object = this.color.object(),
+            h = _color$object.h,
+            s = _color$object.s,
+            v = _color$object.v;
 
         var styles = typeof className === 'string' ? {
           base: className,
@@ -318,18 +294,17 @@
           marker: 'marker'
         } : this.props.className;
 
-        var hueColor = (0, _tinycolor2.default)({ h: h, s: 1, v: 1 }).toHexString();
+        var hueColor = this.color.saturationv(100).value(100).hex();
         var gradient = function gradient(direction, color) {
           return 'linear-gradient(' + direction + ', transparent 0%, ' + color + ' 100%)';
         };
 
-        var hexColorString = intermediateHexInput === null ? (0, _tinycolor2.default)(this.props.value).toHexString() : intermediateHexInput;
+        var hexColorString = intermediateHexInput === null ? this.color.hex() : intermediateHexInput;
 
         return _react2.default.createElement(
           'div',
           {
-            className: styles.base,
-            style: { width: width, height: height } },
+            className: styles.base },
           _react2.default.createElement(
             Coordinator,
             {
@@ -337,7 +312,7 @@
               className: styles.baseSaturationValue,
               width: width - (hueWidth + spacing),
               height: height,
-              coords: [s, v] },
+              coords: [s / 100, v / 100] },
             function (_ref8) {
               var x = _ref8.x,
                   y = _ref8.y,
@@ -376,24 +351,30 @@
             onChange: function onChange(e) {
               var value = e.target.value;
 
-              var currentColor = (0, _tinycolor2.default)(value);
 
               _this4.setState({ intermediateHexInput: value });
-              currentColor.isValid() && _this4.props.onChange(currentColor.toHsv());
+
+              try {
+                _this4.props.onChange((0, _color2.default)(value).hsl().string());
+              } catch (e) {}
             } })
         );
       }
+    }, {
+      key: 'color',
+      get: function get() {
+        return (0, _color2.default)(this.props.value).hsv();
+      }
+
+      // eslint-disable-next-line no-unused-vars
+
     }]);
 
     return ColorpickerFieldRaw;
   }(_react.Component);
 
   ColorpickerFieldRaw.propTypes = {
-    value: _react.PropTypes.shape({
-      h: _react.PropTypes.number,
-      s: _react.PropTypes.number,
-      v: _react.PropTypes.number
-    }),
+    value: _react.PropTypes.string.isRequired,
     onChange: _react.PropTypes.func.isRequired,
     className: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.shape({
       base: _react.PropTypes.string.isRequired,

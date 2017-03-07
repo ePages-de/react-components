@@ -1,5 +1,5 @@
+import color from 'color'
 import formField from './formField'
-import tinycolor from 'tinycolor2'
 import React, {PureComponent, Component, PropTypes} from 'react'
 
 class Coordinator extends PureComponent {
@@ -9,7 +9,8 @@ class Coordinator extends PureComponent {
     height: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
     children: PropTypes.func.isRequired,
-    style: PropTypes.object
+    style: PropTypes.object,
+    className: PropTypes.string
   }
 
   componentWillUnmount () {
@@ -45,7 +46,7 @@ class Coordinator extends PureComponent {
   }
 
   render () {
-    const {coords, children, width, height, style, ...other} = this.props
+    const {coords, children, width, height, style, className} = this.props
     const [rx, ry] = coords
 
     const x = rx * width
@@ -53,7 +54,7 @@ class Coordinator extends PureComponent {
 
     return (
       <div
-        {...other}
+        className={className}
         style={{...(style || {}), width, height}}
         ref={node => { this.node = node }}
         onMouseDown={this.handleMouseDown}
@@ -67,11 +68,7 @@ class Coordinator extends PureComponent {
 
 export class ColorpickerFieldRaw extends Component {
   static propTypes = {
-    value: PropTypes.shape({
-      h: PropTypes.number,
-      s: PropTypes.number,
-      v: PropTypes.number
-    }),
+    value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     className: PropTypes.oneOfType([
       PropTypes.string,
@@ -108,32 +105,33 @@ export class ColorpickerFieldRaw extends Component {
     intermediateHexInput: null
   }
 
-  changeColor = (color) => {
-    this.setState({intermediateHexInput: tinycolor(color).toHexString()})
-    this.props.onChange(color)
+  get color () {
+    return color(this.props.value).hsv()
   }
 
-  handleSvChange = ([s, darkness]) => {
-    const {h} = this.props.value
-    // for anyone wondering:
-    // `v` stands for `value` and is actually the same as `brightness`
-    const v = 1 - darkness
+  changeColor = (color) => {
+    this.setState({intermediateHexInput: color.hex()})
 
-    this.changeColor({h, s, v})
+    this.props.onChange(color.hsl().string())
+  }
+
+  handleSvChange = ([x, y]) => {
+    this.changeColor(this.color
+      .saturationv(x * 100)
+      .value(100 - y * 100)
+    )
   }
 
   // eslint-disable-next-line no-unused-vars
-  handleHueChange = ([_, hue]) => {
-    const {s, v} = this.props.value
-    const h = hue * 360
-
-    this.changeColor({h, s, v})
+  handleHueChange = ([_x, y]) => {
+    this.changeColor(this.color.hue(y * 360))
   }
 
   render () {
     const {className, dimensions: {width, height, hueWidth, spacing}} = this.props
     const {intermediateHexInput} = this.state
-    const {h, s, v} = this.props.value
+
+    const {h, s, v} = this.color.object()
 
     const styles = typeof className === 'string' ? {
       base: className,
@@ -145,23 +143,22 @@ export class ColorpickerFieldRaw extends Component {
       marker: 'marker'
     } : this.props.className
 
-    const hueColor = tinycolor({h, s: 1, v: 1}).toHexString()
+    const hueColor = this.color.saturationv(100).value(100).hex()
     const gradient = (direction, color) => `linear-gradient(${direction}, transparent 0%, ${color} 100%)`
 
     const hexColorString = intermediateHexInput === null
-      ? tinycolor(this.props.value).toHexString()
+      ? this.color.hex()
       : intermediateHexInput
 
     return (
       <div
-        className={styles.base}
-        style={{width, height}}>
+        className={styles.base}>
         <Coordinator
           onChange={this.handleSvChange}
           className={styles.baseSaturationValue}
           width={width - (hueWidth + spacing)}
           height={height}
-          coords={[s, v]}>
+          coords={[s / 100, v / 100]}>
           {({x, y, height}) => ([
             <div
               key="s"
@@ -202,10 +199,12 @@ export class ColorpickerFieldRaw extends Component {
           value={hexColorString}
           onChange={e => {
             const {value} = e.target
-            const currentColor = tinycolor(value)
 
             this.setState({intermediateHexInput: value})
-            currentColor.isValid() && this.props.onChange(currentColor.toHsv())
+
+            try {
+              this.props.onChange(color(value).hsl().string())
+            } catch (e) {}
           }}/>
       </div>
     )
