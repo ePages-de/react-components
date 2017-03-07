@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import tinycolor from 'tinycolor2'
 import {withClassName, Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField, SelectableInputField, SmartInputField, ColorpickerField} from '../src/index'
 
 const initialValue = Immutable.fromJS({
@@ -31,8 +30,6 @@ const cuts = [
 ]
 
 const getTagSuggestions = (text) => Promise.resolve(text.length > 0 ? [text + '1', text + '2'] : null)
-const prepare = (value) => value.update('color', color => tinycolor(color).toHsv())
-const normalize = (value) => value.update('color', color => tinycolor(color).toHexString())
 const BlueInputField = withClassName('blue', ['focus'])(InputField)
 
 class App extends React.Component {
@@ -46,7 +43,7 @@ class App extends React.Component {
       <div>
         <h1>Form</h1>
         <div>
-          <Form name="form" value={initialValue} onSubmit={this.onSubmit} onChange={this.debugOnChange} prepare={prepare} normalize={normalize}>
+          <Form name="form" value={initialValue} onSubmit={this.onSubmit} onChange={this.debugOnChange}>
             <div>
               <div>
                 <BlueInputField name="name" type="text" autoFocus/>
