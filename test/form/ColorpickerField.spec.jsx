@@ -75,12 +75,12 @@ describe('Colorpicker', function () {
     const [h, s, v] = ['125', '93%', '49%']
 
     TestUtils.Simulate.mouseDown(svCanvas, {clientX: 55, clientY: 75})
-    TestUtils.Simulate.mouseDown(hueSlider, {clientX: 0, clientY: 150})
+    TestUtils.Simulate.mouseDown(hueSlider, {clientX: 0, clientY: 122})
 
     expect(onChange, 'was called twice')
     expect(onChange, 'to have calls satisfying', [
         [`hsl(${h}, 23.1%, 67.5%)`],
-        [`hsl(180, ${s}, ${v})`]
+        [`hsl(146, ${s}, ${v})`]
     ])
   })
 })

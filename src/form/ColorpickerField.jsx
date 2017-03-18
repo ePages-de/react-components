@@ -112,7 +112,12 @@ export class ColorpickerFieldRaw extends Component {
   changeColor = (color) => {
     this.setState({intermediateHexInput: color.hex()})
 
-    this.props.onChange(color.hsl().string())
+    const preciseColor = color
+      .hue(Math.round(color.hue()))
+      .hsl()
+      .string()
+
+    this.props.onChange(preciseColor)
   }
 
   handleSvChange = ([x, y]) => {

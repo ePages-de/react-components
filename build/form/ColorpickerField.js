@@ -249,7 +249,9 @@
       }, _this3.changeColor = function (color) {
         _this3.setState({ intermediateHexInput: color.hex() });
 
-        _this3.props.onChange(color.hsl().string());
+        var preciseColor = color.hue(Math.round(color.hue())).hsl().string();
+
+        _this3.props.onChange(preciseColor);
       }, _this3.handleSvChange = function (_ref4) {
         var _ref5 = _slicedToArray(_ref4, 2),
             x = _ref5[0],
