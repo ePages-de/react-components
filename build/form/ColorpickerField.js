@@ -357,7 +357,7 @@
               _this4.setState({ intermediateHexInput: value });
 
               try {
-                _this4.props.onChange((0, _color2.default)(value).hsl().string());
+                _this4.props.onChange((0, _color2.default)(value).hsl().round().string());
               } catch (e) {}
             } })
         );
