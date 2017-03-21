@@ -52,21 +52,21 @@ describe('Colorpicker', function () {
   it('triggers change when hex input receives valid color', function () {
     const onChange = sinon.spy().named('onChange')
     const {dom, hexInput} = render({onChange})
-    const blueishHexColor = '#0099ff'
-    const blueishHslColor = 'hsl(204, 100%, 50%)'
+    const pinkColor = 'deeppink'
+    const pinkHslColor = 'hsl(328, 100%, 54%)'
 
     TestUtils.Simulate.change(hexInput, {target: {value: 'not a color'}})
     expect(onChange, 'was not called')
 
-    TestUtils.Simulate.change(hexInput, {target: {value: blueishHexColor}})
+    TestUtils.Simulate.change(hexInput, {target: {value: pinkColor}})
     expect(dom, 'to have rendered',
       <div>
         <div/>
         <div/>
-        <input value={blueishHexColor}/>
+        <input value={pinkColor}/>
       </div>
     )
-    expect(onChange, 'was called with', blueishHslColor)
+    expect(onChange, 'was called with', pinkHslColor)
   })
 
   it('Moves marker, sets color and changes hex input on canvas clicks', function () {

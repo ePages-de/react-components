@@ -203,7 +203,7 @@ export class ColorpickerFieldRaw extends Component {
             this.setState({intermediateHexInput: value})
 
             try {
-              this.props.onChange(color(value).hsl().string())
+              this.props.onChange(color(value).hsl().round().string())
             } catch (e) {}
           }}/>
       </div>
