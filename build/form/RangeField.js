@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './formField', 'react'], factory);
+    define(['exports', './formField', 'prop-types', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./formField'), require('react'));
+    factory(exports, require('./formField'), require('prop-types'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.formField, global.react);
+    factory(mod.exports, global.formField, global.propTypes, global.react);
     global.RangeField = mod.exports;
   }
-})(this, function (exports, _formField, _react) {
+})(this, function (exports, _formField, _propTypes, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -19,6 +19,8 @@
   exports.RangeFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -137,9 +139,9 @@
             max = _props.max,
             step = _props.step,
             multiplier = _props.multiplier,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'min', 'max', 'step', 'multiplier']); // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'min', 'max', 'step', 'multiplier']);
 
-
+        // eslint-disable-line no-unused-vars
         return _react2.default.createElement('input', _extends({}, other, {
           name: scopedName,
           type: 'range',
@@ -158,14 +160,14 @@
   }(_react2.default.Component);
 
   RangeFieldRaw.propTypes = {
-    value: _react.PropTypes.any.isRequired,
-    onChange: _react.PropTypes.func.isRequired,
-    name: _react.PropTypes.string,
-    scopedName: _react.PropTypes.string,
-    min: _react.PropTypes.number.isRequired,
-    max: _react.PropTypes.number.isRequired,
-    step: _react.PropTypes.number,
-    multiplier: _react.PropTypes.number
+    value: _propTypes2.default.any.isRequired,
+    onChange: _propTypes2.default.func.isRequired,
+    name: _propTypes2.default.string,
+    scopedName: _propTypes2.default.string,
+    min: _propTypes2.default.number.isRequired,
+    max: _propTypes2.default.number.isRequired,
+    step: _propTypes2.default.number,
+    multiplier: _propTypes2.default.number
   };
   RangeFieldRaw.defaultProps = {
     step: 1,

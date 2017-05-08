@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './formField', './FormValueScope', 'react'], factory);
+    define(['exports', './formField', './FormValueScope', 'prop-types', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./formField'), require('./FormValueScope'), require('react'));
+    factory(exports, require('./formField'), require('./FormValueScope'), require('prop-types'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.formField, global.FormValueScope, global.react);
+    factory(mod.exports, global.formField, global.FormValueScope, global.propTypes, global.react);
     global.IteratorField = mod.exports;
   }
-})(this, function (exports, _formField, _FormValueScope, _react) {
+})(this, function (exports, _formField, _FormValueScope, _propTypes, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -20,6 +20,8 @@
   var _formField2 = _interopRequireDefault(_formField);
 
   var _FormValueScope2 = _interopRequireDefault(_FormValueScope);
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -137,13 +139,13 @@
 
   IteratorFieldRaw.propTypes = {
     // TODO: ImmutablePropTypes.list
-    value: _react.PropTypes.any.isRequired,
-    onChange: _react.PropTypes.func.isRequired,
-    name: _react.PropTypes.string,
-    scopedName: _react.PropTypes.string,
-    skip: _react.PropTypes.number,
-    take: _react.PropTypes.number,
-    children: _react.PropTypes.oneOfType([_react.PropTypes.node, _react.PropTypes.func]).isRequired
+    value: _propTypes2.default.any.isRequired,
+    onChange: _propTypes2.default.func.isRequired,
+    name: _propTypes2.default.string,
+    scopedName: _propTypes2.default.string,
+    skip: _propTypes2.default.number,
+    take: _propTypes2.default.number,
+    children: _propTypes2.default.oneOfType([_propTypes2.default.node, _propTypes2.default.func]).isRequired
   };
   IteratorFieldRaw.defaultProps = {
     skip: 0

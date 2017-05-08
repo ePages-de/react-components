@@ -1,21 +1,23 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', 'react'], factory);
+    define(['exports', 'prop-types', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('react'));
+    factory(exports, require('prop-types'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.react);
+    factory(mod.exports, global.propTypes, global.react);
     global.FormValueScope = mod.exports;
   }
-})(this, function (exports, _react) {
+})(this, function (exports, _propTypes, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -148,14 +150,14 @@
   }(_react2.default.Component);
 
   FormValueScope.contextTypes = {
-    formValueScope: _react.PropTypes.object.isRequired
+    formValueScope: _propTypes2.default.object.isRequired
   };
   FormValueScope.propTypes = {
-    name: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]).isRequired,
-    children: _react.PropTypes.element.isRequired
+    name: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]).isRequired,
+    children: _propTypes2.default.element.isRequired
   };
   FormValueScope.childContextTypes = {
-    formValueScope: _react.PropTypes.object
+    formValueScope: _propTypes2.default.object
   };
   exports.default = FormValueScope;
 });

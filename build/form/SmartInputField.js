@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', 'classnames', './formField', 'react'], factory);
+    define(['exports', 'classnames', './formField', 'prop-types', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('classnames'), require('./formField'), require('react'));
+    factory(exports, require('classnames'), require('./formField'), require('prop-types'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.classnames, global.formField, global.react);
+    factory(mod.exports, global.classnames, global.formField, global.propTypes, global.react);
     global.SmartInputField = mod.exports;
   }
-})(this, function (exports, _classnames3, _formField, _react) {
+})(this, function (exports, _classnames3, _formField, _propTypes, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -21,6 +21,8 @@
   var _classnames4 = _interopRequireDefault(_classnames3);
 
   var _formField2 = _interopRequireDefault(_formField);
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -517,38 +519,38 @@
 
   SmartInputFieldRaw.propTypes = {
     // current value
-    value: _react.PropTypes.any.isRequired,
+    value: _propTypes2.default.any.isRequired,
     // value change handler
-    onChange: _react.PropTypes.func.isRequired,
+    onChange: _propTypes2.default.func.isRequired,
     // function to generate suggestion list (must return a promise)
-    getSuggestions: _react.PropTypes.func,
+    getSuggestions: _propTypes2.default.func,
     // decision function, whether a given suggestion can be choosen
-    suggestionDisabled: _react.PropTypes.func,
+    suggestionDisabled: _propTypes2.default.func,
     // if non-strict, this function deduces the actual value to add from the entered text
-    convertTextToValue: _react.PropTypes.func,
+    convertTextToValue: _propTypes2.default.func,
     // this function converts the suggestion to the actual value to add
-    convertSuggestionToValue: _react.PropTypes.func,
+    convertSuggestionToValue: _propTypes2.default.func,
     // whether one can enter anything or just stuff from the suggestion list
-    strict: _react.PropTypes.bool,
+    strict: _propTypes2.default.bool,
     // autoFocus of the underlying HTML input
-    autoFocus: _react.PropTypes.bool,
+    autoFocus: _propTypes2.default.bool,
     // how to render a value
-    renderValue: _react.PropTypes.func,
+    renderValue: _propTypes2.default.func,
     // how to render a suggestion
-    renderSuggestion: _react.PropTypes.func,
+    renderSuggestion: _propTypes2.default.func,
     // whether to hide the already selected values
-    hideValues: _react.PropTypes.bool,
-    className: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.shape({
-      base: _react.PropTypes.string.isRequired,
-      baseFocused: _react.PropTypes.string.isRequired,
-      baseWithSuggestions: _react.PropTypes.string.isRequired,
-      input: _react.PropTypes.string.isRequired,
-      inputValue: _react.PropTypes.string.isRequired,
-      inputText: _react.PropTypes.string.isRequired,
-      suggestions: _react.PropTypes.string.isRequired,
-      suggestion: _react.PropTypes.string.isRequired,
-      suggestionActive: _react.PropTypes.string.isRequired,
-      suggestionDisabled: _react.PropTypes.string.isRequired
+    hideValues: _propTypes2.default.bool,
+    className: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.shape({
+      base: _propTypes2.default.string.isRequired,
+      baseFocused: _propTypes2.default.string.isRequired,
+      baseWithSuggestions: _propTypes2.default.string.isRequired,
+      input: _propTypes2.default.string.isRequired,
+      inputValue: _propTypes2.default.string.isRequired,
+      inputText: _propTypes2.default.string.isRequired,
+      suggestions: _propTypes2.default.string.isRequired,
+      suggestion: _propTypes2.default.string.isRequired,
+      suggestionActive: _propTypes2.default.string.isRequired,
+      suggestionDisabled: _propTypes2.default.string.isRequired
     })]).isRequired
   };
   SmartInputFieldRaw.defaultProps = {
