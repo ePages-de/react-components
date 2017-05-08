@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', 'color', './formField', 'react'], factory);
+    define(['exports', 'color', './formField', 'prop-types', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('color'), require('./formField'), require('react'));
+    factory(exports, require('color'), require('./formField'), require('prop-types'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.color, global.formField, global.react);
+    factory(mod.exports, global.color, global.formField, global.propTypes, global.react);
     global.ColorpickerField = mod.exports;
   }
-})(this, function (exports, _color, _formField, _react) {
+})(this, function (exports, _color, _formField, _propTypes, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -21,6 +21,8 @@
   var _color2 = _interopRequireDefault(_color);
 
   var _formField2 = _interopRequireDefault(_formField);
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -221,13 +223,13 @@
   }(_react.PureComponent);
 
   Coordinator.propTypes = {
-    coords: _react.PropTypes.array.isRequired,
-    width: _react.PropTypes.number.isRequired,
-    height: _react.PropTypes.number.isRequired,
-    onChange: _react.PropTypes.func.isRequired,
-    children: _react.PropTypes.func.isRequired,
-    style: _react.PropTypes.object,
-    className: _react.PropTypes.string
+    coords: _propTypes2.default.array.isRequired,
+    width: _propTypes2.default.number.isRequired,
+    height: _propTypes2.default.number.isRequired,
+    onChange: _propTypes2.default.func.isRequired,
+    children: _propTypes2.default.func.isRequired,
+    style: _propTypes2.default.object,
+    className: _propTypes2.default.string
   };
 
   var ColorpickerFieldRaw = exports.ColorpickerFieldRaw = function (_Component) {
@@ -367,34 +369,29 @@
       get: function get() {
         return (0, _color2.default)(this.props.value).hsv();
       }
-
-      // eslint-disable-next-line no-unused-vars
-
     }]);
 
     return ColorpickerFieldRaw;
   }(_react.Component);
 
   ColorpickerFieldRaw.propTypes = {
-    value: _react.PropTypes.string.isRequired,
-    onChange: _react.PropTypes.func.isRequired,
-    className: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.shape({
-      base: _react.PropTypes.string.isRequired,
-      baseSaturationValue: _react.PropTypes.string.isRequired,
-      baseHue: _react.PropTypes.string.isRequired,
-      saturation: _react.PropTypes.string.isRequired,
-      value: _react.PropTypes.string.isRequired,
-      marker: _react.PropTypes.string.isRequired,
-      baseHexInput: _react.PropTypes.string.isRequired
+    value: _propTypes2.default.string.isRequired,
+    onChange: _propTypes2.default.func.isRequired,
+    className: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.shape({
+      base: _propTypes2.default.string.isRequired,
+      baseSaturationValue: _propTypes2.default.string.isRequired,
+      baseHue: _propTypes2.default.string.isRequired,
+      saturation: _propTypes2.default.string.isRequired,
+      value: _propTypes2.default.string.isRequired,
+      marker: _propTypes2.default.string.isRequired,
+      baseHexInput: _propTypes2.default.string.isRequired
     })]).isRequired,
-    dimensions: _react.PropTypes.shape({
-      width: _react.PropTypes.number,
-      height: _react.PropTypes.number,
-      hueWidth: _react.PropTypes.number,
-      spacing: _react.PropTypes.number
-    }),
-    name: _react.PropTypes.string,
-    scopedName: _react.PropTypes.string
+    dimensions: _propTypes2.default.shape({
+      width: _propTypes2.default.number,
+      height: _propTypes2.default.number,
+      hueWidth: _propTypes2.default.number,
+      spacing: _propTypes2.default.number
+    })
   };
   ColorpickerFieldRaw.defaultProps = {
     dimensions: {

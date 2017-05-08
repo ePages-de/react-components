@@ -1,6 +1,7 @@
 import color from 'color'
 import formField from './formField'
-import React, {PureComponent, Component, PropTypes} from 'react'
+import PropTypes from 'prop-types'
+import React, { PureComponent, Component } from 'react'
 
 class Coordinator extends PureComponent {
   static propTypes = {
@@ -87,9 +88,7 @@ export class ColorpickerFieldRaw extends Component {
       height: PropTypes.number,
       hueWidth: PropTypes.number,
       spacing: PropTypes.number
-    }),
-    name: PropTypes.string,
-    scopedName: PropTypes.string
+    })
   }
 
   static defaultProps = {

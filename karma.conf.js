@@ -11,16 +11,9 @@ module.exports = function (karmaConfig) {
       'es6-shim'
     ],
     webpack: {
-      module: {
-        loaders: webpackConfig.module.loaders.concat([
-          {
-            test: /\.json$/,
-            loader: 'json'
-          }
-        ])
-      },
+      module: webpackConfig.module,
       resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['.js', '.jsx']
       },
       devtool: 'inline-source-map'
     },

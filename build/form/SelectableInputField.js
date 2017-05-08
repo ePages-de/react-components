@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './formField', './InputField', 'react'], factory);
+    define(['exports', './formField', './InputField', 'prop-types', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./formField'), require('./InputField'), require('react'));
+    factory(exports, require('./formField'), require('./InputField'), require('prop-types'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.formField, global.InputField, global.react);
+    factory(mod.exports, global.formField, global.InputField, global.propTypes, global.react);
     global.SelectableInputField = mod.exports;
   }
-})(this, function (exports, _formField, _InputField, _react) {
+})(this, function (exports, _formField, _InputField, _propTypes, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -20,6 +20,8 @@
   var _formField2 = _interopRequireDefault(_formField);
 
   var _InputField2 = _interopRequireDefault(_InputField);
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -156,17 +158,17 @@
   }(_react2.default.Component);
 
   SelectableInputFieldRaw.contextTypes = {
-    formValueScope: _react.PropTypes.any.isRequired
+    formValueScope: _propTypes2.default.any.isRequired
   };
   SelectableInputFieldRaw.propTypes = {
-    value: _react.PropTypes.any.isRequired,
-    onChange: _react.PropTypes.func.isRequired,
-    name: _react.PropTypes.string,
-    scopedName: _react.PropTypes.string,
-    type: _react.PropTypes.string,
-    title: _react.PropTypes.string,
-    label: _react.PropTypes.string,
-    placeholder: _react.PropTypes.string
+    value: _propTypes2.default.any.isRequired,
+    onChange: _propTypes2.default.func.isRequired,
+    name: _propTypes2.default.string,
+    scopedName: _propTypes2.default.string,
+    type: _propTypes2.default.string,
+    title: _propTypes2.default.string,
+    label: _propTypes2.default.string,
+    placeholder: _propTypes2.default.string
   };
   SelectableInputFieldRaw.defaultProps = {
     type: 'text'

@@ -1,6 +1,7 @@
 import formField from './formField'
 import InputField from './InputField'
-import React, {PropTypes} from 'react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 class SelectableInputFieldRaw extends React.Component {
   static contextTypes = {

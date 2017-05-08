@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', 'hoist-non-react-statics', 'react'], factory);
+    define(['exports', 'hoist-non-react-statics', 'prop-types', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('hoist-non-react-statics'), require('react'));
+    factory(exports, require('hoist-non-react-statics'), require('prop-types'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.hoistNonReactStatics, global.react);
+    factory(mod.exports, global.hoistNonReactStatics, global.propTypes, global.react);
     global.withClassName = mod.exports;
   }
-})(this, function (exports, _hoistNonReactStatics, _react) {
+})(this, function (exports, _hoistNonReactStatics, _propTypes, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -19,6 +19,8 @@
   exports.default = withClassName;
 
   var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -145,7 +147,7 @@
 
       WithClassName.displayName = 'WithClassName(' + (Component.displayName || Component.name || 'Component') + ')';
       WithClassName.propTypes = {
-        className: _react.PropTypes.string
+        className: _propTypes2.default.string
       };
 
 

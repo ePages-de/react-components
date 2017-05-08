@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './formField', 'react'], factory);
+    define(['exports', './formField', 'prop-types', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./formField'), require('react'));
+    factory(exports, require('./formField'), require('prop-types'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.formField, global.react);
+    factory(mod.exports, global.formField, global.propTypes, global.react);
     global.TextareaField = mod.exports;
   }
-})(this, function (exports, _formField, _react) {
+})(this, function (exports, _formField, _propTypes, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -19,6 +19,8 @@
   exports.TextareaFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -132,9 +134,9 @@
             name = _props.name,
             scopedName = _props.scopedName,
             rows = _props.rows,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'rows']); // eslint-disable-line no-unused-vars
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'rows']);
 
-
+        // eslint-disable-line no-unused-vars
         return _react2.default.createElement('textarea', _extends({
           autoComplete: 'off',
           autoCorrect: 'off',
@@ -157,11 +159,11 @@
   }(_react2.default.Component);
 
   TextareaFieldRaw.propTypes = {
-    value: _react.PropTypes.string.isRequired,
-    onChange: _react.PropTypes.func.isRequired,
-    name: _react.PropTypes.string,
-    scopedName: _react.PropTypes.string,
-    rows: _react.PropTypes.number
+    value: _propTypes2.default.string.isRequired,
+    onChange: _propTypes2.default.func.isRequired,
+    name: _propTypes2.default.string,
+    scopedName: _propTypes2.default.string,
+    rows: _propTypes2.default.number
   };
   exports.default = (0, _formField2.default)()(TextareaFieldRaw);
 });

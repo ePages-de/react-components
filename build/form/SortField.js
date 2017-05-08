@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './formField', 'react'], factory);
+    define(['exports', './formField', 'prop-types', 'react'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./formField'), require('react'));
+    factory(exports, require('./formField'), require('prop-types'), require('react'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.formField, global.react);
+    factory(mod.exports, global.formField, global.propTypes, global.react);
     global.SortField = mod.exports;
   }
-})(this, function (exports, _formField, _react) {
+})(this, function (exports, _formField, _propTypes, _react) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -19,6 +19,8 @@
   exports.SortFieldRaw = undefined;
 
   var _formField2 = _interopRequireDefault(_formField);
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   var _react2 = _interopRequireDefault(_react);
 
@@ -145,8 +147,7 @@
             crossAxisItemSize = _props.crossAxisItemSize,
             itemCount = _props.itemCount,
             itemSpacing = _props.itemSpacing,
-            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']); // eslint-disable-line no-unused-vars
-
+            other = _objectWithoutProperties(_props, ['value', 'onChange', 'name', 'scopedName', 'children', 'onReorder', 'validate', 'disabled', 'orientation', 'itemSize', 'crossAxisItemSize', 'itemCount', 'itemSpacing']);
 
         var _state = this.state,
             dragIndex = _state.dragIndex,
@@ -211,19 +212,19 @@
   }(_react2.default.Component);
 
   SortFieldRaw.propTypes = {
-    value: _react.PropTypes.any.isRequired,
-    onChange: _react.PropTypes.func.isRequired,
-    name: _react.PropTypes.string,
-    scopedName: _react.PropTypes.string,
-    children: _react.PropTypes.func.isRequired,
-    onReorder: _react.PropTypes.func,
-    validate: _react.PropTypes.func,
-    disabled: _react.PropTypes.func,
-    orientation: _react.PropTypes.oneOf(['horizontal', 'vertical']).isRequired,
-    itemSize: _react.PropTypes.number.isRequired,
-    crossAxisItemSize: _react.PropTypes.number.isRequired,
-    itemSpacing: _react.PropTypes.number,
-    itemCount: _react.PropTypes.number.isRequired
+    value: _propTypes2.default.any.isRequired,
+    onChange: _propTypes2.default.func.isRequired,
+    name: _propTypes2.default.string,
+    scopedName: _propTypes2.default.string,
+    children: _propTypes2.default.func.isRequired,
+    onReorder: _propTypes2.default.func,
+    validate: _propTypes2.default.func,
+    disabled: _propTypes2.default.func,
+    orientation: _propTypes2.default.oneOf(['horizontal', 'vertical']).isRequired,
+    itemSize: _propTypes2.default.number.isRequired,
+    crossAxisItemSize: _propTypes2.default.number.isRequired,
+    itemSpacing: _propTypes2.default.number,
+    itemCount: _propTypes2.default.number.isRequired
   };
   SortFieldRaw.defaultProps = {
     onReorder: function onReorder() {

@@ -1,6 +1,7 @@
 import FormValueScope from './FormValueScope'
 import Immutable from 'immutable'
-import React, {PropTypes} from 'react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 function containsError (errors) {
   if (!errors) {
