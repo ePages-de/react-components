@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types'
+import React from 'react'
+
 import formField from '../../src/form/formField'
-import React, {PropTypes} from 'react'
 
 class TestField extends React.Component {
   static propTypes = {

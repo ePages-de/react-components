@@ -1,8 +1,9 @@
-import {DropDownFieldRaw} from '../../src/form/DropDownField'
-import expect from 'unexpected'
 import React from 'react'
-import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import {DropDownFieldRaw} from '../../src/form/DropDownField'
 
 function render ({value = 'm'} = {}) {
   const sizes = [

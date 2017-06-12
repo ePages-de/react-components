@@ -1,6 +1,7 @@
-import BaseField from './BaseField'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import React from 'react'
+
+import BaseField from './BaseField'
 
 export default function formField () {
   return function (Component) {

@@ -1,8 +1,9 @@
-import expect from 'unexpected'
-import {RadioButtonFieldRaw} from '../../src/form/RadioButtonField'
 import React from 'react'
-import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import {RadioButtonFieldRaw} from '../../src/form/RadioButtonField'
 
 function render ({value} = {}) {
   const buttons = [

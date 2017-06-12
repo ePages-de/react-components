@@ -1,10 +1,11 @@
 import classnames from 'classnames'
-import expect from 'unexpected'
 import Immutable from 'immutable'
 import React from 'react'
-import sinon from 'sinon'
-import {SortFieldRaw} from '../../src/form/SortField'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import {SortFieldRaw} from '../../src/form/SortField'
 
 const defaultValue = Immutable.fromJS([
   {name: 'first'},

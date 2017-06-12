@@ -1,3 +1,4 @@
-node_modules/
+.cache/
 build/
-report/
+coverage/
+node_modules/

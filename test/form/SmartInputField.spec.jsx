@@ -1,10 +1,11 @@
 import Bluebird from 'bluebird'
-import expect from 'unexpected'
 import Immutable from 'immutable'
 import React from 'react'
-import sinon from 'sinon'
-import {SmartInputFieldRaw} from '../../src/form/SmartInputField'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import {SmartInputFieldRaw} from '../../src/form/SmartInputField'
 
 function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabled, strict = false} = {}) {
   const onChange = sinon.spy()

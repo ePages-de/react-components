@@ -1,12 +1,13 @@
-import ErrorMessage from '../../src/form/ErrorMessage'
-import expect from 'unexpected'
-import Form from '../../src/form/Form'
 import Immutable from 'immutable'
-import IteratorField from '../../src/form/IteratorField'
 import React from 'react'
-import sinon from 'sinon'
-import TestField from './TestField'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import ErrorMessage from '../../src/form/ErrorMessage'
+import Form from '../../src/form/Form'
+import IteratorField from '../../src/form/IteratorField'
+import TestField from './TestField'
 
 function render ({validate, skip, take} = {}) {
   const initialValue = Immutable.fromJS({

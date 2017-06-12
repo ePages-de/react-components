@@ -1,6 +1,8 @@
-import formField from './formField'
+import PropTypes from 'prop-types'
+import React from 'react'
+
 import FormValueScope from './FormValueScope'
-import React, {PropTypes} from 'react'
+import formField from './formField'
 
 class IteratorFieldRaw extends React.Component {
   static propTypes = {

@@ -1,10 +1,11 @@
-import expect from 'unexpected'
-import Form from '../../src/form/Form'
 import Immutable from 'immutable'
 import React from 'react'
-import sinon from 'sinon'
-import TestField from './TestField'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import Form from '../../src/form/Form'
+import TestField from './TestField'
 
 function render ({validate, disabled = false} = {}) {
   const initialValue = Immutable.fromJS({

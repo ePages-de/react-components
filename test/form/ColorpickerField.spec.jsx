@@ -1,8 +1,9 @@
-import {ColorpickerFieldRaw} from '../../src/form/ColorpickerField'
-import expect from 'unexpected'
 import React from 'react'
-import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import {ColorpickerFieldRaw} from '../../src/form/ColorpickerField'
 
 const DEFAULT_COLOR_HSL_STRING = 'hsl(125, 93%, 49%)'
 
@@ -79,8 +80,8 @@ describe('Colorpicker', function () {
 
     expect(onChange, 'was called twice')
     expect(onChange, 'to have calls satisfying', [
-        [`hsl(${h}, 23.1%, 67.5%)`],
-        [`hsl(146, ${s}, ${v})`]
+      [`hsl(${h}, 23.1%, 67.5%)`],
+      [`hsl(146, ${s}, ${v})`]
     ])
   })
 })

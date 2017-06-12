@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types'
+import React from 'react'
+
 import formField from './formField'
-import React, {PropTypes} from 'react'
 
 function swap (items, oldIndex, newIndex) {
   return items
