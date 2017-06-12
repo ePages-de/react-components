@@ -3,8 +3,15 @@ machine:
     version: 6.9.1
 
 test:
-  post:
-    - npm run build
-    # Ensure build folder is up-to-date
-    - git diff && exit $(git -c core.filemode=false status --porcelain | wc -l)
-    - bash <(curl -s https://codecov.io/bash)
+  override:
+    - npm run lint
+    - npm run test -- --maxWorkers=1 --coverage
+
+# deployment:
+#   npm:
+#     branch:
+#       - master
+#     commands:
+#       - echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login
+#       - npm run build
+#       - npm publish

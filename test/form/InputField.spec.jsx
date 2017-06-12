@@ -1,8 +1,9 @@
-import expect from 'unexpected'
-import {InputFieldRaw} from '../../src/form/InputField'
 import React from 'react'
-import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import {InputFieldRaw} from '../../src/form/InputField'
 
 function render ({value} = {}) {
   const onChange = sinon.spy()

@@ -1,6 +1,8 @@
 import classnames from 'classnames'
+import PropTypes from 'prop-types'
+import React from 'react'
+
 import formField from './formField'
-import React, {PropTypes} from 'react'
 
 function stopPropagation (event) {
   event.stopPropagation()

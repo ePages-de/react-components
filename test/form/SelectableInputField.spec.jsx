@@ -1,10 +1,11 @@
-import expect from 'unexpected'
-import Form from '../../src/form/Form'
 import Immutable from 'immutable'
 import React from 'react'
-import SelectableInputField from '../../src/form/SelectableInputField'
-import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import Form from '../../src/form/Form'
+import SelectableInputField from '../../src/form/SelectableInputField'
 
 function render () {
   const initialValue = Immutable.fromJS({

@@ -1,9 +1,10 @@
-import {CheckboxFieldRaw} from '../../src/form/CheckboxField'
-import expect from 'unexpected'
 import Immutable from 'immutable'
 import React from 'react'
-import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import {CheckboxFieldRaw} from '../../src/form/CheckboxField'
 
 function render ({value, negate = false} = {}) {
   const initialValue = Immutable.fromJS({value})

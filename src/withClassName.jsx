@@ -1,5 +1,6 @@
 import hoistNonReactStatics from 'hoist-non-react-statics'
-import React, {PropTypes} from 'react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 export default function withClassName (className, hoistedMethods = []) {
   return function (Component) {

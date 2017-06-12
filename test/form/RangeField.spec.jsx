@@ -1,8 +1,9 @@
-import expect from 'unexpected'
-import {RangeFieldRaw} from '../../src/form/RangeField'
 import React from 'react'
-import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
+import {RangeFieldRaw} from '../../src/form/RangeField'
 
 function render ({value} = {}) {
   const onChange = sinon.spy()

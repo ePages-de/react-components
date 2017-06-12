@@ -1,7 +1,8 @@
 import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {withClassName, Form, InputField, CheckboxField, TextareaField, ChoiceField, DropDownField, RadioButtonField, SelectableInputField, SmartInputField, ColorpickerField} from '../src/index'
+
+import {CheckboxField, ChoiceField, ColorpickerField, DropDownField, Form, InputField, RadioButtonField, SelectableInputField, SmartInputField, TextareaField, withClassName} from '../src/index'
 
 const initialValue = Immutable.fromJS({
   name: 'name',

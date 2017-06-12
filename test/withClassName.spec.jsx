@@ -1,7 +1,8 @@
-import expect from 'unexpected'
 import React from 'react'
-import sinon from 'sinon'
 import TestUtils from 'react-testutils-additions'
+import sinon from 'sinon'
+import expect from 'unexpected'
+
 import withClassName from '../src/withClassName'
 
 function render ({className, hoistedMethods = []} = {}) {

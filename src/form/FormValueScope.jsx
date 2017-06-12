@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 function parseName (name) {
   // only split string names by dots, but keep non string names (for example number names
