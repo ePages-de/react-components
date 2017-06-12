@@ -65,13 +65,15 @@ export default class Form extends React.Component {
     this.state = {
       value: props.prepare(props.value),
       errors: new Immutable.Map(),
-      triedToSubmit: false
+      triedToSubmit: false,
+      pristine: true,
+      submitting: false
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (this.props.value !== nextProps.value) {
-      this.setState({value: nextProps.prepare(nextProps.value)})
+  componentDidReceiveProps (prevProps) {
+    if (prevProps.value !== this.props.value) {
+      this.reset()
     }
   }
 
@@ -96,6 +98,16 @@ export default class Form extends React.Component {
     })
   }
 
+  reset = () => {
+    this.setState({
+      value: this.props.prepare(this.props.value),
+      errors: new Immutable.Map(),
+      triedToSubmit: false,
+      pristine: true,
+      submitting: false
+    })
+  }
+
   getError = (name) => {
     return this.state.errors.getIn(parseName(name))
   }
@@ -104,15 +116,19 @@ export default class Form extends React.Component {
 
   onSubmit = (event) => {
     event.preventDefault()
-
-    if (!this.props.disabled) {
+    if (!this.props.disabled && !this.state.submitting) {
       const errors = this.props.validate(this.state.value, true)
 
       if (containsError(errors)) {
         this.setState({errors, triedToSubmit: true})
       } else {
         this.setState({errors: new Immutable.Map()})
-        this.props.onSubmit(this.props.normalize(this.state.value))
+        const result = this.props.onSubmit(this.props.normalize(this.state.value))
+
+        if (result && typeof result.then === 'function') {
+          this.setState({submitting: true})
+          result.catch(() => {}).then(() => this.setState({submitting: false}))
+        }
       }
     }
   }
@@ -121,7 +137,12 @@ export default class Form extends React.Component {
     const {name, value, onSubmit, onChange, prepare, validate, normalize, disabled, children, ...other} = this.props // eslint-disable-line no-unused-vars
     return (
       <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
-        {typeof children === 'function' ? children(this.state.value) : children}
+        {typeof children === 'function' ? children({
+          value: this.state.value,
+          pristine: Immutable.is(value, this.state.value),
+          submitting: this.state.submitting,
+          reset: () => this.reset()
+        }) : children}
       </form>
     )
   }

@@ -1,3 +1,4 @@
+import Bluebird from 'bluebird'
 import Immutable from 'immutable'
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
@@ -15,16 +16,20 @@ function render ({validate, disabled = false} = {}) {
       street: ''
     }
   })
-  const onSubmit = sinon.spy()
+  const onSubmit = sinon.stub()
   const dom = TestUtils.renderIntoDocument(
     <Form name="test" value={initialValue} onSubmit={onSubmit} validate={validate} disabled={disabled}>
-      <div>
-        <TestField name="firstName" className="firstName"/>
+      {({pristine, submitting}) =>
         <div>
-          <TestField name="lastName" className="lastName"/>
+          <TestField name="firstName" className="firstName"/>
+          <div>
+            <TestField name="lastName" className="lastName"/>
+          </div>
+          <TestField name="address.street" className="street"/>
+          <div>{`pristine ${pristine}`}</div>
+          <div>{`submitting ${submitting}`}</div>
         </div>
-        <TestField name="address.street" className="street"/>
-      </div>
+      }
     </Form>
   )
   const form = TestUtils.findOne(dom, 'form')
@@ -159,5 +164,41 @@ describe('Form', function () {
       lastName: 'B',
       address: {street: 'C'}
     }))
+  })
+
+  it('detects pristine state', function () {
+    const {dom: formComponent, firstNameField} = render()
+
+    expect(formComponent, 'to have rendered', <div>pristine true</div>)
+    TestUtils.Simulate.change(firstNameField, {target: {value: 'a'}})
+    expect(formComponent, 'to have rendered', <div>pristine false</div>)
+    TestUtils.Simulate.change(firstNameField, {target: {value: ''}})
+    expect(formComponent, 'to have rendered', <div>pristine true</div>)
+  })
+
+  it('detects submitting state', function () {
+    const {dom: formComponent, form, onSubmit} = render()
+
+    expect(formComponent, 'to have rendered', <div>submitting false</div>)
+    TestUtils.Simulate.submit(form)
+    expect(formComponent, 'to have rendered', <div>submitting false</div>)
+
+    const submit = Bluebird.delay(10)
+    onSubmit.returns(submit)
+    expect(formComponent, 'to have rendered', <div>submitting false</div>)
+    TestUtils.Simulate.submit(form)
+    expect(formComponent, 'to have rendered', <div>submitting true</div>)
+    return submit.then(() => {
+      expect(formComponent, 'to have rendered', <div>submitting false</div>)
+    })
+  })
+
+  it('resets', function () {
+    const {dom: formComponent, firstNameField} = render()
+
+    TestUtils.Simulate.change(firstNameField, {target: {value: 'a'}})
+    expect(firstNameField.value, 'to equal', 'a')
+    formComponent.reset()
+    expect(firstNameField.value, 'to equal', '')
   })
 })
