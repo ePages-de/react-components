@@ -71,9 +71,15 @@ export default class Form extends React.Component {
     }
   }
 
-  componentDidReceiveProps (prevProps) {
-    if (prevProps.value !== this.props.value) {
-      this.reset()
+  componentWillReceiveProps (nextProps) {
+    if (this.props.value !== nextProps.value) {
+      this.setState({
+        value: nextProps.prepare(nextProps.value),
+        errors: new Immutable.Map(),
+        triedToSubmit: false,
+        pristine: true,
+        submitting: false
+      })
     }
   }
 

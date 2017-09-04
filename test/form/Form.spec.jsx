@@ -6,6 +6,7 @@ import sinon from 'sinon'
 import expect from 'unexpected'
 
 import Form from '../../src/form/Form'
+import {PropsSetter} from '../reactHelpers'
 import TestField from './TestField'
 
 function render ({validate, disabled = false} = {}) {
@@ -200,5 +201,22 @@ describe('Form', function () {
     expect(firstNameField.value, 'to equal', 'a')
     formComponent.reset()
     expect(firstNameField.value, 'to equal', '')
+  })
+
+  it('renders new value if props change', function () {
+    const value1 = Immutable.fromJS({name: 'a'})
+    const value2 = Immutable.fromJS({name: 'c'})
+    const dom = TestUtils.renderIntoDocument(
+      <PropsSetter name="test" value={value1} component={Form}>
+        <TestField name="name"/>
+      </PropsSetter>
+    )
+    const nameField = TestUtils.findOne(dom, 'input')
+
+    expect(nameField.value, 'to equal', 'a')
+    TestUtils.Simulate.change(nameField, {target: {value: 'b'}})
+    expect(nameField.value, 'to equal', 'b')
+    dom.setProps({value: value2})
+    expect(nameField.value, 'to equal', 'c')
   })
 })
