@@ -126,7 +126,7 @@ export class SmartInputFieldRaw extends React.Component {
             autoCapitalize={false}
             spellCheck={false}
             className={styles.inputText}
-            ref={(node) => { this.input = node }}/>
+            ref={(node) => { this.input = node }} />
         </div>
         {suggestionsVisible && (
           <div className={styles.suggestions} ref="suggestions">

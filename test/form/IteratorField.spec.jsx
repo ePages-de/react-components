@@ -22,9 +22,9 @@ function render ({validate, skip, take} = {}) {
       <div>
         <IteratorField name="tags" skip={skip} take={take}>
           <div>
-            <TestField name="name" className="tagName"/>
-            <TestField name="color.hex" className="tagColor"/>
-            <ErrorMessage name="name" className="tagName-error"/>
+            <TestField name="name" className="tagName" />
+            <TestField name="color.hex" className="tagColor" />
+            <ErrorMessage name="name" className="tagName-error" />
           </div>
         </IteratorField>
       </div>
@@ -44,12 +44,12 @@ describe('IteratorField', function () {
       <form>
         <div>
           <div>
-            <input name="test.tags.0.name" value="first"/>
-            <input name="test.tags.0.color.hex" value="#ff0000"/>
+            <input name="test.tags.0.name" value="first" />
+            <input name="test.tags.0.color.hex" value="#ff0000" />
           </div>
           <div>
-            <input name="test.tags.1.name" value="second"/>
-            <input name="test.tags.1.color.hex" value="#00ff00"/>
+            <input name="test.tags.1.name" value="second" />
+            <input name="test.tags.1.color.hex" value="#00ff00" />
           </div>
         </div>
       </form>
@@ -62,7 +62,7 @@ describe('IteratorField', function () {
     expect(dom, 'to have rendered',
       <form>
         <div>
-          <input name="test.tags.1.name" value="second"/>
+          <input name="test.tags.1.name" value="second" />
         </div>
       </form>
     )
@@ -74,7 +74,7 @@ describe('IteratorField', function () {
     expect(dom, 'to have rendered',
       <form>
         <div>
-          <input name="test.tags.0.name" value="first"/>
+          <input name="test.tags.0.name" value="first" />
         </div>
       </form>
     )
@@ -113,10 +113,10 @@ describe('IteratorField', function () {
       <form>
         <div>
           <div>
-            <input name="test.tags.0.name" value="first"/>
+            <input name="test.tags.0.name" value="first" />
           </div>
           <div>
-            <input name="test.tags.1.name" value="second"/>
+            <input name="test.tags.1.name" value="second" />
           </div>
         </div>
       </form>
@@ -128,10 +128,10 @@ describe('IteratorField', function () {
       <form>
         <div>
           <div>
-            <input name="test.tags.0.name" value="first"/>
+            <input name="test.tags.0.name" value="first" />
           </div>
           <div>
-            <input name="test.tags.1.name" value=""/>
+            <input name="test.tags.1.name" value="" />
             <div>required</div>
           </div>
         </div>

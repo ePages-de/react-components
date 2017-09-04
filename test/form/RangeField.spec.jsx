@@ -8,7 +8,7 @@ import {RangeFieldRaw} from '../../src/form/RangeField'
 function render ({value} = {}) {
   const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <RangeFieldRaw value={value} onChange={onChange} min={0} max={100}/>
+    <RangeFieldRaw value={value} onChange={onChange} min={0} max={100} />
   )
   const rangeField = TestUtils.findOne(dom, 'input')
 
@@ -20,7 +20,7 @@ describe('RangeField', function () {
     const {dom} = render({value: 23})
 
     expect(dom, 'to have rendered',
-      <input type="range" value={23}/>
+      <input type="range" value={23} />
     )
   })
 

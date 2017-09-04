@@ -30,7 +30,7 @@ export default function formField () {
           onChange={(newValue) => formValueScope.setValue(name, newValue)}
           name={name}
           scopedName={formValueScope.name + '.' + name}
-          ref={this.hoistMethods}/>
+          ref={this.hoistMethods} />
       }
 
       hoistMethods = (wrappedComponent) => {

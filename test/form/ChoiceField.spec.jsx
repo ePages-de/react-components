@@ -15,7 +15,7 @@ function render ({value} = {}) {
     <ChoiceFieldRaw
       value={value}
       onChange={onChange}
-      choices={choices}/>
+      choices={choices} />
   )
   const choiceDivs = TestUtils.find(dom, 'div').slice(1)
 

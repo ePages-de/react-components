@@ -168,15 +168,15 @@ export class ColorpickerFieldRaw extends Component {
             <div
               key="s"
               className={styles.saturation}
-              style={{background: gradient('to right', hueColor)}}/>,
+              style={{background: gradient('to right', hueColor)}} />,
             <div
               key="v"
               className={styles.value}
-              style={{background: gradient('to bottom', '#000')}}/>,
+              style={{background: gradient('to bottom', '#000')}} />,
             <div
               key="marker"
               className={styles.marker}
-              style={{left: Math.round(x), top: Math.round(height - y)}}/>
+              style={{left: Math.round(x), top: Math.round(height - y)}} />
           ])}
         </Coordinator>
         <Coordinator
@@ -195,7 +195,7 @@ export class ColorpickerFieldRaw extends Component {
               #ff0000 100%)`
           }}>
           {({y}) => (
-            <div className={styles.marker} style={{top: Math.round(y)}}/>
+            <div className={styles.marker} style={{top: Math.round(y)}} />
           )}
         </Coordinator>
         <input
@@ -210,7 +210,7 @@ export class ColorpickerFieldRaw extends Component {
             try {
               this.props.onChange(color(value).hsl().round().string())
             } catch (e) {}
-          }}/>
+          }} />
       </div>
     )
   }

@@ -22,7 +22,7 @@ export class CheckboxFieldRaw extends React.Component {
       name={scopedName}
       type="checkbox"
       checked={this.transformValue(value)}
-      onChange={(event) => onChange(this.transformValue(event.target.checked))}/>
+      onChange={(event) => onChange(this.transformValue(event.target.checked))} />
   }
 
   transformValue = (value) => {

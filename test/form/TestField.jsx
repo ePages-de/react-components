@@ -17,7 +17,7 @@ class TestField extends React.Component {
       name={scopedName}
       type="text"
       value={value}
-      onChange={(event) => onChange(event.target.value)}/>
+      onChange={(event) => onChange(event.target.value)} />
   }
 }
 

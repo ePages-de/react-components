@@ -12,7 +12,7 @@ function render ({color = DEFAULT_COLOR_HSL_STRING, onChange = () => null}) {
     <ColorpickerFieldRaw
       className="test-colorpicker"
       value={color}
-      onChange={onChange}/>
+      onChange={onChange} />
   )
 
   const svCanvas = TestUtils.findOne(dom, '.test-colorpicker-value')
@@ -34,18 +34,18 @@ describe('Colorpicker', function () {
         {/* saturation-value canvas */}
         <div>
           {/* saturation */}
-          <div style={{background: `linear-gradient(to right, transparent 0%, ${defaultBaseColorHex} 100%)`}}/>
+          <div style={{background: `linear-gradient(to right, transparent 0%, ${defaultBaseColorHex} 100%)`}} />
           {/* value */}
-          <div style={{background: 'linear-gradient(to bottom, transparent 0%, #000 100%)'}}/>
+          <div style={{background: 'linear-gradient(to bottom, transparent 0%, #000 100%)'}} />
           {/* marker */}
-          <div style={{left: 265, top: 16}}/>
+          <div style={{left: 265, top: 16}} />
         </div>
         {/* hue slider */}
         <div>
           {/* marker */}
-          <div style={{top: 104}}/>
+          <div style={{top: 104}} />
         </div>
-        <input value={defaultColorHex}/>
+        <input value={defaultColorHex} />
       </div>
     )
   })
@@ -62,9 +62,9 @@ describe('Colorpicker', function () {
     TestUtils.Simulate.change(hexInput, {target: {value: pinkColor}})
     expect(dom, 'to have rendered',
       <div>
-        <div/>
-        <div/>
-        <input value={pinkColor}/>
+        <div />
+        <div />
+        <input value={pinkColor} />
       </div>
     )
     expect(onChange, 'was called with', pinkHslColor)

@@ -13,8 +13,8 @@ function render ({validate} = {}) {
   const onSubmit = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
     <Form name="test" value={initialValue} onSubmit={onSubmit} validate={validate}>
-      <TestField name="name" className="name"/>
-      <ErrorMessage name="name" Component="span" className="name-error"/>
+      <TestField name="name" className="name" />
+      <ErrorMessage name="name" Component="span" className="name-error" />
     </Form>
   )
   const form = TestUtils.findOne(dom, 'form')
@@ -31,7 +31,7 @@ describe('ErrorMessage', function () {
     TestUtils.Simulate.submit(form)
     expect(dom, 'to have rendered',
       <form>
-        <input name="test.name" type="text" value=""/>
+        <input name="test.name" type="text" value="" />
         <span>required</span>
       </form>
     )
@@ -40,7 +40,7 @@ describe('ErrorMessage', function () {
     TestUtils.Simulate.submit(form)
     expect(dom, 'to have rendered',
       <form>
-        <input name="test.name" type="text" value="foobar"/>
+        <input name="test.name" type="text" value="foobar" />
       </form>
     )
   })

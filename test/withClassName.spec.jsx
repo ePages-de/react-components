@@ -20,7 +20,7 @@ function render ({className, hoistedMethods = []} = {}) {
   const TestComponentWithClassName = withClassName(className, hoistedMethods)(TestComponent)
 
   const dom = TestUtils.renderIntoDocument(
-    <TestComponentWithClassName/>
+    <TestComponentWithClassName />
   )
 
   return {focus: focusSpy, dom}

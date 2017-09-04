@@ -16,7 +16,7 @@ export default function withClassName (className, hoistedMethods = []) {
         return <Component
           {...other}
           className={additionalClassName ? className + ' ' + additionalClassName : className}
-          ref={this.hoistMethods}/>
+          ref={this.hoistMethods} />
       }
 
       hoistMethods = (wrappedComponent) => {

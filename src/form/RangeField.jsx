@@ -30,7 +30,7 @@ export class RangeFieldRaw extends React.Component {
       step={step}
       value={this.transformValue(value)}
       onChange={(event) => onChange(this.transformValueInverse(event.target.value))}
-      onInput={this.onChange}/>
+      onInput={this.onChange} />
   }
 
   transformValue = (value) => value * this.props.multiplier

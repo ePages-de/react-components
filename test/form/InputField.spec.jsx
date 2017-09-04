@@ -8,7 +8,7 @@ import {InputFieldRaw} from '../../src/form/InputField'
 function render ({value} = {}) {
   const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <InputFieldRaw value={value} onChange={onChange}/>
+    <InputFieldRaw value={value} onChange={onChange} />
   )
   const inputField = TestUtils.findOne(dom, 'input')
 
@@ -20,7 +20,7 @@ describe('InputField', function () {
     const {dom} = render({value: 'foobar'})
 
     expect(dom, 'to have rendered',
-      <input type="text" value="foobar"/>
+      <input type="text" value="foobar" />
     )
   })
 
