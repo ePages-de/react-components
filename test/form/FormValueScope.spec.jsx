@@ -21,8 +21,8 @@ function render ({validate} = {}) {
       <div>
         <FormValueScope name="sub">
           <div>
-            <TestField name="name" className="name"/>
-            <ErrorMessage name="name" className="name-error"/>
+            <TestField name="name" className="name" />
+            <ErrorMessage name="name" className="name-error" />
           </div>
         </FormValueScope>
       </div>
@@ -42,7 +42,7 @@ describe('FormValueScope', function () {
       <form>
         <div>
           <div>
-            <input name="test.sub.name" value="first"/>
+            <input name="test.sub.name" value="first" />
           </div>
         </div>
       </form>
@@ -62,7 +62,7 @@ describe('FormValueScope', function () {
       <form>
         <div>
           <div>
-            <input name="test.sub.name" value="first"/>
+            <input name="test.sub.name" value="first" />
           </div>
         </div>
       </form>
@@ -74,7 +74,7 @@ describe('FormValueScope', function () {
       <form>
         <div>
           <div>
-            <input name="test.sub.name" value=""/>
+            <input name="test.sub.name" value="" />
             <div>required</div>
           </div>
         </div>

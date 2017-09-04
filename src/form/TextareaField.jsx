@@ -24,7 +24,7 @@ export class TextareaFieldRaw extends React.Component {
       rows={rows}
       value={value}
       onChange={(event) => onChange(event.target.value)}
-      ref={(node) => { this.textarea = node }}/>
+      ref={(node) => { this.textarea = node }} />
   }
 
   focus = () => this.textarea && this.textarea.focus()

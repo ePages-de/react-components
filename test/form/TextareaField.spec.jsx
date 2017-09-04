@@ -8,7 +8,7 @@ import {TextareaFieldRaw} from '../../src/form/TextareaField'
 function render ({value} = {}) {
   const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <TextareaFieldRaw value={value} onChange={onChange}/>
+    <TextareaFieldRaw value={value} onChange={onChange} />
   )
   const textarea = TestUtils.findOne(dom, 'textarea')
 
@@ -20,7 +20,7 @@ describe('TextareaField', function () {
     const {dom} = render({value: 'foo\nbar'})
 
     expect(dom, 'to have rendered',
-      <textarea value={'foo\nbar'}/>
+      <textarea value={'foo\nbar'} />
     )
   })
 

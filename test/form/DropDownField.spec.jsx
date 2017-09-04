@@ -13,7 +13,7 @@ function render ({value = 'm'} = {}) {
   ]
   const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <DropDownFieldRaw value={value} onChange={onChange} options={sizes}/>
+    <DropDownFieldRaw value={value} onChange={onChange} options={sizes} />
   )
   const sizeField = TestUtils.findOne(dom, 'select')
 

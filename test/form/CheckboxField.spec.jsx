@@ -10,7 +10,7 @@ function render ({value, negate = false} = {}) {
   const initialValue = Immutable.fromJS({value})
   const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <CheckboxFieldRaw value={value} onChange={onChange} negate={negate}/>
+    <CheckboxFieldRaw value={value} onChange={onChange} negate={negate} />
   )
   const checkboxField = TestUtils.findOne(dom, 'input[type="checkbox"]')
 
@@ -21,12 +21,12 @@ describe('CheckboxField', function () {
   it('renders', function () {
     const {dom: dom1} = render({value: false})
     expect(dom1, 'to have rendered',
-      <input type="checkbox" checked={false}/>
+      <input type="checkbox" checked={false} />
     )
 
     const {dom: dom2} = render({value: true})
     expect(dom2, 'to have rendered',
-      <input type="checkbox" checked/>
+      <input type="checkbox" checked />
     )
   })
 
@@ -42,7 +42,7 @@ describe('CheckboxField', function () {
     const {onChange, dom, checkboxField} = render({value: false, negate: true})
 
     expect(dom, 'to have rendered',
-      <input type="checkbox" checked/>
+      <input type="checkbox" checked />
     )
     TestUtils.Simulate.change(checkboxField, {target: {checked: false}})
     expect(onChange, 'to have calls satisfying', () => onChange(true))

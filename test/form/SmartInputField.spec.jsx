@@ -16,7 +16,7 @@ function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabl
       getSuggestions={getSuggestions}
       suggestionDisabled={suggestionDisabled}
       strict={strict}
-      className="smart-input"/>
+      className="smart-input" />
   )
   const input = TestUtils.findOne(dom, 'input')
 
@@ -34,7 +34,7 @@ describe('SmartInputField', () => {
         <div>
           <div>first</div>
           <div>second</div>
-          <input/>
+          <input />
         </div>
       </div>
     )
@@ -129,7 +129,7 @@ describe('SmartInputField', () => {
           <div>
             <div>first</div>
             <div>second</div>
-            <input/>
+            <input />
           </div>
           <div>
             <div>third-suggested</div>
@@ -146,7 +146,7 @@ describe('SmartInputField', () => {
           <div>
             <div>first</div>
             <div>second</div>
-            <input/>
+            <input />
           </div>
           <div>
             <div>third-suggested</div>
@@ -163,7 +163,7 @@ describe('SmartInputField', () => {
           <div>
             <div>first</div>
             <div>second</div>
-            <input/>
+            <input />
           </div>
           <div>
             <div>third-suggested</div>
@@ -180,7 +180,7 @@ describe('SmartInputField', () => {
           <div>
             <div>first</div>
             <div>second</div>
-            <input/>
+            <input />
           </div>
           <div>
             <div>third-suggested</div>
@@ -220,7 +220,7 @@ describe('SmartInputField', () => {
     expect(dom, 'to have rendered',
       <div>
         <div>
-          <input value="12"/>
+          <input value="12" />
         </div>
       </div>
     )
@@ -229,7 +229,7 @@ describe('SmartInputField', () => {
     expect(dom, 'to have rendered',
       <div>
         <div>
-          <input value=""/>
+          <input value="" />
         </div>
       </div>
     )

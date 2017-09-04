@@ -43,7 +43,7 @@ class SelectableInputFieldRaw extends React.Component {
               // give time for the input field to be enabled
               window.setTimeout(() => this.inputField.focus(), 0)
             }
-          }}/>
+          }} />
         {label}
       </label>
       <InputField
@@ -51,7 +51,7 @@ class SelectableInputFieldRaw extends React.Component {
         type={type}
         placeholder={placeholder}
         disabled={!this.context.formValueScope.getValue(checkboxName)}
-        ref={(component) => { this.inputField = component }}/>
+        ref={(component) => { this.inputField = component }} />
     </div>
   }
 }

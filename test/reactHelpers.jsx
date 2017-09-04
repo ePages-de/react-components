@@ -18,6 +18,6 @@ export class PropsSetter extends React.Component {
 
   render () {
     const {component: Component} = this.props
-    return <Component {...this.state}/>
+    return <Component {...this.state} />
   }
 }

@@ -28,7 +28,7 @@ export class InputFieldRaw extends React.Component {
       type={type}
       value={value}
       onChange={(event) => onChange(event.target.value)}
-      ref={(node) => { this.input = node }}/>
+      ref={(node) => { this.input = node }} />
   }
 
   focus = () => this.input && this.input.focus()

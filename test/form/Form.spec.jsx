@@ -22,11 +22,11 @@ function render ({validate, disabled = false} = {}) {
     <Form name="test" value={initialValue} onSubmit={onSubmit} validate={validate} disabled={disabled}>
       {({pristine, submitting}) =>
         <div>
-          <TestField name="firstName" className="firstName"/>
+          <TestField name="firstName" className="firstName" />
           <div>
-            <TestField name="lastName" className="lastName"/>
+            <TestField name="lastName" className="lastName" />
           </div>
-          <TestField name="address.street" className="street"/>
+          <TestField name="address.street" className="street" />
           <div>{`pristine ${pristine}`}</div>
           <div>{`submitting ${submitting}`}</div>
         </div>
@@ -48,11 +48,11 @@ describe('Form', function () {
     expect(dom, 'to have rendered',
       <form name="test" autoComplete="off">
         <div>
-          <input name="test.firstName" className="firstName"/>
+          <input name="test.firstName" className="firstName" />
           <div>
-            <input name="test.lastName" className="lastName"/>
+            <input name="test.lastName" className="lastName" />
           </div>
-          <input name="test.address.street" className="street"/>
+          <input name="test.address.street" className="street" />
         </div>
       </form>
     )
@@ -208,7 +208,7 @@ describe('Form', function () {
     const value2 = Immutable.fromJS({name: 'c'})
     const dom = TestUtils.renderIntoDocument(
       <PropsSetter name="test" value={value1} component={Form}>
-        <TestField name="name"/>
+        <TestField name="name" />
       </PropsSetter>
     )
     const nameField = TestUtils.findOne(dom, 'input')

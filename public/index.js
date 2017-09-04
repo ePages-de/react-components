@@ -47,37 +47,37 @@ class App extends React.Component {
           <Form name="form" value={initialValue} onSubmit={this.onSubmit} onChange={this.debugOnChange}>
             <div>
               <div>
-                <BlueInputField name="name" type="text" autoFocus/>
+                <BlueInputField name="name" type="text" autoFocus />
               </div>
               <div>
-                <InputField name="password" type="password"/>
+                <InputField name="password" type="password" />
               </div>
               <div>
-                <InputField name="comment" type="text"/>
+                <InputField name="comment" type="text" />
               </div>
               <div>
-                <CheckboxField name="adult"/>
+                <CheckboxField name="adult" />
               </div>
               <div>
-                <TextareaField name="description" rows={6}/>
+                <TextareaField name="description" rows={6} />
               </div>
               <div>
-                <ChoiceField name="size" choices={sizes}/>
+                <ChoiceField name="size" choices={sizes} />
               </div>
               <div>
-                <DropDownField name="size" options={sizes}/>
+                <DropDownField name="size" options={sizes} />
               </div>
               <div>
-                <RadioButtonField name="cut" buttons={cuts}/>
+                <RadioButtonField name="cut" buttons={cuts} />
               </div>
               <div>
-                <SelectableInputField name="facebook" type="text" title="Selector" label="SelectorLabel" placeholder="type here"/>
+                <SelectableInputField name="facebook" type="text" title="Selector" label="SelectorLabel" placeholder="type here" />
               </div>
               <div>
-                <SmartInputField name="tags" className="smart-input" getSuggestions={getTagSuggestions}/>
+                <SmartInputField name="tags" className="smart-input" getSuggestions={getTagSuggestions} />
               </div>
               <div>
-                <ColorpickerField name="color" className="colorpicker"/>
+                <ColorpickerField name="color" className="colorpicker" />
               </div>
             </div>
             <button type="submit">Submit</button>
@@ -99,4 +99,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App/>, document.getElementById('app'))
+ReactDOM.render(<App />, document.getElementById('app'))

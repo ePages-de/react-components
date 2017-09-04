@@ -15,7 +15,7 @@ function render () {
   const onSubmit = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
     <Form name="testform" value={initialValue} onSubmit={onSubmit}>
-      <SelectableInputField name="facebook" type="text" title="mySelectableInput" label="mySelectableInputLabel" placeholder="type here"/>
+      <SelectableInputField name="facebook" type="text" title="mySelectableInput" label="mySelectableInputLabel" placeholder="type here" />
     </Form>
   )
   const form = TestUtils.findOne(dom, 'form')
@@ -35,7 +35,7 @@ describe('SelectableInputField', function () {
           <label title="mySelectableInput">
             <input
               name="testform.facebookSelected"
-              type="checkbox"/>
+              type="checkbox" />
           </label>
           <input
             autoComplete="off"
@@ -44,7 +44,7 @@ describe('SelectableInputField', function () {
             spellCheck="false"
             name="testform.facebook"
             type="text"
-            value="testvalue"/>
+            value="testvalue" />
         </div>
       </form>
     )
