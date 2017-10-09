@@ -5,10 +5,10 @@
   "scripts": {
     "start": "node ./webpack.devserver.js",
     "test": "jest",
-    "build": "rm -rf build/ && NODE_ENV=production babel src/ --out-dir build/",
+    "build": "sh -c \"rm -rf build/ && NODE_ENV=production babel src/ --out-dir build/\"",
     "lint": "import-sort src/ && import-sort test/ && import-sort public/ && eslint --ext js,jsx *.js src/ test/ public/",
     "lint-fix": "import-sort -o src/; import-sort -o test/; import-sort -o public/; eslint --ext js,jsx *.js src/ test/ public/ --fix",
-    "karma": "NODE_ENV=test karma start",
+    "karma": "sh -c \"NODE_ENV=test karma start\"",
     "prepublish": "npm run build"
   },
   "repository": {
