@@ -85,7 +85,7 @@ describe('Colorpicker', function () {
     ])
   })
 
-  it('does ignores invalid colors from ', function () {
+  it('does ignore invalid colors', function () {
     const onChange = sinon.spy().named('onChange')
     const {hueSlider, svCanvas} = render({onChange})
 
