@@ -84,4 +84,14 @@ describe('Colorpicker', function () {
       [`hsl(146, ${s}, ${v})`]
     ])
   })
+
+  it('does ignores invalid colors from ', function () {
+    const onChange = sinon.spy().named('onChange')
+    const {hueSlider, svCanvas} = render({onChange})
+
+    TestUtils.Simulate.mouseDown(svCanvas, {clientX: '55px', clientY: 75})
+    TestUtils.Simulate.mouseDown(hueSlider, {clientX: '0px', clientY: '122px'})
+
+    expect(onChange, 'was not called')
+  })
 })

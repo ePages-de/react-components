@@ -4,6 +4,22 @@ import React, {Component, PureComponent} from 'react'
 
 import formField from './formField'
 
+/**
+ * check if a string is a valid color value
+ *
+ * @param {string} value color value string
+ * @returns {boolean} whether the string is a valid color or not
+ */
+function isValidColor (value) {
+  try {
+    // `color` throws an error when the value is not a valid color
+    color(value)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
 class Coordinator extends PureComponent {
   static propTypes = {
     coords: PropTypes.array.isRequired,
@@ -110,14 +126,16 @@ export class ColorpickerFieldRaw extends Component {
   }
 
   changeColor = (color) => {
-    this.setState({intermediateHexInput: color.hex()})
+    if (isValidColor(color.string())) {
+      this.setState({intermediateHexInput: color.hex()})
 
-    const preciseColor = color
-      .hue(Math.round(color.hue()))
-      .hsl()
-      .string()
+      const preciseColor = color
+        .hue(Math.round(color.hue()))
+        .hsl()
+        .string()
 
-    this.props.onChange(preciseColor)
+      this.props.onChange(preciseColor)
+    }
   }
 
   handleSvChange = ([x, y]) => {
@@ -207,9 +225,9 @@ export class ColorpickerFieldRaw extends Component {
 
             this.setState({intermediateHexInput: value})
 
-            try {
+            if (isValidColor(value)) {
               this.props.onChange(color(value).hsl().round().string())
-            } catch (e) {}
+            }
           }} />
       </div>
     )
