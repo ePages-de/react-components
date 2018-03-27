@@ -22,12 +22,12 @@ export class DropDownFieldRaw extends React.Component {
       <select
         {...other}
         name={scopedName}
-        value={options.findIndex((opt) => opt.value === value)}
-        onChange={(event) => onChange(options[parseInt(event.target.value)].value)}>
+        value={options.find((opt) => opt.value === value).value}
+        onChange={(event) => onChange(event.target.value)}>
         {options.map((option, index) =>
           <option
             key={index}
-            value={index}>
+            value={option.value}>
             {option.label}
           </option>
         )}
