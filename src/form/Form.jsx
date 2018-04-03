@@ -1,4 +1,5 @@
 import Immutable from 'immutable'
+import debounce from 'lodash/debounce'
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -40,6 +41,8 @@ export default class Form extends React.Component {
     onChange: PropTypes.func,
     prepare: PropTypes.func,
     validate: PropTypes.func,
+    validateAsync: PropTypes.func,
+    validateAsyncWaitMs: PropTypes.number,
     normalize: PropTypes.func,
     disabled: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
@@ -51,6 +54,8 @@ export default class Form extends React.Component {
     onChange: () => null,
     prepare: (value) => value,
     validate: () => null,
+    validateAsync: () => null,
+    validateAsyncWaitMs: 500,
     normalize: (value) => value,
     disabled: false
   }
@@ -60,7 +65,7 @@ export default class Form extends React.Component {
   }
 
   constructor (props) {
-    super()
+    super(props)
 
     this.state = {
       value: props.prepare(props.value),
@@ -69,6 +74,8 @@ export default class Form extends React.Component {
       pristine: true,
       submitting: false
     }
+
+    this.handleAsyncValidateDebounced = debounce(this.handleAsyncValidate, this.props.validateAsyncWaitMs)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -97,11 +104,26 @@ export default class Form extends React.Component {
       : value
     const newValue2 = this.props.onChange(newValue1)
 
-    const errors = this.props.validate(newValue2 || newValue1, this.state.triedToSubmit)
+    if (this.props.validateAsync) {
+      this.handleAsyncValidateDebounced(newValue2 || newValue1, name, this.state.triedToSubmit)
+    } else {
+      const errors = this.props.validate(newValue2 || newValue1, this.state.triedToSubmit)
+      this.setState({
+        errors: containsError(errors) ? errors : new Immutable.Map()
+      })
+    }
     this.setState({
-      errors: containsError(errors) ? errors : new Immutable.Map(),
       value: newValue2 || newValue1
     })
+  }
+
+  handleAsyncValidate = (value, changedFiled, triedToSubmit) => {
+    this.props.validateAsync(value, changedFiled, triedToSubmit)
+      .then((errors) => {
+        this.setState({
+          errors: containsError(errors) ? errors : new Immutable.Map()
+        })
+      })
   }
 
   reset = () => {
@@ -123,24 +145,34 @@ export default class Form extends React.Component {
   onSubmit = (event) => {
     event.preventDefault()
     if (!this.props.disabled && !this.state.submitting) {
-      const errors = this.props.validate(this.state.value, true)
+      this.syncOrAsyncValidate(this.state.value, null, true)
+        .then((errors) => {
+          if (containsError(errors)) {
+            this.setState({errors, triedToSubmit: true})
+          } else {
+            this.setState({errors: new Immutable.Map()})
+            const result = this.props.onSubmit(this.props.normalize(this.state.value))
+            if (result && typeof result.then === 'function') {
+              this.setState({submitting: true})
+              result.catch(() => {}).then(() => this.setState({submitting: false}))
+            }
+          }
+        })
+    }
+  }
 
-      if (containsError(errors)) {
-        this.setState({errors, triedToSubmit: true})
-      } else {
-        this.setState({errors: new Immutable.Map()})
-        const result = this.props.onSubmit(this.props.normalize(this.state.value))
-
-        if (result && typeof result.then === 'function') {
-          this.setState({submitting: true})
-          result.catch(() => {}).then(() => this.setState({submitting: false}))
-        }
-      }
+  syncOrAsyncValidate = (value, changedFiled, triedToSubmit) => {
+    if (this.props.validateAsync) {
+      return this.props.validateAsync(value, changedFiled, triedToSubmit)
+    } else {
+      return new Promise((resolve, reject) => {
+        resolve(this.props.validate(value, triedToSubmit))
+      })
     }
   }
 
   render () {
-    const {name, value, onSubmit, onChange, prepare, validate, normalize, disabled, children, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {name, value, onSubmit, onChange, prepare, validate, validateAsync, validateAsyncWaitMs, normalize, disabled, children, ...other} = this.props // eslint-disable-line no-unused-vars
     return (
       <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
         {typeof children === 'function' ? children({
