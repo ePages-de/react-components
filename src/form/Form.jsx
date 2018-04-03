@@ -3,6 +3,7 @@ import debounce from 'lodash/debounce'
 import PropTypes from 'prop-types'
 import React from 'react'
 
+import createPromiseLinearizer from '../utils/createPromiseLinearizer'
 import FormValueScope from './FormValueScope'
 
 function containsError (errors) {
@@ -75,6 +76,7 @@ export default class Form extends React.Component {
       submitting: false
     }
 
+    this.linearizer = createPromiseLinearizer()
     this.handleAsyncValidateDebounced = debounce(this.handleAsyncValidate, this.props.validateAsyncWaitMs)
   }
 
@@ -118,7 +120,7 @@ export default class Form extends React.Component {
   }
 
   handleAsyncValidate = (value, changedFiled, triedToSubmit) => {
-    this.props.validateAsync(value, changedFiled, triedToSubmit)
+    this.linearizer(() => this.props.validateAsync(value, changedFiled, triedToSubmit))
       .then((errors) => {
         this.setState({
           errors: containsError(errors) ? errors : new Immutable.Map()
@@ -163,7 +165,7 @@ export default class Form extends React.Component {
 
   syncOrAsyncValidate = (value, changedFiled, triedToSubmit) => {
     if (this.props.validateAsync) {
-      return this.props.validateAsync(value, changedFiled, triedToSubmit)
+      return this.linearizer(() => this.props.validateAsync(value, changedFiled, triedToSubmit))
     } else {
       return new Promise((resolve, reject) => {
         resolve(this.props.validate(value, triedToSubmit))
