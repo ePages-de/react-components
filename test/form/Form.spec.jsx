@@ -58,21 +58,25 @@ describe('Form', function () {
     )
   })
 
-  it('returns original instance if unchanged', function () {
+  it('returns original instance if unchanged', async function () {
     const {onSubmit, form} = render()
 
     expect(onSubmit, 'was not called')
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(onSubmit, 'was called once')
   })
 
-  it('returns new value', function () {
+  it('returns new value', async function () {
     const {onSubmit, form, firstNameField, lastNameField, streetField} = render()
 
     TestUtils.Simulate.change(firstNameField, {target: {value: 'foo'}})
     TestUtils.Simulate.change(lastNameField, {target: {value: 'bar'}})
     TestUtils.Simulate.change(streetField, {target: {value: 'apple'}})
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(onSubmit, 'was called once')
     expect(onSubmit, 'to have calls satisfying', function () {
       onSubmit(Immutable.fromJS({
@@ -85,38 +89,65 @@ describe('Form', function () {
     })
   })
 
-  it('does not submit if disabled', function () {
+  it('does not submit if disabled', async function () {
     const {onSubmit, form} = render({disabled: true})
 
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(onSubmit, 'was not called')
   })
 
-  it('respects validation', function () {
+  it('respects validation', async function () {
     const validate = (value) => Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})
     const {onSubmit, form, firstNameField, lastNameField} = render({validate})
 
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(onSubmit, 'was not called')
     TestUtils.Simulate.change(lastNameField, {target: {value: 'bar'}})
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(onSubmit, 'was not called')
     TestUtils.Simulate.change(firstNameField, {target: {value: 'foo'}})
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
+    expect(onSubmit, 'was called once')
+  })
+
+  it('validates asynchronously', async function () {
+    const validate = sinon.spy((value) => Promise.resolve(Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})))
+    const {onSubmit, form, firstNameField, lastNameField} = render({validate})
+
+    TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
+    expect(onSubmit, 'was not called')
+    TestUtils.Simulate.change(lastNameField, {target: {value: 'bar'}})
+    expect(validate, 'was called')
+    TestUtils.Simulate.change(firstNameField, {target: {value: 'foo'}})
+    TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(onSubmit, 'was called once')
   })
 
   // https://github.com/ePages-de/react-components/issues/8
-  it('calls validate while typing', function () {
+  it('calls validate while typing', async function () {
     const validate = sinon.spy()
     const {onSubmit, firstNameField} = render({validate})
 
     TestUtils.Simulate.change(firstNameField)
+    await Bluebird.delay(1)
+
     expect(validate, 'was called')
     expect(onSubmit, 'was not called')
   })
 
-  it('calls validation correctly (with second argument false before first submit and true afterwards)', function () {
+  it('calls validation correctly (with second argument false before first submit and true afterwards)', async function () {
     const validate = sinon.spy(() => Immutable.fromJS({firstName: 'required'}))
     const {onSubmit, form, firstNameField} = render({validate})
 
@@ -125,6 +156,7 @@ describe('Form', function () {
     TestUtils.Simulate.submit(form)
     TestUtils.Simulate.change(firstNameField, {target: {value: '123'}})
     TestUtils.Simulate.change(firstNameField, {target: {value: '1234'}})
+    await Bluebird.delay(1)
 
     expect(onSubmit, 'to have calls satisfying', () => {
       validate(Immutable.fromJS({firstName: '1', lastName: '', address: {street: ''}}), false)
@@ -177,17 +209,21 @@ describe('Form', function () {
     expect(formComponent, 'to have rendered', <div>pristine true</div>)
   })
 
-  it('detects submitting state', function () {
+  it('detects submitting state', async function () {
     const {dom: formComponent, form, onSubmit} = render()
 
     expect(formComponent, 'to have rendered', <div>submitting false</div>)
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(formComponent, 'to have rendered', <div>submitting false</div>)
 
     const submit = Bluebird.delay(10)
     onSubmit.returns(submit)
     expect(formComponent, 'to have rendered', <div>submitting false</div>)
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(formComponent, 'to have rendered', <div>submitting true</div>)
     return submit.then(() => {
       expect(formComponent, 'to have rendered', <div>submitting false</div>)

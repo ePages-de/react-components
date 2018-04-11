@@ -2,7 +2,7 @@ import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import {CheckboxField, ChoiceField, ColorpickerField, DropDownField, Form, InputField, RadioButtonField, SelectableInputField, SmartInputField, TextareaField, withClassName} from '../src/index'
+import {CheckboxField, ChoiceField, ColorpickerField, DropDownField, ErrorMessage, Form, InputField, RadioButtonField, SelectableInputField, SmartInputField, TextareaField, withClassName} from '../src/index'
 
 const initialValue = Immutable.fromJS({
   name: 'name',
@@ -44,10 +44,11 @@ class App extends React.Component {
       <div>
         <h1>Form</h1>
         <div>
-          <Form name="form" value={initialValue} onSubmit={this.onSubmit} onChange={this.debugOnChange}>
+          <Form name="form" value={initialValue} onSubmit={this.onSubmit} onChange={this.debugOnChange} validate={this.validate} validateWaitMs={300}>
             <div>
               <div>
                 <BlueInputField name="name" type="text" autoFocus />
+                <ErrorMessage name="name" Component="span" />
               </div>
               <div>
                 <InputField name="password" type="password" />
@@ -96,6 +97,10 @@ class App extends React.Component {
 
   onSubmit = (value) => {
     console.log(value.toJS()) // eslint-disable-line no-console
+  }
+
+  validate = (value) => {
+    return Immutable.fromJS({name: !value.get('name') ? 'required' : null})
   }
 }
 

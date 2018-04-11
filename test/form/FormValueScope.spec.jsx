@@ -1,3 +1,4 @@
+import Bluebird from 'bluebird'
 import Immutable from 'immutable'
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
@@ -49,7 +50,7 @@ describe('FormValueScope', function () {
     )
   })
 
-  it('passes through validation', function () {
+  it('passes through validation', async function () {
     const validate = (value) => Immutable.fromJS({
       sub: {
         name: !value.getIn(['sub', 'name']) ? 'required' : null
@@ -58,6 +59,8 @@ describe('FormValueScope', function () {
     const {dom, form, nameField} = render({validate})
 
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(dom, 'to have rendered',
       <form>
         <div>
@@ -70,6 +73,8 @@ describe('FormValueScope', function () {
 
     TestUtils.Simulate.change(nameField, {target: {value: ''}})
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(dom, 'to have rendered',
       <form>
         <div>
