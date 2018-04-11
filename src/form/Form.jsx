@@ -1,10 +1,22 @@
 import Immutable from 'immutable'
-import debounce from 'lodash/debounce'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import createPromiseLinearizer from '../utils/createPromiseLinearizer'
 import FormValueScope from './FormValueScope'
+
+function createLinearizedDebouncedFunc (func, waitMs = 0) {
+  let timer = null
+
+  return (...args) => {
+    return new Promise(resolve => {
+      if (timer) window.clearTimeout(timer)
+      timer = window.setTimeout(() => {
+        timer = null
+        resolve(func(...args))
+      }, waitMs)
+    })
+  }
+}
 
 function containsError (errors) {
   if (!errors) {
@@ -42,8 +54,7 @@ export default class Form extends React.Component {
     onChange: PropTypes.func,
     prepare: PropTypes.func,
     validate: PropTypes.func,
-    validateAsync: PropTypes.func,
-    validateAsyncWaitMs: PropTypes.number,
+    validateWaitMs: PropTypes.number,
     normalize: PropTypes.func,
     disabled: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
@@ -55,8 +66,7 @@ export default class Form extends React.Component {
     onChange: () => null,
     prepare: (value) => value,
     validate: () => null,
-    validateAsync: () => null,
-    validateAsyncWaitMs: 500,
+    validateWaitMs: 0,
     normalize: (value) => value,
     disabled: false
   }
@@ -76,8 +86,7 @@ export default class Form extends React.Component {
       submitting: false
     }
 
-    this.linearizer = createPromiseLinearizer()
-    this.handleAsyncValidateDebounced = debounce(this.handleAsyncValidate, this.props.validateAsyncWaitMs)
+    this.validate = createLinearizedDebouncedFunc(props.validate, props.validateWaitMs)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -106,21 +115,11 @@ export default class Form extends React.Component {
       : value
     const newValue2 = this.props.onChange(newValue1)
 
-    if (this.props.validateAsync) {
-      this.handleAsyncValidateDebounced(newValue2 || newValue1, name, this.state.triedToSubmit)
-    } else {
-      const errors = this.props.validate(newValue2 || newValue1, this.state.triedToSubmit)
-      this.setState({
-        errors: containsError(errors) ? errors : new Immutable.Map()
-      })
-    }
     this.setState({
       value: newValue2 || newValue1
     })
-  }
 
-  handleAsyncValidate = (value, changedFiled, triedToSubmit) => {
-    this.linearizer(() => this.props.validateAsync(value, changedFiled, triedToSubmit))
+    this.validate(newValue2 || newValue1, this.state.triedToSubmit, name)
       .then((errors) => {
         this.setState({
           errors: containsError(errors) ? errors : new Immutable.Map()
@@ -147,7 +146,7 @@ export default class Form extends React.Component {
   onSubmit = (event) => {
     event.preventDefault()
     if (!this.props.disabled && !this.state.submitting) {
-      this.syncOrAsyncValidate(this.state.value, null, true)
+      Promise.resolve(this.props.validate(this.state.value, true, null))
         .then((errors) => {
           if (containsError(errors)) {
             this.setState({errors, triedToSubmit: true})
@@ -163,18 +162,8 @@ export default class Form extends React.Component {
     }
   }
 
-  syncOrAsyncValidate = (value, changedFiled, triedToSubmit) => {
-    if (this.props.validateAsync) {
-      return this.linearizer(() => this.props.validateAsync(value, changedFiled, triedToSubmit))
-    } else {
-      return new Promise((resolve, reject) => {
-        resolve(this.props.validate(value, triedToSubmit))
-      })
-    }
-  }
-
   render () {
-    const {name, value, onSubmit, onChange, prepare, validate, validateAsync, validateAsyncWaitMs, normalize, disabled, children, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {name, value, onSubmit, onChange, prepare, validate, validateWaitMs, normalize, disabled, children, ...other} = this.props // eslint-disable-line no-unused-vars
     return (
       <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
         {typeof children === 'function' ? children({

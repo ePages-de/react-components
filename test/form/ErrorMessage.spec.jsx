@@ -1,3 +1,4 @@
+import Bluebird from 'bluebird'
 import Immutable from 'immutable'
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
@@ -24,11 +25,14 @@ function render ({validate} = {}) {
 }
 
 describe('ErrorMessage', function () {
-  it('renders', function () {
+  it('renders', async function () {
     const validate = (value) => !value.get('name') ? Immutable.fromJS({name: 'required'}) : null
     const {dom, form, nameField} = render({validate})
 
     TestUtils.Simulate.submit(form)
+
+    await Bluebird.delay(1)
+
     expect(dom, 'to have rendered',
       <form>
         <input name="test.name" type="text" value="" />
@@ -38,6 +42,7 @@ describe('ErrorMessage', function () {
 
     TestUtils.Simulate.change(nameField, {target: {value: 'foobar'}})
     TestUtils.Simulate.submit(form)
+
     expect(dom, 'to have rendered',
       <form>
         <input name="test.name" type="text" value="foobar" />

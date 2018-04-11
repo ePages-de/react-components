@@ -1,3 +1,4 @@
+import Bluebird from 'bluebird'
 import Immutable from 'immutable'
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
@@ -80,7 +81,7 @@ describe('IteratorField', function () {
     )
   })
 
-  it('returns new value', function () {
+  it('returns new value', async function () {
     const {onSubmit, form, tagNameFields} = render()
 
     expect(tagNameFields, 'to have length', 2)
@@ -88,6 +89,8 @@ describe('IteratorField', function () {
     TestUtils.Simulate.change(tagNameFields[0], {target: {value: 'first-new'}})
     TestUtils.Simulate.change(tagNameFields[1], {target: {value: 'second-new'}})
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(onSubmit, 'was called once')
     expect(onSubmit, 'to have calls satisfying', function () {
       onSubmit(Immutable.fromJS({
@@ -99,7 +102,7 @@ describe('IteratorField', function () {
     })
   })
 
-  it('passes through validation', function () {
+  it('passes through validation', async function () {
     const validate = (value) => new Immutable.Map({
       tags: value.get('tags').map((tag) => new Immutable.Map({
         name: !tag.get('name') ? 'required' : null
@@ -121,9 +124,10 @@ describe('IteratorField', function () {
         </div>
       </form>
     )
-
     TestUtils.Simulate.change(tagNameFields[1], {target: {value: ''}})
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(dom, 'to have rendered',
       <form>
         <div>
