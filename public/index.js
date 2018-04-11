@@ -48,7 +48,7 @@ class App extends React.Component {
             <div>
               <div>
                 <BlueInputField name="name" type="text" autoFocus />
-                <ErrorMessage name="name" Component="span" className="name-error" />
+                <ErrorMessage name="name" Component="span" />
               </div>
               <div>
                 <InputField name="password" type="password" />

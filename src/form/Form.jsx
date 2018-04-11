@@ -152,6 +152,7 @@ export default class Form extends React.Component {
             this.setState({errors, triedToSubmit: true})
           } else {
             this.setState({errors: new Immutable.Map()})
+
             const result = this.props.onSubmit(this.props.normalize(this.state.value))
             if (result && typeof result.then === 'function') {
               this.setState({submitting: true})

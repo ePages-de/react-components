@@ -30,7 +30,6 @@ describe('ErrorMessage', function () {
     const {dom, form, nameField} = render({validate})
 
     TestUtils.Simulate.submit(form)
-
     await Bluebird.delay(1)
 
     expect(dom, 'to have rendered',
@@ -42,6 +41,7 @@ describe('ErrorMessage', function () {
 
     TestUtils.Simulate.change(nameField, {target: {value: 'foobar'}})
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
 
     expect(dom, 'to have rendered',
       <form>

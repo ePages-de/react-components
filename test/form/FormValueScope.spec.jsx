@@ -59,6 +59,8 @@ describe('FormValueScope', function () {
     const {dom, form, nameField} = render({validate})
 
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(1)
+
     expect(dom, 'to have rendered',
       <form>
         <div>
