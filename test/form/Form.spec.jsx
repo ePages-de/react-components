@@ -5,11 +5,12 @@ import TestUtils from 'react-testutils-additions'
 import sinon from 'sinon'
 import expect from 'unexpected'
 
+import ErrorMessage from '../../src/form/ErrorMessage'
 import Form from '../../src/form/Form'
 import {PropsSetter} from '../reactHelpers'
 import TestField from './TestField'
 
-function render ({validate, disabled = false} = {}) {
+function render (props) {
   const initialValue = Immutable.fromJS({
     firstName: '',
     lastName: '',
@@ -19,10 +20,11 @@ function render ({validate, disabled = false} = {}) {
   })
   const onSubmit = sinon.stub()
   const dom = TestUtils.renderIntoDocument(
-    <Form name="test" value={initialValue} onSubmit={onSubmit} validate={validate} disabled={disabled}>
+    <Form name="test" value={initialValue} onSubmit={onSubmit} {...props}>
       {({pristine, submitting}) =>
         <div>
           <TestField name="firstName" className="firstName" />
+          <ErrorMessage name="firstName" />
           <div>
             <TestField name="lastName" className="lastName" />
           </div>
@@ -145,6 +147,52 @@ describe('Form', function () {
 
     expect(validate, 'was called')
     expect(onSubmit, 'was not called')
+  })
+
+  it('correctly handles debounced async validation while typing', async function () {
+    const responseDelays = [400, 200, 0]
+    const validations = []
+
+    const validateWaitMs = 20
+    const validate = sinon.spy(value => {
+      const validation = Bluebird.delay(responseDelays.shift()).then(() =>
+        Immutable.fromJS(!value.get('firstName') ? {firstName: 'first name required'} : null)
+      )
+      validations.push(validation)
+      return validation
+    })
+
+    const {dom, firstNameField} = render({validate, validateWaitMs})
+
+    TestUtils.Simulate.change(firstNameField, {target: {value: 'a'}})
+
+    // The validation promise for this resolves last and should be discarded.
+    TestUtils.Simulate.change(firstNameField, {target: {value: ''}})
+    await Bluebird.delay(validateWaitMs)
+
+    TestUtils.Simulate.change(firstNameField, {target: {value: 'b'}})
+
+    TestUtils.Simulate.change(firstNameField, {target: {value: 'bc'}})
+    await Bluebird.delay(validateWaitMs)
+
+    // The validation promise for this resolves first and should be used.
+    TestUtils.Simulate.change(firstNameField, {target: {value: 'bcd'}})
+    await Bluebird.delay(validateWaitMs)
+
+    expect(validations.length, 'to be', 3)
+
+    await Bluebird.all(validations)
+    await Bluebird.delay(1)
+
+    expect(validate, 'was called times', 3)
+    expect(validate, 'to have calls satisfying', [
+      [{firstName: ''}, false, 'firstName'],
+      [{firstName: 'bc'}, false, 'firstName'],
+      [{firstName: 'bcd'}, false, 'firstName']
+    ])
+
+    // This should fail if the first validation promise was not discarded.
+    expect(dom, 'not to contain', <div>first name required</div>)
   })
 
   it('calls validation correctly (with second argument false before first submit and true afterwards)', async function () {

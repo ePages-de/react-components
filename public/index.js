@@ -34,8 +34,9 @@ const getTagSuggestions = (text) => Promise.resolve(text.length > 0 ? [text + '1
 const BlueInputField = withClassName('blue', ['focus'])(InputField)
 
 class App extends React.Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
+
     this.state = {formValue: initialValue}
   }
 

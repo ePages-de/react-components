@@ -5,12 +5,12 @@ import formField from './formField'
 
 export class DropDownFieldRaw extends React.Component {
   static propTypes = {
-    value: PropTypes.any.isRequired,
+    value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
     scopedName: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.shape({
-      value: PropTypes.any.isRequired,
+      value: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired
     })).isRequired
   }

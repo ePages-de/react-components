@@ -6,13 +6,28 @@ import FormValueScope from './FormValueScope'
 
 function createLinearizedDebouncedFunc (func, waitMs = 0) {
   let timer = null
+  let lastPendingId = 0
 
-  return (...args) => {
-    return new Promise(resolve => {
-      if (timer) window.clearTimeout(timer)
+  function run (args) {
+    const currentPendingId = lastPendingId + 1
+    lastPendingId = currentPendingId
+    timer = null
+
+    return Promise.resolve(func(...args))
+      .then((...args) => {
+        if (lastPendingId === currentPendingId) {
+          return Promise.resolve(...args)
+        }
+      })
+  }
+
+  return (args, runImmediately = false) => {
+    if (timer) window.clearTimeout(timer)
+    if (runImmediately) return run(args)
+
+    return new Promise((resolve, reject) => {
       timer = window.setTimeout(() => {
-        timer = null
-        resolve(func(...args))
+        run(args).then(resolve, reject)
       }, waitMs)
     })
   }
@@ -114,15 +129,16 @@ export default class Form extends React.Component {
       ? this.state.value.setIn(parseName(name), value)
       : value
     const newValue2 = this.props.onChange(newValue1)
+    const newValue = newValue2 || newValue1
 
     this.setState({
-      value: newValue2 || newValue1
+      value: newValue
     })
 
-    this.validate(newValue2 || newValue1, this.state.triedToSubmit, name)
-      .then((errors) => {
+    this.validate([newValue, this.state.triedToSubmit, name])
+      .then(validationResult => {
         this.setState({
-          errors: containsError(errors) ? errors : new Immutable.Map()
+          errors: containsError(validationResult) ? validationResult : new Immutable.Map()
         })
       })
   }
@@ -146,10 +162,10 @@ export default class Form extends React.Component {
   onSubmit = (event) => {
     event.preventDefault()
     if (!this.props.disabled && !this.state.submitting) {
-      Promise.resolve(this.props.validate(this.state.value, true, null))
-        .then((errors) => {
-          if (containsError(errors)) {
-            this.setState({errors, triedToSubmit: true})
+      this.validate([this.state.value, true, null], true)
+        .then(validationResult => {
+          if (containsError(validationResult)) {
+            this.setState({errors: validationResult, triedToSubmit: true})
           } else {
             this.setState({errors: new Immutable.Map()})
 
