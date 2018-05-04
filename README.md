@@ -19,3 +19,6 @@ npm run build
 
 [react]: https://facebook.github.io/react/
 [VectorOpenStock]: https://www.vectoropenstock.com/vectors/preview/71474/cartoon-domestic-and-wild-animals-pack
+
+## Test page
+In order to try out the components you can run `npm start` and then open http://localhost:3000 in your browser.
