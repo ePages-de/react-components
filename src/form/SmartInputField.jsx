@@ -37,6 +37,8 @@ export class SmartInputFieldRaw extends React.Component {
     renderSuggestion: PropTypes.func,
     // whether to hide the already selected values
     hideValues: PropTypes.bool,
+    // the text which is displayed within the input field before anything is typed in
+    placeholderText: PropTypes.string,
     className: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.shape({
@@ -85,7 +87,7 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, suggestionDisabled, autoFocus, renderValue, renderSuggestion, hideValues, className} = this.props
+    const {value, suggestionDisabled, autoFocus, renderValue, renderSuggestion, hideValues, placeholderText, className} = this.props
     const {text, focused, suggestions, activeSuggestionIndex} = this.state
     const suggestionsVisible = suggestions && suggestions.length > 0
 
@@ -125,6 +127,7 @@ export class SmartInputFieldRaw extends React.Component {
             autoCorrect={false}
             autoCapitalize={false}
             spellCheck={false}
+            placeholder={placeholderText}
             className={styles.inputText}
             ref={(node) => { this.input = node }} />
         </div>
