@@ -7,7 +7,7 @@ import expect from 'unexpected'
 
 import {SmartInputFieldRaw} from '../../src/form/SmartInputField'
 
-function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabled, strict = false} = {}) {
+function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabled, strict = false, placeholderText = 'Usage hint'} = {}) {
   const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
     <SmartInputFieldRaw
@@ -16,6 +16,7 @@ function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabl
       getSuggestions={getSuggestions}
       suggestionDisabled={suggestionDisabled}
       strict={strict}
+      placeholderText={placeholderText}
       className="smart-input" />
   )
   const input = TestUtils.findOne(dom, 'input')
@@ -34,7 +35,7 @@ describe('SmartInputField', () => {
         <div>
           <div>first</div>
           <div>second</div>
-          <input />
+          <input placeholder="Usage hint" />
         </div>
       </div>
     )

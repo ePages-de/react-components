@@ -48,37 +48,49 @@ class App extends React.Component {
           <Form name="form" value={initialValue} onSubmit={this.onSubmit} onChange={this.debugOnChange} validate={this.validate} validateWaitMs={300}>
             <div>
               <div>
+                <h2>BlueInputField</h2>
                 <BlueInputField name="name" type="text" autoFocus />
+                <h2>ErrorMessage</h2>
                 <ErrorMessage name="name" Component="span" />
               </div>
               <div>
+                <h2>InputField (password)</h2>
                 <InputField name="password" type="password" />
               </div>
               <div>
+                <h2>InputField (text)</h2>
                 <InputField name="comment" type="text" />
               </div>
               <div>
+                <h2>CheckboxField</h2>
                 <CheckboxField name="adult" />
               </div>
               <div>
+                <h2>TextareaField</h2>
                 <TextareaField name="description" rows={6} />
               </div>
               <div>
+                <h2>ChoiceField</h2>
                 <ChoiceField name="size" choices={sizes} />
               </div>
               <div>
+                <h2>DropDownField</h2>
                 <DropDownField name="size" options={sizes} />
               </div>
               <div>
+                <h2>RadioButtonField</h2>
                 <RadioButtonField name="cut" buttons={cuts} />
               </div>
               <div>
+                <h2>SelectableInputField</h2>
                 <SelectableInputField name="facebook" type="text" title="Selector" label="SelectorLabel" placeholder="type here" />
               </div>
               <div>
-                <SmartInputField name="tags" className="smart-input" getSuggestions={getTagSuggestions} />
+                <h2>SmartInputField</h2>
+                <SmartInputField name="tags" className="smart-input" placeholderText="type here" getSuggestions={getTagSuggestions} />
               </div>
               <div>
+                <h2>ColorpickerField</h2>
                 <ColorpickerField name="color" className="colorpicker" />
               </div>
             </div>
