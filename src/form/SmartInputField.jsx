@@ -106,30 +106,36 @@ export class SmartInputFieldRaw extends React.Component {
       }
       : this.props.className
 
+    const inputField = (
+      <input
+        type="text"
+        value={text}
+        autoFocus={autoFocus}
+        onChange={this.handleChange}
+        onKeyDown={this.handleKeyDown}
+        onFocus={this.handleFocus}
+        onBlur={this.handleBlur}
+        onMouseDown={stopPropagation}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        placeholder={placeholderText}
+        className={styles.inputText}
+        key="inputField"
+        ref={(node) => { this.input = node }} />
+    )
+
+    const values = hideValues ? [] : value.map((value, index) =>
+      <div key={index} onMouseDown={stopPropagation} className={styles.inputValue}>
+        {renderValue(value, this.handleClickValueRemove(index))}
+      </div>
+    )
+
     return (
       <div className={classnames(styles.base, {[styles.baseFocused]: focused, [styles.baseWithSuggestions]: suggestionsVisible})} onMouseDown={this.handleMouseDownContainer}>
         <div className={styles.input}>
-          {!hideValues && value.map((value, index) =>
-            <div key={index} onMouseDown={stopPropagation} className={styles.inputValue}>
-              {renderValue(value, this.handleClickValueRemove(index))}
-            </div>
-          )}
-          <input
-            type="text"
-            value={text}
-            autoFocus={autoFocus}
-            onChange={this.handleChange}
-            onKeyDown={this.handleKeyDown}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-            onMouseDown={stopPropagation}
-            autoComplete={false}
-            autoCorrect={false}
-            autoCapitalize={false}
-            spellCheck={false}
-            placeholder={placeholderText}
-            className={styles.inputText}
-            ref={(node) => { this.input = node }} />
+          {values.concat(inputField)}
         </div>
         {suggestionsVisible && (
           <div className={styles.suggestions} ref="suggestions">

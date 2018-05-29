@@ -5,6 +5,12 @@ console.error = function (message) { // eslint-disable-line no-console
 console.warning = function (message) { // eslint-disable-line no-console
   throw new Error(message)
 }
+// mock unavailable window stuff
+if (typeof window !== 'undefined') {
+  window.requestAnimationFrame = function (fn) {
+    window.setTimeout(fn, 1000 / 60)
+  }
+}
 
 // configure test suite
 const unexpected = require('unexpected')
