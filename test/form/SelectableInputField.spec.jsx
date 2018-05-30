@@ -1,4 +1,3 @@
-import Bluebird from 'bluebird'
 import Immutable from 'immutable'
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
@@ -51,7 +50,7 @@ describe('SelectableInputField', function () {
     )
   })
 
-  it('returns new value', async function () {
+  it('returns new value', function () {
     const {form, onSubmit, inputField0, inputField1} = render()
 
     expect(onSubmit, 'was not called')
@@ -66,7 +65,6 @@ describe('SelectableInputField', function () {
     expect(inputField1.value, 'to be', 'ab')
 
     TestUtils.Simulate.submit(form)
-    await Bluebird.delay(1)
 
     expect(onSubmit, 'was called once')
     expect(onSubmit, 'to have calls satisfying', function () {
