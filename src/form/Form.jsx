@@ -4,32 +4,39 @@ import React from 'react'
 
 import FormValueScope from './FormValueScope'
 
-function createLinearizedDebouncedFunc (func, waitMs = 0) {
+// Creates a debounced version of `func` that receives its arguments as first,
+// and a callback function as second argument. When invoked multiple times, the
+// callback function is only called for the last invocation of `func`.
+function createValidateFunc (func, waitMs = 0) {
   let timer = null
   let lastPendingId = 0
 
-  function run (args) {
+  function run (args, doneFunc) {
     const currentPendingId = lastPendingId + 1
+    const result = func(...args)
+
     lastPendingId = currentPendingId
     timer = null
 
-    return Promise.resolve(func(...args))
-      .then((...args) => {
+    if (result && typeof result.then === 'function') {
+      result.then((...args) => {
         if (lastPendingId === currentPendingId) {
-          return Promise.resolve(...args)
+          doneFunc(...args)
         }
       })
+    } else {
+      doneFunc(result)
+    }
   }
 
-  return (args, runImmediately = false) => {
+  return (args, doneFunc, runImmediately = false) => {
     if (timer) window.clearTimeout(timer)
-    if (runImmediately) return run(args)
 
-    return new Promise((resolve, reject) => {
-      timer = window.setTimeout(() => {
-        run(args).then(resolve, reject)
-      }, waitMs)
-    })
+    if (waitMs === null || runImmediately) {
+      run(args, doneFunc)
+    } else {
+      timer = window.setTimeout(() => run(args, doneFunc), waitMs)
+    }
   }
 }
 
@@ -81,7 +88,7 @@ export default class Form extends React.Component {
     onChange: () => null,
     prepare: (value) => value,
     validate: () => null,
-    validateWaitMs: 0,
+    validateWaitMs: null,
     normalize: (value) => value,
     disabled: false
   }
@@ -101,7 +108,7 @@ export default class Form extends React.Component {
       submitting: false
     }
 
-    this.validate = createLinearizedDebouncedFunc(props.validate, props.validateWaitMs)
+    this.validate = createValidateFunc(props.validate, props.validateWaitMs)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -135,12 +142,14 @@ export default class Form extends React.Component {
       value: newValue
     })
 
-    this.validate([newValue, this.state.triedToSubmit, name])
-      .then(validationResult => {
+    this.validate(
+      [newValue, this.state.triedToSubmit, name],
+      validationResult => {
         this.setState({
           errors: containsError(validationResult) ? validationResult : new Immutable.Map()
         })
-      })
+      }
+    )
   }
 
   reset = () => {
@@ -162,8 +171,9 @@ export default class Form extends React.Component {
   onSubmit = (event) => {
     event.preventDefault()
     if (!this.props.disabled && !this.state.submitting) {
-      this.validate([this.state.value, true, null], true)
-        .then(validationResult => {
+      this.validate(
+        [this.state.value, true, null],
+        validationResult => {
           if (containsError(validationResult)) {
             this.setState({errors: validationResult, triedToSubmit: true})
           } else {
@@ -175,7 +185,9 @@ export default class Form extends React.Component {
               result.catch(() => {}).then(() => this.setState({submitting: false}))
             }
           }
-        })
+        },
+        true
+      )
     }
   }
 
