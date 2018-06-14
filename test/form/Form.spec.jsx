@@ -293,4 +293,26 @@ describe('Form', function () {
     dom.setProps({value: value2})
     expect(nameField.value, 'to equal', 'c')
   })
+
+  it("doesn't setState after it's been unmounted", function () {
+    class RenderUntilSubmitted extends React.Component {
+      state = {}
+      render () {
+        return this.state.unmounted ? null : (
+          <Form
+            name="test"
+            value={Immutable.fromJS({})}
+            onSubmit={() => this.setState({unmounted: true}) || Promise.resolve()}>
+            {() => null}
+          </Form>
+        )
+      }
+    }
+
+    // If React spits out a "Can't call setState (or forceUpdate) on an unmounted component.",
+    // this will fail with an unhandled promise rejection.
+    const dom = TestUtils.renderIntoDocument(<RenderUntilSubmitted />)
+    const form = TestUtils.findOne(dom, 'form')
+    TestUtils.Simulate.submit(form)
+  })
 })

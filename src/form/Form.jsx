@@ -123,6 +123,10 @@ export default class Form extends React.Component {
     }
   }
 
+  componentWillUnmount () {
+    this.willUnmount = true
+  }
+
   getValue = (name) => {
     if (name !== undefined && name !== null) {
       return this.state.value.getIn(parseName(name))
@@ -182,7 +186,7 @@ export default class Form extends React.Component {
             const result = this.props.onSubmit(this.props.normalize(this.state.value))
             if (result && typeof result.then === 'function') {
               this.setState({submitting: true})
-              result.catch(() => {}).then(() => this.setState({submitting: false}))
+              result.catch(() => {}).then(() => this.willUnmount || this.setState({submitting: false}))
             }
           }
         },
