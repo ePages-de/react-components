@@ -1,4 +1,5 @@
-import Immutable from "immutable";
+import Immutable, { is as isEqual } from "immutable";
+import diff from "immutablediff";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -79,7 +80,8 @@ export default class Form extends React.Component {
     validateWaitMs: PropTypes.number,
     normalize: PropTypes.func,
     disabled: PropTypes.bool,
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+    serverValidationErrors: PropTypes.any
   };
 
   static defaultProps = {
@@ -90,12 +92,15 @@ export default class Form extends React.Component {
     validate: () => null,
     validateWaitMs: null,
     normalize: value => value,
-    disabled: false
+    disabled: false,
+    serverValidationErrors: null
   };
 
   get name() {
     return this.props.name;
   }
+
+  updatedServerValidationErrors = false;
 
   constructor(props) {
     super(props);
@@ -112,14 +117,22 @@ export default class Form extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.value !== nextProps.value) {
+    const serverErrors =
+      nextProps.serverValidationErrors &&
+      nextProps.serverValidationErrors.size > 0
+        ? { errors: nextProps.serverValidationErrors, triedToSubmit: true }
+        : {};
+
+    if (!isEqual(this.props.value, nextProps.value)) {
       this.setState({
         value: nextProps.prepare(nextProps.value),
-        errors: new Immutable.Map(),
-        triedToSubmit: false,
+        errors: serverErrors.errors || new Immutable.Map(),
+        triedToSubmit: serverErrors.triedToSubmit || false,
         pristine: true,
         submitting: false
       });
+    } else {
+      this.setState(serverErrors);
     }
   }
 
@@ -131,6 +144,34 @@ export default class Form extends React.Component {
     }
   };
 
+  getFormValuesFirstDifference = (currentValue, newValue) => {
+    const differences = diff(currentValue, newValue);
+    const replaceOperation = "replace";
+
+    if (differences) {
+      const firstDifference = differences
+        .filter(entry => entry.get("op") === replaceOperation)
+        .first();
+
+      if (firstDifference && firstDifference.size > 0) {
+        return firstDifference
+          .get("path")
+          .split("/")
+          .filter(Boolean);
+      }
+    }
+  };
+
+  getChangedCompleteErrorList = (currentValue, newValue, serverErrors) => {
+    const path = this.getFormValuesFirstDifference(currentValue, newValue);
+
+    if (path) {
+      return serverErrors.setIn(path, false);
+    }
+
+    return serverErrors;
+  };
+
   setValue = (name, value) => {
     const newValue1 =
       name !== undefined && name !== null
@@ -139,6 +180,19 @@ export default class Form extends React.Component {
     const newValue2 = this.props.onChange(newValue1);
     const newValue = newValue2 || newValue1;
 
+    const serverValidationErrors =
+      this.updatedServerValidationErrors || this.props.serverValidationErrors;
+
+    // because only one field value could be change at the time
+    const updatedErrorList =
+      serverValidationErrors &&
+      serverValidationErrors.size > 0 &&
+      this.getChangedCompleteErrorList(
+        this.state.value,
+        newValue,
+        serverValidationErrors
+      );
+
     this.setState({
       value: newValue
     });
@@ -146,6 +200,18 @@ export default class Form extends React.Component {
     this.validate(
       [newValue, this.state.triedToSubmit, name],
       validationResult => {
+        // in case we have errors in server and client at the same time we merging it
+        if (updatedErrorList && updatedErrorList.size > 0) {
+          validationResult = validationResult.mergeDeepWith(
+            (oldVal, newVal) => {
+              return oldVal && oldVal !== false ? oldVal : newVal;
+            },
+            updatedErrorList
+          );
+        }
+
+        this.updatedServerValidationErrors = updatedErrorList;
+
         this.setState({
           errors: containsError(validationResult)
             ? validationResult
@@ -173,18 +239,25 @@ export default class Form extends React.Component {
 
   onSubmit = event => {
     event.preventDefault();
+
     if (!this.props.disabled && !this.state.submitting) {
       this.validate(
         [this.state.value, true, null],
         validationResult => {
           if (containsError(validationResult)) {
-            this.setState({ errors: validationResult, triedToSubmit: true });
+            this.setState({
+              errors: validationResult,
+              triedToSubmit: true
+            });
           } else {
-            this.setState({ errors: new Immutable.Map() });
+            this.setState({
+              errors: new Immutable.Map()
+            });
 
             const result = this.props.onSubmit(
               this.props.normalize(this.state.value)
             );
+
             if (result && typeof result.then === "function") {
               this.setState({ submitting: true });
               result
@@ -192,6 +265,7 @@ export default class Form extends React.Component {
                 .then(() => this.setState({ submitting: false }));
             }
           }
+          this.updatedServerValidationErrors = false;
         },
         true
       );
@@ -210,6 +284,7 @@ export default class Form extends React.Component {
       normalize,
       disabled,
       children,
+      serverValidationErrors,
       ...other
     } = this.props; // eslint-disable-line no-unused-vars
     return (
