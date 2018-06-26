@@ -95,9 +95,7 @@ export default class Form extends React.Component {
     normalize: value => value,
     disabled: false,
     serverValidationErrors: null,
-    handleUnmappedErrors: error => {
-      console.warn("Unmapped form error: ", error);
-    }
+    handleUnmappedErrors: () => null
   };
 
   get name() {
@@ -145,6 +143,10 @@ export default class Form extends React.Component {
         this.handleUnmappedServerErrors(serverErrors);
       });
     }
+  }
+
+  componentWillUnmount() {
+    this.willUnmount = true;
   }
 
   getValue = name => {
@@ -300,7 +302,9 @@ export default class Form extends React.Component {
               this.setState({ submitting: true });
               result
                 .catch(() => {})
-                .then(() => this.setState({ submitting: false }));
+                .then(
+                  () => this.willUnmount || this.setState({ submitting: false })
+                );
             }
           }
           this.updatedServerValidationErrors = false;

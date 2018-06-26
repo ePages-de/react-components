@@ -1,5 +1,5 @@
 import Bluebird from "bluebird";
-import Immutable, { Map, toJS } from "immutable";
+import Immutable from "immutable";
 import PropTypes from "prop-types";
 import React from "react";
 import TestUtils from "react-testutils-additions";
@@ -23,7 +23,8 @@ class ServerErrorMessage extends React.Component {
 
   static propTypes = {
     name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    Component: PropTypes.any
+    Component: PropTypes.any,
+    serverValidationErrors: PropTypes.object
   };
 
   parseName = name => {
@@ -426,6 +427,31 @@ describe("Form", function() {
     expect(nameField.value, "to equal", "b");
     dom.setProps({ value: value2 });
     expect(nameField.value, "to equal", "c");
+  });
+
+  it("doesn't setState after it's been unmounted", function() {
+    class RenderUntilSubmitted extends React.Component {
+      state = {};
+      render() {
+        return this.state.unmounted ? null : (
+          <Form
+            name="test"
+            value={Immutable.fromJS({})}
+            onSubmit={() =>
+              this.setState({ unmounted: true }) || Promise.resolve()
+            }
+          >
+            {() => null}
+          </Form>
+        );
+      }
+    }
+
+    // If React spits out a "Can't call setState (or forceUpdate) on an unmounted component.",
+    // this will fail with an unhandled promise rejection.
+    const dom = TestUtils.renderIntoDocument(<RenderUntilSubmitted />);
+    const form = TestUtils.findOne(dom, "form");
+    TestUtils.Simulate.submit(form);
   });
 
   it("outputs server side error from props", function() {

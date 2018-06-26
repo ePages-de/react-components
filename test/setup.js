@@ -2,9 +2,12 @@
 console.error = function (message) { // eslint-disable-line no-console
   throw new Error(message)
 }
-console.warning = function (message) { // eslint-disable-line no-console
+console.warn = function (message) { // eslint-disable-line no-console
   throw new Error(message)
 }
+process.on('unhandledRejection', error => {
+  throw new Error('unhandledRejection: ' + error.message)
+})
 // mock unavailable window stuff
 if (typeof window !== 'undefined') {
   window.requestAnimationFrame = function (fn) {
