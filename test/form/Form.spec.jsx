@@ -1,53 +1,116 @@
-import Bluebird from 'bluebird'
-import Immutable from 'immutable'
-import React from 'react'
-import TestUtils from 'react-testutils-additions'
-import sinon from 'sinon'
-import expect from 'unexpected'
+import Bluebird from "bluebird";
+import Immutable, { Map, toJS } from "immutable";
+import PropTypes from "prop-types";
+import React from "react";
+import TestUtils from "react-testutils-additions";
+import sinon from "sinon";
+import expect from "unexpected";
 
-import ErrorMessage from '../../src/form/ErrorMessage'
-import Form from '../../src/form/Form'
-import {PropsSetter} from '../reactHelpers'
-import TestField from './TestField'
+import ErrorMessage from "../../src/form/ErrorMessage";
+import Form from "../../src/form/Form";
+import { PropsSetter } from "../reactHelpers";
+import TestField from "./TestField";
 
-function render (props) {
+class ServerErrorMessage extends React.Component {
+  static contextTypes = {
+    formValueScope: PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    Component: "div"
+  };
+
+  static propTypes = {
+    name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    Component: PropTypes.any
+  };
+
+  parseName = name => {
+    // only split string names by dots, but keep non string names (for example number names
+    // like in IteratorField) as they are
+    return typeof name === "string" ? name.split(/\./g) : [name];
+  };
+
+  getError = name => {
+    const {
+      updatedServerValidationErrors,
+      props
+    } = this.context.formValueScope;
+
+    const { serverValidationErrors } = props;
+
+    const specificError =
+      (updatedServerValidationErrors &&
+        updatedServerValidationErrors.getIn(this.parseName(name))) ||
+      serverValidationErrors.getIn(this.parseName(name));
+
+    console.log("", specificError);
+
+    return specificError;
+  };
+
+  render() {
+    const { name, Component, ...other } = this.props;
+    // const errorMessage = this.context.formValueScope.getError(name);
+    const extendedErrorMessage = this.getError(name);
+
+    return extendedErrorMessage ? (
+      <Component {...other}>{extendedErrorMessage}</Component>
+    ) : null;
+  }
+}
+
+function render(props) {
   const initialValue = Immutable.fromJS({
-    firstName: '',
-    lastName: '',
+    firstName: "",
+    lastName: "",
     address: {
-      street: ''
+      street: ""
     }
-  })
-  const onSubmit = sinon.stub()
+  });
+  const onSubmit = sinon.stub();
   const dom = TestUtils.renderIntoDocument(
     <Form name="test" value={initialValue} onSubmit={onSubmit} {...props}>
-      {({pristine, submitting}) =>
+      {({ pristine, submitting }) => (
         <div>
           <TestField name="firstName" className="firstName" />
           <ErrorMessage name="firstName" />
+          <ServerErrorMessage name="firstName" />
           <div>
             <TestField name="lastName" className="lastName" />
+            <ErrorMessage name="lastName" />
+            <ServerErrorMessage name="lastName" />
           </div>
           <TestField name="address.street" className="street" />
           <div>{`pristine ${pristine}`}</div>
           <div>{`submitting ${submitting}`}</div>
         </div>
-      }
+      )}
     </Form>
-  )
-  const form = TestUtils.findOne(dom, 'form')
-  const firstNameField = TestUtils.findOne(dom, '.firstName')
-  const lastNameField = TestUtils.findOne(dom, '.lastName')
-  const streetField = TestUtils.findOne(dom, '.street')
+  );
+  const form = TestUtils.findOne(dom, "form");
+  const firstNameField = TestUtils.findOne(dom, ".firstName");
+  const lastNameField = TestUtils.findOne(dom, ".lastName");
+  const streetField = TestUtils.findOne(dom, ".street");
 
-  return {initialValue, onSubmit, dom, form, firstNameField, lastNameField, streetField}
+  return {
+    initialValue,
+    onSubmit,
+    dom,
+    form,
+    firstNameField,
+    lastNameField,
+    streetField
+  };
 }
 
-describe('Form', function () {
-  it('renders', function () {
-    const {dom} = render()
+describe("Form", function() {
+  it("renders", function() {
+    const { dom } = render();
 
-    expect(dom, 'to have rendered',
+    expect(
+      dom,
+      "to have rendered",
       <form name="test" autoComplete="off">
         <div>
           <input name="test.firstName" className="firstName" />
@@ -57,240 +120,404 @@ describe('Form', function () {
           <input name="test.address.street" className="street" />
         </div>
       </form>
-    )
-  })
+    );
+  });
 
-  it('returns original instance if unchanged', function () {
-    const {onSubmit, form} = render()
+  it("returns original instance if unchanged", function() {
+    const { onSubmit, form } = render();
 
-    expect(onSubmit, 'was not called')
-    TestUtils.Simulate.submit(form)
+    expect(onSubmit, "was not called");
+    TestUtils.Simulate.submit(form);
 
-    expect(onSubmit, 'was called once')
-  })
+    expect(onSubmit, "was called once");
+  });
 
-  it('returns new value', function () {
-    const {onSubmit, form, firstNameField, lastNameField, streetField} = render()
+  it("returns new value", function() {
+    const {
+      onSubmit,
+      form,
+      firstNameField,
+      lastNameField,
+      streetField
+    } = render();
 
-    TestUtils.Simulate.change(firstNameField, {target: {value: 'foo'}})
-    TestUtils.Simulate.change(lastNameField, {target: {value: 'bar'}})
-    TestUtils.Simulate.change(streetField, {target: {value: 'apple'}})
-    TestUtils.Simulate.submit(form)
+    TestUtils.Simulate.change(firstNameField, { target: { value: "foo" } });
+    TestUtils.Simulate.change(lastNameField, { target: { value: "bar" } });
+    TestUtils.Simulate.change(streetField, { target: { value: "apple" } });
+    TestUtils.Simulate.submit(form);
 
-    expect(onSubmit, 'was called once')
-    expect(onSubmit, 'to have calls satisfying', function () {
-      onSubmit(Immutable.fromJS({
-        firstName: 'foo',
-        lastName: 'bar',
-        address: {
-          street: 'apple'
-        }
-      }))
-    })
-  })
+    expect(onSubmit, "was called once");
+    expect(onSubmit, "to have calls satisfying", function() {
+      onSubmit(
+        Immutable.fromJS({
+          firstName: "foo",
+          lastName: "bar",
+          address: {
+            street: "apple"
+          }
+        })
+      );
+    });
+  });
 
-  it('does not submit if disabled', function () {
-    const {onSubmit, form} = render({disabled: true})
+  it("does not submit if disabled", function() {
+    const { onSubmit, form } = render({ disabled: true });
 
-    TestUtils.Simulate.submit(form)
+    TestUtils.Simulate.submit(form);
 
-    expect(onSubmit, 'was not called')
-  })
+    expect(onSubmit, "was not called");
+  });
 
-  it('respects validation', function () {
-    const validate = (value) => Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})
-    const {onSubmit, form, firstNameField, lastNameField} = render({validate})
+  it("respects validation", function() {
+    const validate = value =>
+      Immutable.fromJS({
+        firstName: !value.get("firstName") ? "required" : null
+      });
+    const { onSubmit, form, firstNameField, lastNameField } = render({
+      validate
+    });
 
-    TestUtils.Simulate.submit(form)
+    TestUtils.Simulate.submit(form);
 
-    expect(onSubmit, 'was not called')
-    TestUtils.Simulate.change(lastNameField, {target: {value: 'bar'}})
-    TestUtils.Simulate.submit(form)
+    expect(onSubmit, "was not called");
+    TestUtils.Simulate.change(lastNameField, { target: { value: "bar" } });
+    TestUtils.Simulate.submit(form);
 
-    expect(onSubmit, 'was not called')
-    TestUtils.Simulate.change(firstNameField, {target: {value: 'foo'}})
-    TestUtils.Simulate.submit(form)
+    expect(onSubmit, "was not called");
+    TestUtils.Simulate.change(firstNameField, { target: { value: "foo" } });
+    TestUtils.Simulate.submit(form);
 
-    expect(onSubmit, 'was called once')
-  })
+    expect(onSubmit, "was called once");
+  });
 
-  it('validates asynchronously', async function () {
-    const validate = sinon.spy((value) => Promise.resolve(Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})))
-    const {onSubmit, form, firstNameField, lastNameField} = render({validate})
+  it("validates asynchronously", async function() {
+    const validate = sinon.spy(value =>
+      Promise.resolve(
+        Immutable.fromJS({
+          firstName: !value.get("firstName") ? "required" : null
+        })
+      )
+    );
+    const { onSubmit, form, firstNameField, lastNameField } = render({
+      validate
+    });
 
-    TestUtils.Simulate.submit(form)
-    await Bluebird.delay(1)
+    TestUtils.Simulate.submit(form);
+    await Bluebird.delay(1);
 
-    expect(onSubmit, 'was not called')
-    TestUtils.Simulate.change(lastNameField, {target: {value: 'bar'}})
-    expect(validate, 'was called')
-    TestUtils.Simulate.change(firstNameField, {target: {value: 'foo'}})
-    TestUtils.Simulate.submit(form)
-    await Bluebird.delay(1)
+    expect(onSubmit, "was not called");
+    TestUtils.Simulate.change(lastNameField, { target: { value: "bar" } });
+    expect(validate, "was called");
+    TestUtils.Simulate.change(firstNameField, { target: { value: "foo" } });
+    TestUtils.Simulate.submit(form);
+    await Bluebird.delay(1);
 
-    expect(onSubmit, 'was called once')
-  })
+    expect(onSubmit, "was called once");
+  });
 
   // https://github.com/ePages-de/react-components/issues/8
-  it('calls validate while typing', function () {
-    const validate = sinon.spy()
-    const {onSubmit, firstNameField} = render({validate})
+  it("calls validate while typing", function() {
+    const validate = sinon.spy();
+    const { onSubmit, firstNameField } = render({ validate });
 
-    TestUtils.Simulate.change(firstNameField)
+    TestUtils.Simulate.change(firstNameField);
 
-    expect(validate, 'was called')
-    expect(onSubmit, 'was not called')
-  })
+    expect(validate, "was called");
+    expect(onSubmit, "was not called");
+  });
 
-  it('correctly handles debounced async validation while typing', async function () {
-    const responseDelays = [400, 200, 0]
-    const validations = []
+  it("correctly handles debounced async validation while typing", async function() {
+    const responseDelays = [400, 200, 0];
+    const validations = [];
 
-    const validateWaitMs = 20
+    const validateWaitMs = 20;
     const validate = sinon.spy(value => {
       const validation = Bluebird.delay(responseDelays.shift()).then(() =>
-        Immutable.fromJS(!value.get('firstName') ? {firstName: 'first name required'} : null)
-      )
-      validations.push(validation)
-      return validation
-    })
+        Immutable.fromJS(
+          !value.get("firstName") ? { firstName: "first name required" } : null
+        )
+      );
+      validations.push(validation);
+      return validation;
+    });
 
-    const {dom, firstNameField} = render({validate, validateWaitMs})
+    const { dom, firstNameField } = render({ validate, validateWaitMs });
 
-    TestUtils.Simulate.change(firstNameField, {target: {value: 'a'}})
+    TestUtils.Simulate.change(firstNameField, { target: { value: "a" } });
 
     // The validation promise for this resolves last and should be discarded.
-    TestUtils.Simulate.change(firstNameField, {target: {value: ''}})
-    await Bluebird.delay(validateWaitMs)
+    TestUtils.Simulate.change(firstNameField, { target: { value: "" } });
+    await Bluebird.delay(validateWaitMs);
 
-    TestUtils.Simulate.change(firstNameField, {target: {value: 'b'}})
+    TestUtils.Simulate.change(firstNameField, { target: { value: "b" } });
 
-    TestUtils.Simulate.change(firstNameField, {target: {value: 'bc'}})
-    await Bluebird.delay(validateWaitMs)
+    TestUtils.Simulate.change(firstNameField, { target: { value: "bc" } });
+    await Bluebird.delay(validateWaitMs);
 
     // The validation promise for this resolves first and should be used.
-    TestUtils.Simulate.change(firstNameField, {target: {value: 'bcd'}})
-    await Bluebird.delay(validateWaitMs)
+    TestUtils.Simulate.change(firstNameField, { target: { value: "bcd" } });
+    await Bluebird.delay(validateWaitMs);
 
-    expect(validations.length, 'to be', 3)
+    expect(validations.length, "to be", 3);
 
-    await Bluebird.all(validations)
-    await Bluebird.delay(1)
+    await Bluebird.all(validations);
+    await Bluebird.delay(1);
 
-    expect(validate, 'was called times', 3)
-    expect(validate, 'to have calls satisfying', [
-      [{firstName: ''}, false, 'firstName'],
-      [{firstName: 'bc'}, false, 'firstName'],
-      [{firstName: 'bcd'}, false, 'firstName']
-    ])
+    expect(validate, "was called times", 3);
+    expect(validate, "to have calls satisfying", [
+      [{ firstName: "" }, false, "firstName"],
+      [{ firstName: "bc" }, false, "firstName"],
+      [{ firstName: "bcd" }, false, "firstName"]
+    ]);
 
     // This should fail if the first validation promise was not discarded.
-    expect(dom, 'not to contain', <div>first name required</div>)
-  })
+    expect(dom, "not to contain", <div>first name required</div>);
+  });
 
-  it('calls validation correctly (with second argument false before first submit and true afterwards)', function () {
-    const validate = sinon.spy(() => Immutable.fromJS({firstName: 'required'}))
-    const {onSubmit, form, firstNameField} = render({validate})
+  it("calls validation correctly (with second argument false before first submit and true afterwards)", function() {
+    const validate = sinon.spy(() =>
+      Immutable.fromJS({ firstName: "required" })
+    );
+    const { onSubmit, form, firstNameField } = render({ validate });
 
-    TestUtils.Simulate.change(firstNameField, {target: {value: '1'}})
-    TestUtils.Simulate.change(firstNameField, {target: {value: '12'}})
-    TestUtils.Simulate.submit(form)
-    TestUtils.Simulate.change(firstNameField, {target: {value: '123'}})
-    TestUtils.Simulate.change(firstNameField, {target: {value: '1234'}})
+    TestUtils.Simulate.change(firstNameField, { target: { value: "1" } });
+    TestUtils.Simulate.change(firstNameField, { target: { value: "12" } });
+    TestUtils.Simulate.submit(form);
+    TestUtils.Simulate.change(firstNameField, { target: { value: "123" } });
+    TestUtils.Simulate.change(firstNameField, { target: { value: "1234" } });
 
-    expect(onSubmit, 'to have calls satisfying', () => {
-      validate(Immutable.fromJS({firstName: '1', lastName: '', address: {street: ''}}), false)
-      validate(Immutable.fromJS({firstName: '12', lastName: '', address: {street: ''}}), false)
-      validate(Immutable.fromJS({firstName: '12', lastName: '', address: {street: ''}}), true)
-      validate(Immutable.fromJS({firstName: '123', lastName: '', address: {street: ''}}), true)
-      validate(Immutable.fromJS({firstName: '1234', lastName: '', address: {street: ''}}), true)
-    })
-  })
+    expect(onSubmit, "to have calls satisfying", () => {
+      validate(
+        Immutable.fromJS({
+          firstName: "1",
+          lastName: "",
+          address: { street: "" }
+        }),
+        false
+      );
+      validate(
+        Immutable.fromJS({
+          firstName: "12",
+          lastName: "",
+          address: { street: "" }
+        }),
+        false
+      );
+      validate(
+        Immutable.fromJS({
+          firstName: "12",
+          lastName: "",
+          address: { street: "" }
+        }),
+        true
+      );
+      validate(
+        Immutable.fromJS({
+          firstName: "123",
+          lastName: "",
+          address: { street: "" }
+        }),
+        true
+      );
+      validate(
+        Immutable.fromJS({
+          firstName: "1234",
+          lastName: "",
+          address: { street: "" }
+        }),
+        true
+      );
+    });
+  });
 
-  it('sets and gets values', function () {
-    const {dom: formComponent} = render()
+  it("sets and gets values", function() {
+    const { dom: formComponent } = render();
 
-    expect(formComponent.getValue('firstName'), 'to equal', '')
-    formComponent.setValue('firstName', 'a')
-    expect(formComponent.getValue('firstName'), 'to equal', 'a')
+    expect(formComponent.getValue("firstName"), "to equal", "");
+    formComponent.setValue("firstName", "a");
+    expect(formComponent.getValue("firstName"), "to equal", "a");
 
-    expect(formComponent.getValue('address.street'), 'to equal', '')
-    formComponent.setValue('address.street', 'c')
-    expect(formComponent.getValue('address.street'), 'to equal', 'c')
-  })
+    expect(formComponent.getValue("address.street"), "to equal", "");
+    formComponent.setValue("address.street", "c");
+    expect(formComponent.getValue("address.street"), "to equal", "c");
+  });
 
-  it('sets and gets the top-level value', function () {
-    const {dom: formComponent} = render()
+  it("sets and gets the top-level value", function() {
+    const { dom: formComponent } = render();
 
-    expect(formComponent.getValue(), 'to equal', Immutable.fromJS({
-      firstName: '',
-      lastName: '',
-      address: {street: ''}
-    }))
-    formComponent.setValue(undefined, Immutable.fromJS({
-      firstName: 'A',
-      lastName: 'B',
-      address: {street: 'C'}
-    }))
-    expect(formComponent.getValue(undefined), 'to equal', Immutable.fromJS({
-      firstName: 'A',
-      lastName: 'B',
-      address: {street: 'C'}
-    }))
-  })
+    expect(
+      formComponent.getValue(),
+      "to equal",
+      Immutable.fromJS({
+        firstName: "",
+        lastName: "",
+        address: { street: "" }
+      })
+    );
+    formComponent.setValue(
+      undefined,
+      Immutable.fromJS({
+        firstName: "A",
+        lastName: "B",
+        address: { street: "C" }
+      })
+    );
+    expect(
+      formComponent.getValue(undefined),
+      "to equal",
+      Immutable.fromJS({
+        firstName: "A",
+        lastName: "B",
+        address: { street: "C" }
+      })
+    );
+  });
 
-  it('detects pristine state', function () {
-    const {dom: formComponent, firstNameField} = render()
+  it("detects pristine state", function() {
+    const { dom: formComponent, firstNameField } = render();
 
-    expect(formComponent, 'to have rendered', <div>pristine true</div>)
-    TestUtils.Simulate.change(firstNameField, {target: {value: 'a'}})
-    expect(formComponent, 'to have rendered', <div>pristine false</div>)
-    TestUtils.Simulate.change(firstNameField, {target: {value: ''}})
-    expect(formComponent, 'to have rendered', <div>pristine true</div>)
-  })
+    expect(formComponent, "to have rendered", <div>pristine true</div>);
+    TestUtils.Simulate.change(firstNameField, { target: { value: "a" } });
+    expect(formComponent, "to have rendered", <div>pristine false</div>);
+    TestUtils.Simulate.change(firstNameField, { target: { value: "" } });
+    expect(formComponent, "to have rendered", <div>pristine true</div>);
+  });
 
-  it('detects submitting state', function () {
-    const {dom: formComponent, form, onSubmit} = render()
+  it("detects submitting state", function() {
+    const { dom: formComponent, form, onSubmit } = render();
 
-    expect(formComponent, 'to have rendered', <div>submitting false</div>)
-    TestUtils.Simulate.submit(form)
+    expect(formComponent, "to have rendered", <div>submitting false</div>);
+    TestUtils.Simulate.submit(form);
 
-    expect(formComponent, 'to have rendered', <div>submitting false</div>)
+    expect(formComponent, "to have rendered", <div>submitting false</div>);
 
-    const submit = Bluebird.delay(10)
-    onSubmit.returns(submit)
-    expect(formComponent, 'to have rendered', <div>submitting false</div>)
-    TestUtils.Simulate.submit(form)
+    const submit = Bluebird.delay(10);
+    onSubmit.returns(submit);
+    expect(formComponent, "to have rendered", <div>submitting false</div>);
+    TestUtils.Simulate.submit(form);
 
-    expect(formComponent, 'to have rendered', <div>submitting true</div>)
+    expect(formComponent, "to have rendered", <div>submitting true</div>);
     return submit.then(() => {
-      expect(formComponent, 'to have rendered', <div>submitting false</div>)
-    })
-  })
+      expect(formComponent, "to have rendered", <div>submitting false</div>);
+    });
+  });
 
-  it('resets', function () {
-    const {dom: formComponent, firstNameField} = render()
+  it("resets", function() {
+    const { dom: formComponent, firstNameField } = render();
 
-    TestUtils.Simulate.change(firstNameField, {target: {value: 'a'}})
-    expect(firstNameField.value, 'to equal', 'a')
-    formComponent.reset()
-    expect(firstNameField.value, 'to equal', '')
-  })
+    TestUtils.Simulate.change(firstNameField, { target: { value: "a" } });
+    expect(firstNameField.value, "to equal", "a");
+    formComponent.reset();
+    expect(firstNameField.value, "to equal", "");
+  });
 
-  it('renders new value if props change', function () {
-    const value1 = Immutable.fromJS({name: 'a'})
-    const value2 = Immutable.fromJS({name: 'c'})
+  it("renders new value if props change", function() {
+    const value1 = Immutable.fromJS({ name: "a" });
+    const value2 = Immutable.fromJS({ name: "c" });
     const dom = TestUtils.renderIntoDocument(
       <PropsSetter name="test" value={value1} component={Form}>
         <TestField name="name" />
       </PropsSetter>
-    )
-    const nameField = TestUtils.findOne(dom, 'input')
+    );
+    const nameField = TestUtils.findOne(dom, "input");
 
-    expect(nameField.value, 'to equal', 'a')
-    TestUtils.Simulate.change(nameField, {target: {value: 'b'}})
-    expect(nameField.value, 'to equal', 'b')
-    dom.setProps({value: value2})
-    expect(nameField.value, 'to equal', 'c')
-  })
-})
+    expect(nameField.value, "to equal", "a");
+    TestUtils.Simulate.change(nameField, { target: { value: "b" } });
+    expect(nameField.value, "to equal", "b");
+    dom.setProps({ value: value2 });
+    expect(nameField.value, "to equal", "c");
+  });
+
+  it("outputs server side error from props", function() {
+    const { dom: formComponent, onSubmit } = render({
+      serverValidationErrors: Immutable.fromJS({
+        firstName: "first name server error"
+      })
+    });
+
+    const submit = Bluebird.delay(100);
+    onSubmit.returns(submit);
+
+    return submit.then(() => {
+      expect(formComponent, "to contain", <div>first name server error</div>);
+    });
+  });
+
+  it("removes server side error tooltip when field is changed its content", function() {
+    const { dom: formComponent, onSubmit, firstNameField } = render({
+      serverValidationErrors: Immutable.fromJS({
+        firstName: "first name server error",
+        lastName: "last name server error"
+      })
+    });
+
+    const submit = Bluebird.delay(100);
+    onSubmit.returns(submit);
+
+    submit.then(() => {
+      expect(formComponent, "to contain", <div>first name server error</div>);
+      expect(formComponent, "to contain", <div>last name server error</div>);
+    });
+
+    TestUtils.Simulate.change(firstNameField, { target: { value: "a" } });
+
+    submit.then(() => {
+      expect(
+        formComponent,
+        "not to contain",
+        <div>first name server error</div>
+      );
+      expect(formComponent, "to contain", <div>last name server error</div>);
+    });
+  });
+
+  it.only("outputs server side error with client side", function() {
+    const validate = value =>
+      Immutable.fromJS({
+        firstName: !value.get("firstName") ? "required" : null
+      });
+
+    const { dom: formComponent, onSubmit, firstNameField } = render({
+      validate,
+      serverValidationErrors: Immutable.fromJS({
+        lastName: "last name server error"
+      })
+    });
+
+    TestUtils.Simulate.change(firstNameField, { target: { value: "a" } });
+
+    //  submit.then(() => {
+    expect(formComponent, "not to contain", <div>required</div>);
+    expect(formComponent, "to contain", <div>last name server error</div>);
+    // });
+
+    TestUtils.Simulate.change(firstNameField, { target: { value: "" } });
+
+    //submit.then(() => {
+    expect(formComponent, "to contain", <div>required</div>);
+    expect(formComponent, "to contain", <div>last name server error</div>);
+    //   });
+  });
+
+  it.only("outputs validation error in popup in case not correspoding filed was found", async function() {
+    const handleUnmappedErrors = sinon.spy(() =>
+      console.log("handle unmapped")
+    );
+    const { dom: formComponent, onSubmit, firstNameField } = render({
+      handleUnmappedErrors,
+      serverValidationErrors: Immutable.fromJS({
+        firstName: "first name server error",
+        unknownFiled: "sampletext"
+      })
+    });
+
+    await Bluebird.delay(200);
+
+    TestUtils.Simulate.change(firstNameField, { target: { value: "pp" } });
+
+    await Bluebird.delay(200);
+
+    expect(formComponent, "to contain", <div>first name server error</div>);
+    expect(handleUnmappedErrors, "was called once");
+  });
+});

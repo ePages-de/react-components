@@ -81,7 +81,8 @@ export default class Form extends React.Component {
     normalize: PropTypes.func,
     disabled: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
-    serverValidationErrors: PropTypes.any
+    serverValidationErrors: PropTypes.any,
+    handleUnmappedErrors: PropTypes.func
   };
 
   static defaultProps = {
@@ -93,7 +94,8 @@ export default class Form extends React.Component {
     validateWaitMs: null,
     normalize: value => value,
     disabled: false,
-    serverValidationErrors: null
+    serverValidationErrors: null,
+    handleUnmappedErrors: () => null
   };
 
   get name() {
@@ -126,13 +128,15 @@ export default class Form extends React.Component {
     if (!isEqual(this.props.value, nextProps.value)) {
       this.setState({
         value: nextProps.prepare(nextProps.value),
-        errors: serverErrors.errors || new Immutable.Map(),
-        triedToSubmit: serverErrors.triedToSubmit || false,
+        errors: new Immutable.Map(),
+        triedToSubmit: false,
         pristine: true,
         submitting: false
       });
     } else {
-      this.setState(serverErrors);
+      this.setState(serverErrors, () => {
+        this.handleUnmappedServerErrors(serverErrors);
+      });
     }
   }
 
@@ -141,6 +145,30 @@ export default class Form extends React.Component {
       return this.state.value.getIn(parseName(name));
     } else {
       return this.state.value;
+    }
+  };
+
+  // in case if we have validation error with property which is not in form (or can't be mapped to form due to response)
+  handleUnmappedServerErrors = serverErrors => {
+    if (serverErrors && serverErrors.errors && serverErrors.errors.size > 0) {
+      const formFieldsStructure = this.getFormFieldsStructure();
+      const [...serverErrorKeys] = serverErrors.errors.keys();
+
+      const notMapped = serverErrorKeys.reduce((acc, el) => {
+        if (!formFieldsStructure.includes(el)) {
+          acc.push({ [el]: serverErrors.errors.get(el) });
+        }
+
+        return acc;
+      }, []);
+
+      if (notMapped && notMapped.length > 0) {
+        if (this.props.handleUnmappedErrors) {
+          this.props.handleUnmappedErrors(notMapped);
+        } else {
+          console.log(notMapped);
+        }
+      }
     }
   };
 
@@ -202,12 +230,11 @@ export default class Form extends React.Component {
       validationResult => {
         // in case we have errors in server and client at the same time we merging it
         if (updatedErrorList && updatedErrorList.size > 0) {
-          validationResult = validationResult.mergeDeepWith(
-            (oldVal, newVal) => {
-              return oldVal && oldVal !== false ? oldVal : newVal;
-            },
-            updatedErrorList
-          );
+          validationResult = validationResult
+            ? validationResult.mergeDeepWith((oldVal, newVal) => {
+                return oldVal && oldVal !== false ? oldVal : newVal;
+              }, updatedErrorList)
+            : updatedErrorList;
         }
 
         this.updatedServerValidationErrors = updatedErrorList;
@@ -229,6 +256,12 @@ export default class Form extends React.Component {
       pristine: true,
       submitting: false
     });
+  };
+
+  getFormFieldsStructure = () => {
+    if (this.props.value && this.props.value.size > 0) {
+      return [...this.props.value.keys()];
+    }
   };
 
   getError = name => {
@@ -285,6 +318,7 @@ export default class Form extends React.Component {
       disabled,
       children,
       serverValidationErrors,
+      handleUnmappedErrors,
       ...other
     } = this.props; // eslint-disable-line no-unused-vars
     return (
