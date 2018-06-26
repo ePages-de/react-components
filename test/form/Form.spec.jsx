@@ -11,6 +11,7 @@ import Form from "../../src/form/Form";
 import { PropsSetter } from "../reactHelpers";
 import TestField from "./TestField";
 
+// to be able to output in dom server errors this component was made
 class ServerErrorMessage extends React.Component {
   static contextTypes = {
     formValueScope: PropTypes.object.isRequired
@@ -39,19 +40,18 @@ class ServerErrorMessage extends React.Component {
 
     const { serverValidationErrors } = props;
 
-    const specificError =
-      (updatedServerValidationErrors &&
-        updatedServerValidationErrors.getIn(this.parseName(name))) ||
-      serverValidationErrors.getIn(this.parseName(name));
+    if (serverValidationErrors) {
+      const specificError = updatedServerValidationErrors
+        ? updatedServerValidationErrors.getIn(this.parseName(name))
+        : serverValidationErrors.getIn(this.parseName(name));
 
-    console.log("", specificError);
-
-    return specificError;
+      return specificError;
+    }
+    return null;
   };
 
   render() {
     const { name, Component, ...other } = this.props;
-    // const errorMessage = this.context.formValueScope.getError(name);
     const extendedErrorMessage = this.getError(name);
 
     return extendedErrorMessage ? (
@@ -443,7 +443,7 @@ describe("Form", function() {
     });
   });
 
-  it("removes server side error tooltip when field is changed its content", function() {
+  it("removes server side error tooltip when field is changed its content", async function() {
     const { dom: formComponent, onSubmit, firstNameField } = render({
       serverValidationErrors: Immutable.fromJS({
         firstName: "first name server error",
@@ -451,27 +451,21 @@ describe("Form", function() {
       })
     });
 
-    const submit = Bluebird.delay(100);
+    const submit = () => Bluebird.delay(500);
     onSubmit.returns(submit);
 
-    submit.then(() => {
-      expect(formComponent, "to contain", <div>first name server error</div>);
-      expect(formComponent, "to contain", <div>last name server error</div>);
-    });
+    await submit();
+    expect(formComponent, "to contain", <div>first name server error</div>);
+    expect(formComponent, "to contain", <div>last name server error</div>);
 
     TestUtils.Simulate.change(firstNameField, { target: { value: "a" } });
 
-    submit.then(() => {
-      expect(
-        formComponent,
-        "not to contain",
-        <div>first name server error</div>
-      );
-      expect(formComponent, "to contain", <div>last name server error</div>);
-    });
+    await submit();
+    expect(formComponent, "not to contain", <div>first name server error</div>);
+    expect(formComponent, "to contain", <div>last name server error</div>);
   });
 
-  it.only("outputs server side error with client side", function() {
+  it("outputs server side error with client side", async function() {
     const validate = value =>
       Immutable.fromJS({
         firstName: !value.get("firstName") ? "required" : null
@@ -484,40 +478,49 @@ describe("Form", function() {
       })
     });
 
+    const submit = () => Bluebird.delay(100);
+    onSubmit.returns(submit);
+
     TestUtils.Simulate.change(firstNameField, { target: { value: "a" } });
 
-    //  submit.then(() => {
+    await submit();
     expect(formComponent, "not to contain", <div>required</div>);
     expect(formComponent, "to contain", <div>last name server error</div>);
-    // });
 
     TestUtils.Simulate.change(firstNameField, { target: { value: "" } });
 
-    //submit.then(() => {
+    await submit();
     expect(formComponent, "to contain", <div>required</div>);
     expect(formComponent, "to contain", <div>last name server error</div>);
-    //   });
   });
 
-  it.only("outputs validation error in popup in case not correspoding filed was found", async function() {
-    const handleUnmappedErrors = sinon.spy(() =>
-      console.log("handle unmapped")
-    );
-    const { dom: formComponent, onSubmit, firstNameField } = render({
+  it("outputs validation error in popup in case no correspoding filed was found", async function() {
+    const handleUnmappedErrors = sinon.stub();
+
+    const otherPros = {
       handleUnmappedErrors,
       serverValidationErrors: Immutable.fromJS({
         firstName: "first name server error",
         unknownFiled: "sampletext"
       })
-    });
+    };
 
-    await Bluebird.delay(200);
+    const value1 = Immutable.fromJS({ firstName: "firstname" });
+    const value2 = Immutable.fromJS({ firstName: "firstname" });
 
-    TestUtils.Simulate.change(firstNameField, { target: { value: "pp" } });
+    const dom = TestUtils.renderIntoDocument(
+      <PropsSetter name="test" value={value1} component={Form} {...otherPros}>
+        <TestField name="firstName" className="firstName" />
+        <ServerErrorMessage name="firstName" />
+      </PropsSetter>
+    );
 
-    await Bluebird.delay(200);
+    // just to toggle component will receive new props
+    dom.setProps({ value: value2 });
 
-    expect(formComponent, "to contain", <div>first name server error</div>);
+    await Bluebird.delay(10);
+
+    expect(dom, "to contain", <div>first name server error</div>);
     expect(handleUnmappedErrors, "was called once");
   });
 });

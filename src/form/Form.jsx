@@ -95,7 +95,9 @@ export default class Form extends React.Component {
     normalize: value => value,
     disabled: false,
     serverValidationErrors: null,
-    handleUnmappedErrors: () => null
+    handleUnmappedErrors: error => {
+      console.warn("Unmapped form error: ", error);
+    }
   };
 
   get name() {
@@ -126,13 +128,18 @@ export default class Form extends React.Component {
         : {};
 
     if (!isEqual(this.props.value, nextProps.value)) {
-      this.setState({
-        value: nextProps.prepare(nextProps.value),
-        errors: new Immutable.Map(),
-        triedToSubmit: false,
-        pristine: true,
-        submitting: false
-      });
+      this.setState(
+        {
+          value: nextProps.prepare(nextProps.value),
+          errors: serverErrors.errors || new Immutable.Map(),
+          triedToSubmit: serverErrors.triedToSubmit || false,
+          pristine: true,
+          submitting: false
+        },
+        () => {
+          this.handleUnmappedServerErrors(serverErrors);
+        }
+      );
     } else {
       this.setState(serverErrors, () => {
         this.handleUnmappedServerErrors(serverErrors);
@@ -154,20 +161,18 @@ export default class Form extends React.Component {
       const formFieldsStructure = this.getFormFieldsStructure();
       const [...serverErrorKeys] = serverErrors.errors.keys();
 
-      const notMapped = serverErrorKeys.reduce((acc, el) => {
-        if (!formFieldsStructure.includes(el)) {
-          acc.push({ [el]: serverErrors.errors.get(el) });
-        }
+      // we getting only first one
+      const unmappedErrorKey = serverErrorKeys.find(
+        el => !formFieldsStructure.includes(el)
+      );
 
-        return acc;
-      }, []);
+      if (unmappedErrorKey) {
+        const unmappedOutputObject = {
+          field: unmappedErrorKey,
+          message: serverErrors.errors.get(unmappedErrorKey)
+        };
 
-      if (notMapped && notMapped.length > 0) {
-        if (this.props.handleUnmappedErrors) {
-          this.props.handleUnmappedErrors(notMapped);
-        } else {
-          console.log(notMapped);
-        }
+        this.props.handleUnmappedErrors(unmappedOutputObject);
       }
     }
   };

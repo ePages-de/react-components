@@ -88,5 +88,8 @@
     ],
     "cacheDirectory": "<rootDir>/.cache/jest"
   },
-  "false": {}
+  "false": {},
+  "dependencies": {
+    "immutablediff": "0.4.4"
+  }
 }
