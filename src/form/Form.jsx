@@ -89,10 +89,10 @@ export default class Form extends React.Component {
     value: new Immutable.Map(),
     onSubmit: () => null,
     onChange: () => null,
-    prepare: value => value,
+    prepare: (value) => value,
     validate: () => null,
     validateWaitMs: null,
-    normalize: value => value,
+    normalize: (value) => value,
     disabled: false,
     serverValidationErrors: null,
     handleUnmappedErrors: () => null
@@ -149,7 +149,7 @@ export default class Form extends React.Component {
     this.willUnmount = true
   }
 
-  getValue = name => {
+  getValue = (name) => {
     if (name !== undefined && name !== null) {
       return this.state.value.getIn(parseName(name))
     } else {
@@ -158,14 +158,14 @@ export default class Form extends React.Component {
   };
 
   // in case if we have validation error with property which is not in form (or can't be mapped to form due to response)
-  handleUnmappedServerErrors = serverErrors => {
+  handleUnmappedServerErrors = (serverErrors) => {
     if (serverErrors && serverErrors.errors && serverErrors.errors.size > 0) {
       const formFieldsStructure = this.getFormFieldsStructure()
       const [...serverErrorKeys] = serverErrors.errors.keys()
 
       // we getting only first one
       const unmappedErrorKey = serverErrorKeys.find(
-        el => !formFieldsStructure.includes(el)
+        (el) => !formFieldsStructure.includes(el)
       )
 
       if (unmappedErrorKey) {
@@ -185,7 +185,7 @@ export default class Form extends React.Component {
 
     if (differences) {
       const firstDifference = differences
-        .filter(entry => entry.get('op') === replaceOperation)
+        .filter((entry) => entry.get('op') === replaceOperation)
         .first()
 
       if (firstDifference && firstDifference.size > 0) {
@@ -234,7 +234,7 @@ export default class Form extends React.Component {
 
     this.validate(
       [newValue, this.state.triedToSubmit, name],
-      validationResult => {
+      (validationResult) => {
         // in case we have errors in server and client at the same time we merging it
         if (updatedErrorList && updatedErrorList.size > 0) {
           validationResult = validationResult
@@ -271,19 +271,19 @@ export default class Form extends React.Component {
     }
   };
 
-  getError = name => {
+  getError = (name) => {
     return this.state.errors.getIn(parseName(name))
   };
 
   submit = () => this.onSubmit({ preventDefault: () => {} });
 
-  onSubmit = event => {
+  onSubmit = (event) => {
     event.preventDefault()
 
     if (!this.props.disabled && !this.state.submitting) {
       this.validate(
         [this.state.value, true, null],
-        validationResult => {
+        (validationResult) => {
           if (containsError(validationResult)) {
             this.setState({
               errors: validationResult,
