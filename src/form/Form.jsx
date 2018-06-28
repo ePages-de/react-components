@@ -1,70 +1,70 @@
-import Immutable, { is as isEqual } from "immutable";
-import diff from "immutablediff";
-import PropTypes from "prop-types";
-import React from "react";
+import Immutable, { is as isEqual } from 'immutable'
+import diff from 'immutablediff'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import FormValueScope from "./FormValueScope";
+import FormValueScope from './FormValueScope'
 
 // Creates a debounced version of `func` that receives its arguments as first,
 // and a callback function as second argument. When invoked multiple times, the
 // callback function is only called for the last invocation of `func`.
-function createValidateFunc(func, waitMs = 0) {
-  let timer = null;
-  let lastPendingId = 0;
+function createValidateFunc (func, waitMs = 0) {
+  let timer = null
+  let lastPendingId = 0
 
-  function run(args, doneFunc) {
-    const currentPendingId = lastPendingId + 1;
-    const result = func(...args);
+  function run (args, doneFunc) {
+    const currentPendingId = lastPendingId + 1
+    const result = func(...args)
 
-    lastPendingId = currentPendingId;
-    timer = null;
+    lastPendingId = currentPendingId
+    timer = null
 
-    if (result && typeof result.then === "function") {
+    if (result && typeof result.then === 'function') {
       result.then((...args) => {
         if (lastPendingId === currentPendingId) {
-          doneFunc(...args);
+          doneFunc(...args)
         }
-      });
+      })
     } else {
-      doneFunc(result);
+      doneFunc(result)
     }
   }
 
   return (args, doneFunc, runImmediately = false) => {
-    if (timer) window.clearTimeout(timer);
+    if (timer) window.clearTimeout(timer)
 
     if (waitMs === null || runImmediately) {
-      run(args, doneFunc);
+      run(args, doneFunc)
     } else {
-      timer = window.setTimeout(() => run(args, doneFunc), waitMs);
+      timer = window.setTimeout(() => run(args, doneFunc), waitMs)
     }
-  };
-}
-
-function containsError(errors) {
-  if (!errors) {
-    return false;
-  } else if (Immutable.Iterable.isIterable(errors)) {
-    return errors.reduce((res, item) => {
-      if (res) {
-        return true;
-      } else if (!item) {
-        return false;
-      } else if (typeof item === "string") {
-        return true;
-      } else {
-        return containsError(item);
-      }
-    }, false);
-  } else {
-    throw new Error();
   }
 }
 
-function parseName(name) {
+function containsError (errors) {
+  if (!errors) {
+    return false
+  } else if (Immutable.Iterable.isIterable(errors)) {
+    return errors.reduce((res, item) => {
+      if (res) {
+        return true
+      } else if (!item) {
+        return false
+      } else if (typeof item === 'string') {
+        return true
+      } else {
+        return containsError(item)
+      }
+    }, false)
+  } else {
+    throw new Error()
+  }
+}
+
+function parseName (name) {
   // only split string names by dots, but keep non string names (for example number names
   // like in IteratorField) as they are
-  return typeof name === "string" ? name.split(/\./g) : [name];
+  return typeof name === 'string' ? name.split(/\./g) : [name]
 }
 
 // kind of inherits from FormValueScope
@@ -98,14 +98,14 @@ export default class Form extends React.Component {
     handleUnmappedErrors: () => null
   };
 
-  get name() {
-    return this.props.name;
+  get name () {
+    return this.props.name
   }
 
   updatedServerValidationErrors = false;
 
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
       value: props.prepare(props.value),
@@ -113,17 +113,17 @@ export default class Form extends React.Component {
       triedToSubmit: false,
       pristine: true,
       submitting: false
-    };
+    }
 
-    this.validate = createValidateFunc(props.validate, props.validateWaitMs);
+    this.validate = createValidateFunc(props.validate, props.validateWaitMs)
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const serverErrors =
       nextProps.serverValidationErrors &&
       nextProps.serverValidationErrors.size > 0
         ? { errors: nextProps.serverValidationErrors, triedToSubmit: true }
-        : {};
+        : {}
 
     if (!isEqual(this.props.value, nextProps.value)) {
       this.setState(
@@ -135,88 +135,88 @@ export default class Form extends React.Component {
           submitting: false
         },
         () => {
-          this.handleUnmappedServerErrors(serverErrors);
+          this.handleUnmappedServerErrors(serverErrors)
         }
-      );
+      )
     } else {
       this.setState(serverErrors, () => {
-        this.handleUnmappedServerErrors(serverErrors);
-      });
+        this.handleUnmappedServerErrors(serverErrors)
+      })
     }
   }
 
-  componentWillUnmount() {
-    this.willUnmount = true;
+  componentWillUnmount () {
+    this.willUnmount = true
   }
 
   getValue = name => {
     if (name !== undefined && name !== null) {
-      return this.state.value.getIn(parseName(name));
+      return this.state.value.getIn(parseName(name))
     } else {
-      return this.state.value;
+      return this.state.value
     }
   };
 
   // in case if we have validation error with property which is not in form (or can't be mapped to form due to response)
   handleUnmappedServerErrors = serverErrors => {
     if (serverErrors && serverErrors.errors && serverErrors.errors.size > 0) {
-      const formFieldsStructure = this.getFormFieldsStructure();
-      const [...serverErrorKeys] = serverErrors.errors.keys();
+      const formFieldsStructure = this.getFormFieldsStructure()
+      const [...serverErrorKeys] = serverErrors.errors.keys()
 
       // we getting only first one
       const unmappedErrorKey = serverErrorKeys.find(
         el => !formFieldsStructure.includes(el)
-      );
+      )
 
       if (unmappedErrorKey) {
         const unmappedOutputObject = {
           field: unmappedErrorKey,
           message: serverErrors.errors.get(unmappedErrorKey)
-        };
+        }
 
-        this.props.handleUnmappedErrors(unmappedOutputObject);
+        this.props.handleUnmappedErrors(unmappedOutputObject)
       }
     }
   };
 
   getFormValuesFirstDifference = (currentValue, newValue) => {
-    const differences = diff(currentValue, newValue);
-    const replaceOperation = "replace";
+    const differences = diff(currentValue, newValue)
+    const replaceOperation = 'replace'
 
     if (differences) {
       const firstDifference = differences
-        .filter(entry => entry.get("op") === replaceOperation)
-        .first();
+        .filter(entry => entry.get('op') === replaceOperation)
+        .first()
 
       if (firstDifference && firstDifference.size > 0) {
         return firstDifference
-          .get("path")
-          .split("/")
-          .filter(Boolean);
+          .get('path')
+          .split('/')
+          .filter(Boolean)
       }
     }
   };
 
   getChangedCompleteErrorList = (currentValue, newValue, serverErrors) => {
-    const path = this.getFormValuesFirstDifference(currentValue, newValue);
+    const path = this.getFormValuesFirstDifference(currentValue, newValue)
 
     if (path) {
-      return serverErrors.setIn(path, false);
+      return serverErrors.setIn(path, false)
     }
 
-    return serverErrors;
+    return serverErrors
   };
 
   setValue = (name, value) => {
     const newValue1 =
       name !== undefined && name !== null
         ? this.state.value.setIn(parseName(name), value)
-        : value;
-    const newValue2 = this.props.onChange(newValue1);
-    const newValue = newValue2 || newValue1;
+        : value
+    const newValue2 = this.props.onChange(newValue1)
+    const newValue = newValue2 || newValue1
 
     const serverValidationErrors =
-      this.updatedServerValidationErrors || this.props.serverValidationErrors;
+      this.updatedServerValidationErrors || this.props.serverValidationErrors
 
     // because only one field value could be change at the time
     const updatedErrorList =
@@ -226,11 +226,11 @@ export default class Form extends React.Component {
         this.state.value,
         newValue,
         serverValidationErrors
-      );
+      )
 
     this.setState({
       value: newValue
-    });
+    })
 
     this.validate(
       [newValue, this.state.triedToSubmit, name],
@@ -239,20 +239,20 @@ export default class Form extends React.Component {
         if (updatedErrorList && updatedErrorList.size > 0) {
           validationResult = validationResult
             ? validationResult.mergeDeepWith((oldVal, newVal) => {
-                return oldVal && oldVal !== false ? oldVal : newVal;
-              }, updatedErrorList)
-            : updatedErrorList;
+              return oldVal && oldVal !== false ? oldVal : newVal
+            }, updatedErrorList)
+            : updatedErrorList
         }
 
-        this.updatedServerValidationErrors = updatedErrorList;
+        this.updatedServerValidationErrors = updatedErrorList
 
         this.setState({
           errors: containsError(validationResult)
             ? validationResult
             : new Immutable.Map()
-        });
+        })
       }
-    );
+    )
   };
 
   reset = () => {
@@ -262,23 +262,23 @@ export default class Form extends React.Component {
       triedToSubmit: false,
       pristine: true,
       submitting: false
-    });
+    })
   };
 
   getFormFieldsStructure = () => {
     if (this.props.value && this.props.value.size > 0) {
-      return [...this.props.value.keys()];
+      return [...this.props.value.keys()]
     }
   };
 
   getError = name => {
-    return this.state.errors.getIn(parseName(name));
+    return this.state.errors.getIn(parseName(name))
   };
 
   submit = () => this.onSubmit({ preventDefault: () => {} });
 
   onSubmit = event => {
-    event.preventDefault();
+    event.preventDefault()
 
     if (!this.props.disabled && !this.state.submitting) {
       this.validate(
@@ -288,33 +288,33 @@ export default class Form extends React.Component {
             this.setState({
               errors: validationResult,
               triedToSubmit: true
-            });
+            })
           } else {
             this.setState({
               errors: new Immutable.Map()
-            });
+            })
 
             const result = this.props.onSubmit(
               this.props.normalize(this.state.value)
-            );
+            )
 
-            if (result && typeof result.then === "function") {
-              this.setState({ submitting: true });
+            if (result && typeof result.then === 'function') {
+              this.setState({ submitting: true })
               result
                 .catch(() => {})
                 .then(
                   () => this.willUnmount || this.setState({ submitting: false })
-                );
+                )
             }
           }
-          this.updatedServerValidationErrors = false;
+          this.updatedServerValidationErrors = false
         },
         true
-      );
+      )
     }
   };
 
-  render() {
+  render () {
     const {
       name,
       value,
@@ -329,28 +329,28 @@ export default class Form extends React.Component {
       serverValidationErrors,
       handleUnmappedErrors,
       ...other
-    } = this.props; // eslint-disable-line no-unused-vars
+    } = this.props // eslint-disable-line no-unused-vars
     return (
-      <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
-        {typeof children === "function"
+      <form autoComplete='off' {...other} name={name} onSubmit={this.onSubmit}>
+        {typeof children === 'function'
           ? children({
-              value: this.state.value,
-              pristine: Immutable.is(value, this.state.value),
-              submitting: this.state.submitting,
-              reset: () => this.reset()
-            })
+            value: this.state.value,
+            pristine: Immutable.is(value, this.state.value),
+            submitting: this.state.submitting,
+            reset: () => this.reset()
+          })
           : children}
       </form>
-    );
+    )
   }
 
   static childContextTypes = {
     formValueScope: PropTypes.object
   };
 
-  getChildContext() {
+  getChildContext () {
     return {
       formValueScope: this
-    };
+    }
   }
 }
