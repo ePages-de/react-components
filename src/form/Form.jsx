@@ -81,7 +81,7 @@ export default class Form extends React.Component {
     normalize: PropTypes.func,
     disabled: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
-    serverValidationErrors: PropTypes.any,
+    serverValidationErrors: PropTypes.object,
     handleUnmappedErrors: PropTypes.func
   };
 
@@ -275,7 +275,7 @@ export default class Form extends React.Component {
     return this.state.errors.getIn(parseName(name))
   };
 
-  submit = () => this.onSubmit({ preventDefault: () => {} });
+  submit = () => this.onSubmit({preventDefault: () => {}})
 
   onSubmit = (event) => {
     event.preventDefault()
@@ -284,27 +284,16 @@ export default class Form extends React.Component {
       this.validate(
         [this.state.value, true, null],
         (validationResult) => {
+        validationResult => {
           if (containsError(validationResult)) {
-            this.setState({
-              errors: validationResult,
-              triedToSubmit: true
-            })
+            this.setState({errors: validationResult, triedToSubmit: true})
           } else {
-            this.setState({
-              errors: new Immutable.Map()
-            })
+            this.setState({errors: new Immutable.Map()})
 
-            const result = this.props.onSubmit(
-              this.props.normalize(this.state.value)
-            )
-
-            if (result && typeof result.then === 'function') {
-              this.setState({ submitting: true })
-              result
-                .catch(() => {})
-                .then(
-                  () => this.willUnmount || this.setState({ submitting: false })
-                )
+            const result = this.props.onSubmit(this.props.normalize(this.state.value))
+            if (result && typeof result.then === "function") {
+              this.setState({submitting: true})
+              result.catch(() => {}).then(() => this.willUnmount || this.setState({ submitting: false }))
             }
           }
           this.updatedServerValidationErrors = false
@@ -330,23 +319,23 @@ export default class Form extends React.Component {
       handleUnmappedErrors,
       ...other
     } = this.props // eslint-disable-line no-unused-vars
+  render() {
+    const {name, value, onSubmit, onChange, prepare, validate, validateWaitMs, normalize, disabled, children, serverValidationErrors, handleUnmappedErrors, ...other} = this.props //eslint-disable-lineno-unused-vars
     return (
-      <form autoComplete='off' {...other} name={name} onSubmit={this.onSubmit}>
-        {typeof children === 'function'
-          ? children({
-            value: this.state.value,
-            pristine: Immutable.is(value, this.state.value),
-            submitting: this.state.submitting,
-            reset: () => this.reset()
-          })
-          : children}
+      <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
+        {typeof children === "function" ? children({
+              value: this.state.value,
+              pristine: Immutable.is(value, this.state.value),
+              submitting: this.state.submitting,
+              reset: () => this.reset()
+            }) : children}
       </form>
-    )
+    );
   }
 
   static childContextTypes = {
     formValueScope: PropTypes.object
-  };
+  }
 
   getChildContext () {
     return {
