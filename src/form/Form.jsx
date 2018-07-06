@@ -2,6 +2,7 @@ import Immutable, { is as isEqual } from 'immutable'
 import diff from 'immutablediff'
 import PropTypes from 'prop-types'
 import React from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 
 import FormValueScope from './FormValueScope'
 
@@ -81,7 +82,7 @@ export default class Form extends React.Component {
     normalize: PropTypes.func,
     disabled: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
-    serverValidationErrors: PropTypes.object,
+    serverValidationErrors: ImmutablePropTypes.map,
     handleUnmappedErrors: PropTypes.func
   };
 
