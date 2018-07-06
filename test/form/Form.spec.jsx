@@ -100,8 +100,8 @@ function render (props) {
 describe('Form', function () {
   it('renders', function () {
     const {dom} = render()
-    
-    expect(dom,  'to have rendered',
+
+    expect(dom, 'to have rendered',
       <form name="test" autoComplete="off">
         <div>
           <input name="test.firstName" className="firstName" />
@@ -115,7 +115,7 @@ describe('Form', function () {
   })
 
   it('returns original instance if unchanged', function () {
-    const { onSubmit, form } = render()
+    const {onSubmit, form} = render()
 
     expect(onSubmit, 'was not called')
     TestUtils.Simulate.submit(form)
@@ -124,7 +124,7 @@ describe('Form', function () {
   })
 
   it('returns new value', function () {
-    const { onSubmit, form, firstNameField, lastNameField, streetField } = render()
+    const {onSubmit, form, firstNameField, lastNameField, streetField} = render()
 
     TestUtils.Simulate.change(firstNameField, {target: {value: 'foo'}})
     TestUtils.Simulate.change(lastNameField, {target: {value: 'bar'}})
@@ -134,17 +134,17 @@ describe('Form', function () {
     expect(onSubmit, 'was called once')
     expect(onSubmit, 'to have calls satisfying', function () {
       onSubmit(Immutable.fromJS({
-          firstName: 'foo',
-          lastName: 'bar',
-          address: {
-            street: 'apple'
-          }
+        firstName: 'foo',
+        lastName: 'bar',
+        address: {
+          street: 'apple'
+        }
       }))
     })
   })
 
   it('does not submit if disabled', function () {
-    const {onSubmit, form} = render({ disabled: true })
+    const {onSubmit, form} = render({disabled: true})
 
     TestUtils.Simulate.submit(form)
 
@@ -152,17 +152,17 @@ describe('Form', function () {
   })
 
   it('respects validation', function () {
-    const validate = (value) =>Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})
+    const validate = (value) => Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})
     const {onSubmit, form, firstNameField, lastNameField} = render({validate})
 
     TestUtils.Simulate.submit(form)
 
     expect(onSubmit, 'was not called')
-    TestUtils.Simulate.change(lastNameField, {target: {value:'bar'}})
+    TestUtils.Simulate.change(lastNameField, {target: {value: 'bar'}})
     TestUtils.Simulate.submit(form)
 
     expect(onSubmit, 'was not called')
-    TestUtils.Simulate.change(firstNameField, {target:{value:'foo'}})
+    TestUtils.Simulate.change(firstNameField, {target: {value: 'foo'}})
     TestUtils.Simulate.submit(form)
 
     expect(onSubmit, 'was called once')
@@ -171,15 +171,15 @@ describe('Form', function () {
   it('validates asynchronously', async function () {
     const validate = sinon.spy((value) => Promise.resolve(Immutable.fromJS({firstName: !value.get('firstName') ? 
 'required' : null})))
-    const { onSubmit, form, firstNameField, lastNameField } = render({validate})
+    const {onSubmit, form, firstNameField, lastNameField} = render({validate})
 
     TestUtils.Simulate.submit(form)
     await Bluebird.delay(1)
 
     expect(onSubmit, 'was not called')
-    TestUtils.Simulate.change(lastNameField, {target: {value:'bar'}})
+    TestUtils.Simulate.change(lastNameField, {target: {value: 'bar'}})
     expect(validate, 'was called')
-    TestUtils.Simulate.change(firstNameField, {target:{value:'foo'}})
+    TestUtils.Simulate.change(firstNameField, {target: {value: 'foo'}})
     TestUtils.Simulate.submit(form)
     await Bluebird.delay(1)
 
@@ -204,7 +204,7 @@ describe('Form', function () {
     const validateWaitMs = 20
     const validate = sinon.spy(value => {
       const validation = Bluebird.delay(responseDelays.shift()).then(() =>
-        Immutable.fromJS(!value.get('firstName') ? { firstName: 'first name required' } : null)
+        Immutable.fromJS(!value.get('firstName') ? {firstName: 'first name required'} : null)
       )
       validations.push(validation)
       return validation
@@ -215,7 +215,7 @@ describe('Form', function () {
     TestUtils.Simulate.change(firstNameField, {target: {value: 'a'}})
 
     // The validation promise for this resolves last and should be discarded.
-    TestUtils.Simulate.change(firstNameField, {target: {value: '' }})
+    TestUtils.Simulate.change(firstNameField, {target: {value: ''}})
     await Bluebird.delay(validateWaitMs)
 
     TestUtils.Simulate.change(firstNameField, {target: {value: 'b'}})
@@ -254,16 +254,16 @@ describe('Form', function () {
     TestUtils.Simulate.change(firstNameField, {target: {value: '1234'}})
 
     expect(onSubmit, 'to have calls satisfying', () => {
-      validate(Immutable.fromJS({firstName: '1', lastName:'', address: {street: ''}}), false)
-      validate(Immutable.fromJS({firstName: '12', lastName:'', address: {street: ''}}), false)
-      validate(Immutable.fromJS({firstName: '12', lastName:'', address: {street: ''}}), true)
-      validate(Immutable.fromJS({firstName: '123', lastName:'', address: {street: ''}}), true)
-      validate(Immutable.fromJS({firstName: '1234', lastName:'', address: {street: ''}}), true)
+      validate(Immutable.fromJS({firstName: '1', lastName: '', address: {street: ''}}), false)
+      validate(Immutable.fromJS({firstName: '12', lastName: '', address: {street: ''}}), false)
+      validate(Immutable.fromJS({firstName: '12', lastName: '', address: {street: ''}}), true)
+      validate(Immutable.fromJS({firstName: '123', lastName: '', address: {street: ''}}), true)
+      validate(Immutable.fromJS({firstName: '1234', lastName: '', address: {street: ''}}), true)
     })
   })
 
   it('sets and gets values', function () {
-    const {dom:formComponent} = render()
+    const {dom: formComponent} = render()
 
     expect(formComponent.getValue('firstName'), 'to equal', '')
     formComponent.setValue('firstName', 'a')
@@ -278,19 +278,19 @@ describe('Form', function () {
     const { dom: formComponent } = render()
 
     expect(formComponent.getValue(), 'to equal', Immutable.fromJS({
-        firstName: '',
-        lastName: '',
-        address: { street: '' }
+      firstName: '',
+      lastName: '',
+      address: {street: ''}
     }))
     formComponent.setValue(undefined, Immutable.fromJS({
-        firstName: 'A',
-        lastName: 'B',
-        address: { street: 'C' }
+      firstName: 'A',
+      lastName: 'B',
+      address: {street: 'C'}
     }))
     expect(formComponent.getValue(undefined), 'to equal', Immutable.fromJS({
-        firstName: 'A',
-        lastName: 'B',
-        address: { street: 'C' }
+      firstName: 'A',
+      lastName: 'B',
+      address: {street: 'C'}
     }))
   })
 
@@ -298,9 +298,9 @@ describe('Form', function () {
     const {dom: formComponent, firstNameField} = render()
 
     expect(formComponent, 'to have rendered', <div>pristine true</div>)
-    TestUtils.Simulate.change(firstNameField, {target:{value:'a'}})
+    TestUtils.Simulate.change(firstNameField, {target: {value: 'a'}})
     expect(formComponent, 'to have rendered', <div>pristine false</div>)
-    TestUtils.Simulate.change(firstNameField, {target:{ value:''}})
+    TestUtils.Simulate.change(firstNameField, {target: {value: ''}})
     expect(formComponent, 'to have rendered', <div>pristine true</div>)
   })
 
@@ -343,7 +343,7 @@ describe('Form', function () {
     const nameField = TestUtils.findOne(dom, 'input')
 
     expect(nameField.value, 'to equal', 'a')
-    TestUtils.Simulate.change(nameField, {target:{value: 'b'}})
+    TestUtils.Simulate.change(nameField, {target: {value: 'b'}})
     expect(nameField.value, 'to equal', 'b')
     dom.setProps({value: value2})
     expect(nameField.value, 'to equal', 'c')
@@ -357,7 +357,7 @@ describe('Form', function () {
           <Form
             name="test"
             value={Immutable.fromJS({})}
-            onSubmit={() =>this.setState({ unmounted: true }) || Promise.resolve()}>
+            onSubmit={() => this.setState({unmounted: true}) || Promise.resolve()}>
             {() => null}
           </Form>
         )
