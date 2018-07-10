@@ -306,7 +306,7 @@ export default class Form extends React.Component {
   render () {
     const {name, value, onSubmit, onChange, prepare, validate, validateWaitMs, normalize, disabled, children, externalErrors, handleUnmappedErrors, ...other} = this.props // eslint-disable-line no-unused-vars
     return (
-      <form autoComplete='off' {...other} name={name} onSubmit={this.onSubmit}>
+      <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
         {typeof children === 'function' ? children({
           value: this.state.value,
           pristine: Immutable.is(value, this.state.value),

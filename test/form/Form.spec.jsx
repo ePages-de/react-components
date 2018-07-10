@@ -76,7 +76,7 @@ function render (props) {
         <div>
           <TestField name="firstName" className="firstName" />
           <ErrorMessage name="firstName" />
-          <ServerErrorMessage name='firstName' />
+          <ServerErrorMessage name="firstName" />
           <div>
             <TestField name="lastName" className="lastName" />
             <ErrorMessage name="lastName" />
@@ -451,9 +451,9 @@ describe('Form', function () {
     const value2 = Immutable.fromJS({ firstName: 'firstname' })
 
     const dom = TestUtils.renderIntoDocument(
-      <PropsSetter name='test' value={value1} component={Form} {...otherPros}>
-        <TestField name='firstName' className='firstName' />
-        <ServerErrorMessage name='firstName' />
+      <PropsSetter name="test" value={value1} component={Form} {...otherPros}>
+        <TestField name="firstName" className="firstName" />
+        <ServerErrorMessage name="firstName" />
       </PropsSetter>
     )
 
