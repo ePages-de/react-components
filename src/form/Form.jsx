@@ -282,7 +282,7 @@ export default class Form extends React.Component {
     if (!this.props.disabled && !this.state.submitting) {
       this.validate(
         [this.state.value, true, null],
-        
+
         validationResult => {
           if (containsError(validationResult)) {
             this.setState({errors: validationResult, triedToSubmit: true})
@@ -295,7 +295,7 @@ export default class Form extends React.Component {
               result.catch(() => {}).then(() => this.willUnmount || this.setState({submitting: false}))
             }
           }
-          
+
           this.updatedExternalErrors = false
         },
         true
