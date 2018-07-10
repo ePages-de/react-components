@@ -24,7 +24,7 @@ class ServerErrorMessage extends React.Component {
   static propTypes = {
     name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     Component: PropTypes.any,
-    serverValidationErrors: PropTypes.object
+    externalErrors: PropTypes.object
   };
 
   parseName = (name) => {
@@ -35,16 +35,16 @@ class ServerErrorMessage extends React.Component {
 
   getError = (name) => {
     const {
-      updatedServerValidationErrors,
+      updatedExternalErrors,
       props
     } = this.context.formValueScope
 
-    const { serverValidationErrors } = props
+    const { externalErrors } = props
 
-    if (serverValidationErrors) {
-      const specificError = updatedServerValidationErrors
-        ? updatedServerValidationErrors.getIn(this.parseName(name))
-        : serverValidationErrors.getIn(this.parseName(name))
+    if (externalErrors) {
+      const specificError = updatedExternalErrors
+        ? updatedExternalErrors.getIn(this.parseName(name))
+        : externalErrors.getIn(this.parseName(name))
 
       return specificError
     }
@@ -169,8 +169,7 @@ describe('Form', function () {
   })
 
   it('validates asynchronously', async function () {
-    const validate = sinon.spy((value) => Promise.resolve(Immutable.fromJS({firstName: !value.get('firstName') ? 
-'required' : null})))
+    const validate = sinon.spy((value) => Promise.resolve(Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})))
     const {onSubmit, form, firstNameField, lastNameField} = render({validate})
 
     TestUtils.Simulate.submit(form)
@@ -373,7 +372,7 @@ describe('Form', function () {
 
   it('outputs server side error from props', function () {
     const { dom: formComponent, onSubmit } = render({
-      serverValidationErrors: Immutable.fromJS({
+      externalErrors: Immutable.fromJS({
         firstName: 'first name server error'
       })
     })
@@ -386,9 +385,9 @@ describe('Form', function () {
     })
   })
 
-  it('removes server side error tooltip when field is changed its content', async function () {
+  it('removes server side error when field is changed its content', async function () {
     const { dom: formComponent, onSubmit, firstNameField } = render({
-      serverValidationErrors: Immutable.fromJS({
+      externalErrors: Immutable.fromJS({
         firstName: 'first name server error',
         lastName: 'last name server error'
       })
@@ -416,7 +415,7 @@ describe('Form', function () {
 
     const { dom: formComponent, onSubmit, firstNameField } = render({
       validate,
-      serverValidationErrors: Immutable.fromJS({
+      externalErrors: Immutable.fromJS({
         lastName: 'last name server error'
       })
     })
@@ -437,12 +436,12 @@ describe('Form', function () {
     expect(formComponent, 'to contain', <div>last name server error</div>)
   })
 
-  it('outputs validation error in popup in case no correspoding field was found', async function () {
+  it('runs handleUnmappedErrors in case no correspoding field was found', async function () {
     const handleUnmappedErrors = sinon.stub()
 
     const otherPros = {
       handleUnmappedErrors,
-      serverValidationErrors: Immutable.fromJS({
+      externalErrors: Immutable.fromJS({
         firstName: 'first name server error',
         unknownFiled: 'sampletext'
       })

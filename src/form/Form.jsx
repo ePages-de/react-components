@@ -82,7 +82,7 @@ export default class Form extends React.Component {
     normalize: PropTypes.func,
     disabled: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
-    serverValidationErrors: ImmutablePropTypes.map,
+    externalErrors: ImmutablePropTypes.map,
     handleUnmappedErrors: PropTypes.func
   };
 
@@ -95,7 +95,7 @@ export default class Form extends React.Component {
     validateWaitMs: null,
     normalize: (value) => value,
     disabled: false,
-    serverValidationErrors: null,
+    externalErrors: null,
     handleUnmappedErrors: () => null
   };
 
@@ -103,7 +103,7 @@ export default class Form extends React.Component {
     return this.props.name
   }
 
-  updatedServerValidationErrors = false;
+  updatedExternalErrors = false;
 
   constructor (props) {
     super(props)
@@ -121,9 +121,9 @@ export default class Form extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     const serverErrors =
-      nextProps.serverValidationErrors &&
-      nextProps.serverValidationErrors.size > 0
-        ? { errors: nextProps.serverValidationErrors, triedToSubmit: true }
+      nextProps.externalErrors &&
+      nextProps.externalErrors.size > 0
+        ? { errors: nextProps.externalErrors, triedToSubmit: true }
         : {}
 
     if (!isEqual(this.props.value, nextProps.value)) {
@@ -216,17 +216,17 @@ export default class Form extends React.Component {
     const newValue2 = this.props.onChange(newValue1)
     const newValue = newValue2 || newValue1
 
-    const serverValidationErrors =
-      this.updatedServerValidationErrors || this.props.serverValidationErrors
+    const externalErrors =
+      this.updatedExternalErrors || this.props.externalErrors
 
     // because only one field value could be change at the time
     const updatedErrorList =
-      serverValidationErrors &&
-      serverValidationErrors.size > 0 &&
+      externalErrors &&
+      externalErrors.size > 0 &&
       this.getChangedCompleteErrorList(
         this.state.value,
         newValue,
-        serverValidationErrors
+        externalErrors
       )
 
     this.setState({
@@ -245,7 +245,7 @@ export default class Form extends React.Component {
             : updatedErrorList
         }
 
-        this.updatedServerValidationErrors = updatedErrorList
+        this.updatedExternalErrors = updatedErrorList
 
         this.setState({
           errors: containsError(validationResult) ? validationResult : new Immutable.Map()
@@ -296,7 +296,7 @@ export default class Form extends React.Component {
             }
           }
           
-          this.updatedServerValidationErrors = false
+          this.updatedExternalErrors = false
         },
         true
       )
@@ -304,7 +304,7 @@ export default class Form extends React.Component {
   }
 
   render () {
-    const {name, value, onSubmit, onChange, prepare, validate, validateWaitMs, normalize, disabled, children, serverValidationErrors, handleUnmappedErrors, ...other} = this.props // eslint-disable-lineno-unused-vars
+    const {name, value, onSubmit, onChange, prepare, validate, validateWaitMs, normalize, disabled, children, externalErrors, handleUnmappedErrors, ...other} = this.props // eslint-disable-line no-unused-vars
     return (
       <form autoComplete='off' {...other} name={name} onSubmit={this.onSubmit}>
         {typeof children === 'function' ? children({
