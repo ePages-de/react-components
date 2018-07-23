@@ -137,20 +137,18 @@ export class SmartInputFieldRaw extends React.Component {
         <div className={styles.input}>
           {values.concat(inputField)}
         </div>
-        {suggestionsVisible && (
-          <div className={styles.suggestions} ref="suggestions">
-            {suggestions.map((suggestion, index) =>
-              <div
-                key={index}
-                onClick={this.handleClickSuggestion(suggestion, index)}
-                onMouseEnter={this.handleMouseEnterSuggestion(suggestion, index)}
-                className={classnames(styles.suggestion, {[styles.suggestionActive]: activeSuggestionIndex === index, [styles.suggestionDisabled]: suggestionDisabled(suggestion, index)})}
-                ref={`suggestion-${index}`}>
-                {renderSuggestion(suggestion)}
-              </div>
-            )}
-          </div>
-        )}
+        <div className={styles.suggestions} ref="suggestions">
+          {suggestionsVisible && suggestions.map((suggestion, index) =>
+            <div
+              key={index}
+              onClick={this.handleClickSuggestion(suggestion, index)}
+              onMouseEnter={this.handleMouseEnterSuggestion(suggestion, index)}
+              className={classnames(styles.suggestion, {[styles.suggestionActive]: activeSuggestionIndex === index, [styles.suggestionDisabled]: suggestionDisabled(suggestion, index)})}
+              ref={`suggestion-${index}`}>
+              {renderSuggestion(suggestion)}
+            </div>
+          )}
+        </div>
       </div>
     )
   }
