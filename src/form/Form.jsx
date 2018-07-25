@@ -201,7 +201,7 @@ export default class Form extends React.Component {
   getChangedCompleteErrorList = (currentValue, newValue, serverErrors) => {
     const path = this.getFormValuesFirstDifference(currentValue, newValue)
 
-    if (path) {
+    if (path && serverErrors.hasIn(path)) {
       return serverErrors.setIn(path, false)
     }
 
