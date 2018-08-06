@@ -68,6 +68,25 @@ function parseName (name) {
   return typeof name === 'string' ? name.split(/\./g) : [name]
 }
 
+// get path for first occured error (validation error) 
+function getErrorPathList (tree, stack = [], result = []) {
+  tree.forEach((node, name) => {
+    if (node && typeof node === 'object') {
+      stack.push(name)
+      getErrorPathList(node, stack, result)
+      stack.pop()
+    } else {
+      if (node) {
+        stack.push(name)
+        result.push(stack.slice())
+        stack.pop()
+      }
+    }
+  })
+
+  return result
+}
+
 // kind of inherits from FormValueScope
 // make sure to mirror changes in FormValueScope here
 export default class Form extends React.Component {
@@ -83,7 +102,8 @@ export default class Form extends React.Component {
     disabled: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
     externalErrors: ImmutablePropTypes.map,
-    handleUnmappedErrors: PropTypes.func
+    handleUnmappedErrors: PropTypes.func,
+    scrollIntoError: PropTypes.func
   };
 
   static defaultProps = {
@@ -96,7 +116,8 @@ export default class Form extends React.Component {
     normalize: (value) => value,
     disabled: false,
     externalErrors: null,
-    handleUnmappedErrors: () => null
+    handleUnmappedErrors: () => null,
+    scrollIntoError: () => null
   };
 
   get name () {
@@ -123,7 +144,7 @@ export default class Form extends React.Component {
     const serverErrors =
       nextProps.externalErrors &&
       nextProps.externalErrors.size > 0
-        ? { errors: nextProps.externalErrors, triedToSubmit: true }
+        ? { errors: nextProps.externalErrors }
         : {}
 
     if (!isEqual(this.props.value, nextProps.value)) {
@@ -131,17 +152,19 @@ export default class Form extends React.Component {
         {
           value: nextProps.prepare(nextProps.value),
           errors: serverErrors.errors || new Immutable.Map(),
-          triedToSubmit: serverErrors.triedToSubmit || false,
+          triedToSubmit: false,
           pristine: true,
           submitting: false
         },
         () => {
           this.handleUnmappedServerErrors(serverErrors)
+          this.onError(nextProps.externalErrors)
         }
       )
     } else {
       this.setState(serverErrors, () => {
         this.handleUnmappedServerErrors(serverErrors)
+        this.onError(nextProps.externalErrors)
       })
     }
   }
@@ -264,6 +287,15 @@ export default class Form extends React.Component {
     })
   }
 
+  onError = (validationResult) => {
+    const pathList = validationResult && getErrorPathList(validationResult)
+    const firstErrorKeyPath = pathList && pathList[0] // first path list
+
+    if (firstErrorKeyPath && firstErrorKeyPath.length > 0) {
+      this.props.scrollIntoError && this.props.scrollIntoError(firstErrorKeyPath)
+    }
+  }
+
   getFormFieldsStructure = () => {
     if (this.props.value && this.props.value.size > 0) {
       return [...this.props.value.keys()]
@@ -285,6 +317,7 @@ export default class Form extends React.Component {
 
         validationResult => {
           if (containsError(validationResult)) {
+            this.onError(validationResult)
             this.setState({errors: validationResult, triedToSubmit: true})
           } else {
             this.setState({errors: new Immutable.Map()})
@@ -304,7 +337,7 @@ export default class Form extends React.Component {
   }
 
   render () {
-    const {name, value, onSubmit, onChange, prepare, validate, validateWaitMs, normalize, disabled, children, externalErrors, handleUnmappedErrors, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {name, value, onSubmit, onChange, prepare, validate, validateWaitMs, normalize, disabled, children, externalErrors, handleUnmappedErrors, scrollIntoError, ...other} = this.props // eslint-disable-line no-unused-vars
     return (
       <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
         {typeof children === 'function' ? children({

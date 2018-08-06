@@ -465,4 +465,46 @@ describe('Form', function () {
     expect(dom, 'to contain', <div>first name server error</div>)
     expect(handleUnmappedErrors, 'was called once')
   })
+
+  it('calls onError function in case of client side errors', async function () {
+    const scrollIntoError = sinon.stub()
+
+    const validate = (value) => Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})
+    const {dom, form, firstNameField} = render({validate, scrollIntoError})
+
+    TestUtils.Simulate.change(firstNameField, { target: { value: '' } })
+
+    TestUtils.Simulate.submit(form)
+
+    expect(dom, 'to contain', <div>required</div>)
+    expect(scrollIntoError, 'was called once')
+  })
+
+  it('calls onError function in case of server side errors', async function () {
+    const scrollIntoError = sinon.stub()
+
+    const otherPros = {
+      scrollIntoError,
+      externalErrors: Immutable.fromJS({
+        firstName: 'first name server error'
+      })
+    }
+
+    const value1 = Immutable.fromJS({ firstName: 'firstname1' })
+    const value2 = Immutable.fromJS({ firstName: 'firstname2' })
+
+    const dom = TestUtils.renderIntoDocument(
+      <PropsSetter name="test" value={value1} component={Form} {...otherPros}>
+        <TestField name="firstName" className="firstName" />
+        <ServerErrorMessage name="firstName" />
+      </PropsSetter>
+    )
+
+    // just to toggle component will receive new props
+    dom.setProps({ value: value2 })
+
+    await Bluebird.delay(10)
+
+    expect(scrollIntoError, 'was called once')
+  })
 })
