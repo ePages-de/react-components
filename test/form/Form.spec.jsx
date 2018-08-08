@@ -334,6 +334,7 @@ describe('Form', function () {
   it('renders new value if props change', function () {
     const value1 = Immutable.fromJS({name: 'a'})
     const value2 = Immutable.fromJS({name: 'c'})
+
     const dom = TestUtils.renderIntoDocument(
       <PropsSetter name="test" value={value1} component={Form}>
         <TestField name="name" />
@@ -344,7 +345,7 @@ describe('Form', function () {
     expect(nameField.value, 'to equal', 'a')
     TestUtils.Simulate.change(nameField, {target: {value: 'b'}})
     expect(nameField.value, 'to equal', 'b')
-    dom.setProps({value: value2})
+    dom.setProps({ value: value2 })
     expect(nameField.value, 'to equal', 'c')
   })
 
@@ -477,21 +478,21 @@ describe('Form', function () {
     TestUtils.Simulate.submit(form)
 
     expect(dom, 'to contain', <div>required</div>)
-    expect(scrollIntoError, 'was called once')
+    expect(scrollIntoError, 'to have calls satisfying', () => scrollIntoError(['firstName']))
   })
 
   it('calls onError function in case of server side errors', async function () {
     const scrollIntoError = sinon.stub()
 
+    // server side error path
     const otherPros = {
       scrollIntoError,
       externalErrors: Immutable.fromJS({
-        firstName: 'first name server error'
+        firstNameServer: 'first name server error'
       })
     }
 
     const value1 = Immutable.fromJS({ firstName: 'firstname1' })
-    const value2 = Immutable.fromJS({ firstName: 'firstname2' })
 
     const dom = TestUtils.renderIntoDocument(
       <PropsSetter name="test" value={value1} component={Form} {...otherPros}>
@@ -501,10 +502,10 @@ describe('Form', function () {
     )
 
     // just to toggle component will receive new props
-    dom.setProps({ value: value2 })
+    dom.setProps({ value: value1 })
 
     await Bluebird.delay(10)
 
-    expect(scrollIntoError, 'was called once')
+    expect(scrollIntoError, 'to have calls satisfying', () => scrollIntoError(['firstNameServer']))
   })
 })

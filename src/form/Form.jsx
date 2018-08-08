@@ -145,13 +145,13 @@ export default class Form extends React.Component {
       nextProps.externalErrors &&
       nextProps.externalErrors.size > 0
         ? { errors: nextProps.externalErrors }
-        : {}
+        : null
 
     if (!isEqual(this.props.value, nextProps.value)) {
       this.setState(
         {
           value: nextProps.prepare(nextProps.value),
-          errors: serverErrors.errors || new Immutable.Map(),
+          errors: (serverErrors && serverErrors.errors) || new Immutable.Map(),
           triedToSubmit: false,
           pristine: true,
           submitting: false
