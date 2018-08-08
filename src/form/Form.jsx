@@ -158,13 +158,13 @@ export default class Form extends React.Component {
         },
         () => {
           this.handleUnmappedServerErrors(serverErrors)
-          this.errorHandler(nextProps.externalErrors)
+          this.handleErrors(nextProps.externalErrors)
         }
       )
     } else {
       this.setState(serverErrors, () => {
         this.handleUnmappedServerErrors(serverErrors)
-        this.errorHandler(nextProps.externalErrors)
+        this.handleErrors(nextProps.externalErrors)
       })
     }
   }
@@ -287,7 +287,7 @@ export default class Form extends React.Component {
     })
   }
 
-  errorHandler = (validationResult) => {
+  handleErrors = (validationResult) => {
     const pathList = validationResult && getErrorPathList(validationResult)
     const firstErrorKeyPath = pathList && pathList[0] // first path list
 
@@ -317,7 +317,7 @@ export default class Form extends React.Component {
 
         validationResult => {
           if (containsError(validationResult)) {
-            this.errorHandler(validationResult)
+            this.handleErrors(validationResult)
             this.setState({errors: validationResult, triedToSubmit: true})
           } else {
             this.setState({errors: new Immutable.Map()})
