@@ -103,7 +103,7 @@ export default class Form extends React.Component {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
     externalErrors: ImmutablePropTypes.map,
     handleUnmappedErrors: PropTypes.func,
-    scrollIntoError: PropTypes.func
+    onError: PropTypes.func
   };
 
   static defaultProps = {
@@ -117,7 +117,7 @@ export default class Form extends React.Component {
     disabled: false,
     externalErrors: null,
     handleUnmappedErrors: () => null,
-    scrollIntoError: () => null
+    onError: () => null
   };
 
   get name () {
@@ -158,13 +158,13 @@ export default class Form extends React.Component {
         },
         () => {
           this.handleUnmappedServerErrors(serverErrors)
-          this.onError(nextProps.externalErrors)
+          this.errorHandler(nextProps.externalErrors)
         }
       )
     } else {
       this.setState(serverErrors, () => {
         this.handleUnmappedServerErrors(serverErrors)
-        this.onError(nextProps.externalErrors)
+        this.errorHandler(nextProps.externalErrors)
       })
     }
   }
@@ -287,12 +287,12 @@ export default class Form extends React.Component {
     })
   }
 
-  onError = (validationResult) => {
+  errorHandler = (validationResult) => {
     const pathList = validationResult && getErrorPathList(validationResult)
     const firstErrorKeyPath = pathList && pathList[0] // first path list
 
     if (firstErrorKeyPath && firstErrorKeyPath.length > 0) {
-      this.props.scrollIntoError && this.props.scrollIntoError(firstErrorKeyPath)
+      this.props.onError && this.props.onError(firstErrorKeyPath)
     }
   }
 
@@ -317,7 +317,7 @@ export default class Form extends React.Component {
 
         validationResult => {
           if (containsError(validationResult)) {
-            this.onError(validationResult)
+            this.errorHandler(validationResult)
             this.setState({errors: validationResult, triedToSubmit: true})
           } else {
             this.setState({errors: new Immutable.Map()})
@@ -337,7 +337,7 @@ export default class Form extends React.Component {
   }
 
   render () {
-    const {name, value, onSubmit, onChange, prepare, validate, validateWaitMs, normalize, disabled, children, externalErrors, handleUnmappedErrors, scrollIntoError, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {name, value, onSubmit, onChange, prepare, validate, validateWaitMs, normalize, disabled, children, externalErrors, handleUnmappedErrors, onError, ...other} = this.props // eslint-disable-line no-unused-vars
     return (
       <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
         {typeof children === 'function' ? children({

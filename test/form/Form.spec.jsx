@@ -468,25 +468,25 @@ describe('Form', function () {
   })
 
   it('calls onError function in case of client side errors', async function () {
-    const scrollIntoError = sinon.stub()
+    const onError = sinon.stub()
 
     const validate = (value) => Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})
-    const {dom, form, firstNameField} = render({validate, scrollIntoError})
+    const {dom, form, firstNameField} = render({validate, onError})
 
     TestUtils.Simulate.change(firstNameField, { target: { value: '' } })
 
     TestUtils.Simulate.submit(form)
 
     expect(dom, 'to contain', <div>required</div>)
-    expect(scrollIntoError, 'to have calls satisfying', () => scrollIntoError(['firstName']))
+    expect(onError, 'to have calls satisfying', () => onError(['firstName']))
   })
 
   it('calls onError function in case of server side errors', async function () {
-    const scrollIntoError = sinon.stub()
+    const onError = sinon.stub()
 
     // server side error path
     const otherPros = {
-      scrollIntoError,
+      onError,
       externalErrors: Immutable.fromJS({
         firstNameServer: 'first name server error'
       })
@@ -506,6 +506,6 @@ describe('Form', function () {
 
     await Bluebird.delay(10)
 
-    expect(scrollIntoError, 'to have calls satisfying', () => scrollIntoError(['firstNameServer']))
+    expect(onError, 'to have calls satisfying', () => onError(['firstNameServer']))
   })
 })
