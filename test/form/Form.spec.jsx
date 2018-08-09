@@ -467,18 +467,29 @@ describe('Form', function () {
     expect(handleUnmappedErrors, 'was called once')
   })
 
-  it('calls onError function in case of client side errors', async function () {
+  it.only('calls onError function in case of client side errors', async function () {
     const onError = sinon.stub()
 
     const validate = (value) => Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})
-    const {dom, form, firstNameField} = render({validate, onError})
+    const { dom, form, firstNameField } = render({ validate, onError })
 
     TestUtils.Simulate.change(firstNameField, { target: { value: '' } })
-
     TestUtils.Simulate.submit(form)
+    await Bluebird.delay(100)
 
     expect(dom, 'to contain', <div>required</div>)
-    expect(onError, 'to have calls satisfying', () => onError(['firstName']))
+    
+    expect(onError, 'to have calls satisfying', () => {
+      // after changine value in form 
+      onError(Immutable.fromJS({
+        firstName: 'required'
+      }), false)
+
+      // after submit
+      onError(Immutable.fromJS({
+        firstName: 'required'
+      }))
+    })
   })
 
   it('calls onError function in case of server side errors', async function () {
@@ -506,6 +517,8 @@ describe('Form', function () {
 
     await Bluebird.delay(10)
 
-    expect(onError, 'to have calls satisfying', () => onError(['firstNameServer']))
+    expect(onError, 'to have calls satisfying', () => onError(Immutable.fromJS({
+      firstNameServer: 'first name server error'
+    })))
   })
 })
