@@ -68,25 +68,6 @@ function parseName (name) {
   return typeof name === 'string' ? name.split(/\./g) : [name]
 }
 
-// get path for first occured error (validation error) 
-function getErrorPathList (tree, stack = [], result = []) {
-  tree.forEach((node, name) => {
-    if (node && typeof node === 'object') {
-      stack.push(name)
-      getErrorPathList(node, stack, result)
-      stack.pop()
-    } else {
-      if (node) {
-        stack.push(name)
-        result.push(stack.slice())
-        stack.pop()
-      }
-    }
-  })
-
-  return result
-}
-
 // kind of inherits from FormValueScope
 // make sure to mirror changes in FormValueScope here
 export default class Form extends React.Component {
@@ -158,13 +139,13 @@ export default class Form extends React.Component {
         },
         () => {
           this.handleUnmappedServerErrors(serverErrors)
-          this.handleErrors(nextProps.externalErrors)
+          this.props.onError(nextProps.externalErrors)
         }
       )
     } else {
       this.setState(serverErrors, () => {
         this.handleUnmappedServerErrors(serverErrors)
-        this.handleErrors(nextProps.externalErrors)
+        this.props.onError(nextProps.externalErrors)
       })
     }
   }
@@ -270,8 +251,14 @@ export default class Form extends React.Component {
 
         this.updatedExternalErrors = updatedErrorList
 
+        const hasErrors = containsError(validationResult)
+
+        if (hasErrors) {
+          this.props.onError(validationResult, false)
+        }
+
         this.setState({
-          errors: containsError(validationResult) ? validationResult : new Immutable.Map()
+          errors: hasErrors ? validationResult : new Immutable.Map()
         })
       }
     )
@@ -285,15 +272,6 @@ export default class Form extends React.Component {
       pristine: true,
       submitting: false
     })
-  }
-
-  handleErrors = (validationResult) => {
-    const pathList = validationResult && getErrorPathList(validationResult)
-    const firstErrorKeyPath = pathList && pathList[0] // first path list
-
-    if (firstErrorKeyPath && firstErrorKeyPath.length > 0) {
-      this.props.onError && this.props.onError(firstErrorKeyPath)
-    }
   }
 
   getFormFieldsStructure = () => {
@@ -317,7 +295,7 @@ export default class Form extends React.Component {
 
         validationResult => {
           if (containsError(validationResult)) {
-            this.handleErrors(validationResult)
+            this.props.onError(validationResult)
             this.setState({errors: validationResult, triedToSubmit: true})
           } else {
             this.setState({errors: new Immutable.Map()})
