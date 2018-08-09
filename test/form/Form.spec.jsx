@@ -440,7 +440,7 @@ describe('Form', function () {
   it('runs handleUnmappedErrors in case no correspoding field was found', async function () {
     const handleUnmappedErrors = sinon.stub()
 
-    const otherPros = {
+    const otherProps = {
       handleUnmappedErrors,
       externalErrors: Immutable.fromJS({
         firstName: 'first name server error',
@@ -452,7 +452,7 @@ describe('Form', function () {
     const value2 = Immutable.fromJS({ firstName: 'firstname' })
 
     const dom = TestUtils.renderIntoDocument(
-      <PropsSetter name="test" value={value1} component={Form} {...otherPros}>
+      <PropsSetter name="test" value={value1} component={Form} {...otherProps}>
         <TestField name="firstName" className="firstName" />
         <ServerErrorMessage name="firstName" />
       </PropsSetter>
@@ -496,7 +496,7 @@ describe('Form', function () {
     const onError = sinon.stub()
 
     // server side error path
-    const otherPros = {
+    const otherProps = {
       onError,
       externalErrors: Immutable.fromJS({
         firstNameServer: 'first name server error'
@@ -506,7 +506,7 @@ describe('Form', function () {
     const value1 = Immutable.fromJS({ firstName: 'firstname1' })
 
     const dom = TestUtils.renderIntoDocument(
-      <PropsSetter name="test" value={value1} component={Form} {...otherPros}>
+      <PropsSetter name="test" value={value1} component={Form} {...otherProps}>
         <TestField name="firstName" className="firstName" />
         <ServerErrorMessage name="firstName" />
       </PropsSetter>
