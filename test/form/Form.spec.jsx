@@ -467,7 +467,7 @@ describe('Form', function () {
     expect(handleUnmappedErrors, 'was called once')
   })
 
-  it.only('calls onError function in case of client side errors', async function () {
+  it('calls onError function in case of client side errors', async function () {
     const onError = sinon.stub()
 
     const validate = (value) => Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})
@@ -478,7 +478,7 @@ describe('Form', function () {
     await Bluebird.delay(100)
 
     expect(dom, 'to contain', <div>required</div>)
-    
+
     expect(onError, 'to have calls satisfying', () => {
       // after changine value in form 
       onError(Immutable.fromJS({
@@ -488,7 +488,7 @@ describe('Form', function () {
       // after submit
       onError(Immutable.fromJS({
         firstName: 'required'
-      }))
+      }), true)
     })
   })
 
@@ -519,6 +519,6 @@ describe('Form', function () {
 
     expect(onError, 'to have calls satisfying', () => onError(Immutable.fromJS({
       firstNameServer: 'first name server error'
-    })))
+    }), true))
   })
 })

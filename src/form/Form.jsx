@@ -139,13 +139,13 @@ export default class Form extends React.Component {
         },
         () => {
           this.handleUnmappedServerErrors(serverErrors)
-          this.props.onError(nextProps.externalErrors)
+          this.props.onError(nextProps.externalErrors, true)
         }
       )
     } else {
       this.setState(serverErrors, () => {
         this.handleUnmappedServerErrors(serverErrors)
-        this.props.onError(nextProps.externalErrors)
+        this.props.onError(nextProps.externalErrors, true)
       })
     }
   }
@@ -295,7 +295,7 @@ export default class Form extends React.Component {
 
         validationResult => {
           if (containsError(validationResult)) {
-            this.props.onError(validationResult)
+            this.props.onError(validationResult, true)
             this.setState({errors: validationResult, triedToSubmit: true})
           } else {
             this.setState({errors: new Immutable.Map()})
