@@ -1,7 +1,7 @@
 {
   "name": "@epages/react-components",
   "description": "A zoo of useful React components.",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "scripts": {
     "start": "node ./webpack.devserver.js",
     "test": "jest",
@@ -60,6 +60,7 @@
     "prop-types": "15.6.0",
     "react": "16.4.0",
     "react-dom": "16.4.0",
+    "react-immutable-proptypes": "2.1.0",
     "react-router": "3.2.1",
     "react-test-renderer": "16.4.0",
     "react-testutils-additions": "16.0.0",
@@ -88,5 +89,8 @@
     ],
     "cacheDirectory": "<rootDir>/.cache/jest"
   },
-  "false": {}
+  "false": {},
+  "dependencies": {
+    "immutablediff": "0.4.4"
+  }
 }
