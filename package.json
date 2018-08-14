@@ -22,8 +22,8 @@
   "main": "build/index.js",
   "peerDependencies": {
     "classnames": "^2.2.5",
-    "color": "^2.0.0",
-    "hoist-non-react-statics": "^2.3.1",
+    "color": "^3.0.0",
+    "hoist-non-react-statics": "^3.0.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "immutable": "^3.8.2"
@@ -38,7 +38,7 @@
     "babel-preset-stage-1": "6.24.1",
     "bluebird": "3.5.1",
     "classnames": "2.2.6",
-    "color": "2.0.0",
+    "color": "3.0.0",
     "eslint": "5.3.0",
     "eslint-config-standard": "11.0.0",
     "eslint-config-standard-react": "6.0.0",
