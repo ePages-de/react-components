@@ -1,0 +1,46 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.11.3
+
+    working_directory: ~/react-components
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: npm-{{ checksum "package.json" }}
+
+      - run:
+          name: Install dependencies
+          command: npm install --no-save
+
+      - save_cache:
+          key: npm-{{ checksum "package.json" }}
+          paths:
+            - ~/.npm
+            - ~/react-components/node_modules
+
+      - run:
+          name: Run linters
+          command: npm run lint
+
+      - run:
+          name: Run tests
+          command: npm run test -- --maxWorkers=1 --coverage
+
+      - run:
+          name: Check build
+          command: npm run build
+
+      - run:
+          name: Upload coverage reports
+          command: |
+            bash <(curl -s https://codecov.io/bash) \
+              -f coverage/lcov.info \
+              -C $CIRCLE_SHA1
+
+      - store_artifacts:
+          path: ~/react-components/coverage
+          destination: coverage
