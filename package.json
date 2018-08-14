@@ -63,7 +63,7 @@
     "react-router": "3.2.1",
     "react-test-renderer": "16.4.2",
     "react-testutils-additions": "16.0.0",
-    "sinon": "4.0.1",
+    "sinon": "6.1.5",
     "unexpected": "10.38.0",
     "unexpected-immutable": "0.2.6",
     "unexpected-react": "5.0.1",
