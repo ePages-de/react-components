@@ -4,6 +4,7 @@
 const path = require('path')
 
 module.exports = {
+  mode: process.env.NODE_ENV,
   context: path.resolve('./src'),
   entry: [
     '../public/index.html',

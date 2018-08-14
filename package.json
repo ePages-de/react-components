@@ -3,7 +3,7 @@
   "description": "A zoo of useful React components.",
   "version": "0.5.0",
   "scripts": {
-    "start": "node ./webpack.devserver.js",
+    "start": "NODE_ENV=development node ./webpack.devserver.js",
     "test": "jest",
     "build": "sh -c \"rm -rf build/ && NODE_ENV=production babel src/ --out-dir build/\"",
     "lint": "import-sort -l {src,test,public}/**/*.{js,jsx} && eslint --ext js,jsx *.js src/ test/ public/",
@@ -68,8 +68,9 @@
     "unexpected-immutable": "0.2.6",
     "unexpected-react": "5.0.1",
     "unexpected-sinon": "10.10.1",
-    "webpack": "3.6.0",
-    "webpack-dev-server": "2.9.1"
+    "webpack": "4.16.5",
+    "webpack-cli": "3.1.0",
+    "webpack-dev-server": "3.1.5"
   },
   "importSort": {
     ".js, .jsx": {
