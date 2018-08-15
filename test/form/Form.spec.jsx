@@ -480,7 +480,7 @@ describe('Form', function () {
     expect(dom, 'to contain', <div>required</div>)
 
     expect(onError, 'to have calls satisfying', () => {
-      // after changine value in form 
+      // after changing value in form
       onError(Immutable.fromJS({
         firstName: 'required'
       }), false)
