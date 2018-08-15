@@ -334,6 +334,7 @@ describe('Form', function () {
   it('renders new value if props change', function () {
     const value1 = Immutable.fromJS({name: 'a'})
     const value2 = Immutable.fromJS({name: 'c'})
+
     const dom = TestUtils.renderIntoDocument(
       <PropsSetter name="test" value={value1} component={Form}>
         <TestField name="name" />
@@ -344,7 +345,7 @@ describe('Form', function () {
     expect(nameField.value, 'to equal', 'a')
     TestUtils.Simulate.change(nameField, {target: {value: 'b'}})
     expect(nameField.value, 'to equal', 'b')
-    dom.setProps({value: value2})
+    dom.setProps({ value: value2 })
     expect(nameField.value, 'to equal', 'c')
   })
 
@@ -439,7 +440,7 @@ describe('Form', function () {
   it('runs handleUnmappedErrors in case no correspoding field was found', async function () {
     const handleUnmappedErrors = sinon.stub()
 
-    const otherPros = {
+    const otherProps = {
       handleUnmappedErrors,
       externalErrors: Immutable.fromJS({
         firstName: 'first name server error',
@@ -451,7 +452,7 @@ describe('Form', function () {
     const value2 = Immutable.fromJS({ firstName: 'firstname' })
 
     const dom = TestUtils.renderIntoDocument(
-      <PropsSetter name="test" value={value1} component={Form} {...otherPros}>
+      <PropsSetter name="test" value={value1} component={Form} {...otherProps}>
         <TestField name="firstName" className="firstName" />
         <ServerErrorMessage name="firstName" />
       </PropsSetter>
@@ -464,5 +465,60 @@ describe('Form', function () {
 
     expect(dom, 'to contain', <div>first name server error</div>)
     expect(handleUnmappedErrors, 'was called once')
+  })
+
+  it('calls onError function in case of client side errors', async function () {
+    const onError = sinon.stub()
+
+    const validate = (value) => Immutable.fromJS({firstName: !value.get('firstName') ? 'required' : null})
+    const { dom, form, firstNameField } = render({ validate, onError })
+
+    TestUtils.Simulate.change(firstNameField, { target: { value: '' } })
+    TestUtils.Simulate.submit(form)
+    await Bluebird.delay(100)
+
+    expect(dom, 'to contain', <div>required</div>)
+
+    expect(onError, 'to have calls satisfying', () => {
+      // after changine value in form 
+      onError(Immutable.fromJS({
+        firstName: 'required'
+      }), false)
+
+      // after submit
+      onError(Immutable.fromJS({
+        firstName: 'required'
+      }), true)
+    })
+  })
+
+  it('calls onError function in case of server side errors', async function () {
+    const onError = sinon.stub()
+
+    // server side error path
+    const otherProps = {
+      onError,
+      externalErrors: Immutable.fromJS({
+        firstNameServer: 'first name server error'
+      })
+    }
+
+    const value1 = Immutable.fromJS({ firstName: 'firstname1' })
+
+    const dom = TestUtils.renderIntoDocument(
+      <PropsSetter name="test" value={value1} component={Form} {...otherProps}>
+        <TestField name="firstName" className="firstName" />
+        <ServerErrorMessage name="firstName" />
+      </PropsSetter>
+    )
+
+    // just to toggle component will receive new props
+    dom.setProps({ value: value1 })
+
+    await Bluebird.delay(10)
+
+    expect(onError, 'to have calls satisfying', () => onError(Immutable.fromJS({
+      firstNameServer: 'first name server error'
+    }), true))
   })
 })
