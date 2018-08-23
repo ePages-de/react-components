@@ -163,8 +163,16 @@ export class SmartInputFieldRaw extends React.Component {
     this.getSuggestions(text, this.props.value)
   }
 
+  onChange = (newValue, ...args) => {
+    const { onSelectionChange }= this.props
+    const lastAddedElement = newValue.last()
+
+    this.props.onChange(newValue, ...args)
+    onSelectionChange && onSelectionChange(lastAddedElement, ...args)
+  }
+
   handleKeyDown = (event) => {
-    const {value, onChange, convertTextToValue, convertSuggestionToValue, strict, hideValues} = this.props
+    const {value, convertTextToValue, convertSuggestionToValue, strict, hideValues} = this.props
     const {text, suggestions, activeSuggestionIndex} = this.state
 
     switch (event.keyCode) {
@@ -183,7 +191,7 @@ export class SmartInputFieldRaw extends React.Component {
           if (nextValue) {
             // update value and reset entered text and suggestion list
             const newValue = value.concat([nextValue])
-            onChange(newValue)
+            this.onChange(newValue)
             this.resetText()
             this.getSuggestions('', newValue)
           }
@@ -203,7 +211,7 @@ export class SmartInputFieldRaw extends React.Component {
         // if text is empty, then drop the last value from the list
         if (!hideValues && text.length === 0 && value.count() > 0) {
           const newValue = value.slice(0, value.count() - 1)
-          onChange(newValue)
+          this.onChange(newValue)
           this.resetText()
           this.getSuggestions('', newValue)
         }
@@ -257,18 +265,18 @@ export class SmartInputFieldRaw extends React.Component {
     return function (event) {
       event.preventDefault()
       const newValue = value.slice(0, index).concat(value.slice(index + 1))
-      onChange(newValue)
+      this.onChange(newValue)
     }
   }
 
   handleClickSuggestion = (suggestion, index) => {
     const self = this
-    const {value, onChange, suggestionDisabled, convertSuggestionToValue} = this.props
+    const {value, suggestionDisabled, convertSuggestionToValue} = this.props
 
     return function () {
       if (!suggestionDisabled(suggestion, index)) {
         const newValue = value.concat([convertSuggestionToValue(suggestion)])
-        onChange(newValue)
+        self.onChange(newValue)
         self.resetText()
         self.getSuggestions('', newValue)
       }
