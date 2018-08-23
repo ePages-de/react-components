@@ -164,7 +164,7 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   onChange = (newValue, ...args) => {
-    const { onSelectionChange }= this.props
+    const { onSelectionChange } = this.props
     const lastAddedElement = newValue.last()
 
     this.props.onChange(newValue, ...args)
@@ -260,12 +260,13 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   handleClickValueRemove = (index) => {
-    const {value, onChange} = this.props
+    const self = this
+    const {value} = this.props
 
     return function (event) {
       event.preventDefault()
       const newValue = value.slice(0, index).concat(value.slice(index + 1))
-      this.onChange(newValue)
+      self.onChange(newValue)
     }
   }
 
