@@ -19,6 +19,8 @@ export class SmartInputFieldRaw extends React.Component {
     value: PropTypes.any.isRequired,
     // value change handler
     onChange: PropTypes.func.isRequired,
+    // function to receive last added value
+    onSelectionChange: PropTypes.func,
     // function to generate suggestion list (must return a promise)
     getSuggestions: PropTypes.func,
     // decision function, whether a given suggestion can be choosen
@@ -67,6 +69,7 @@ export class SmartInputFieldRaw extends React.Component {
       </div>
     ),
     renderSuggestion: (suggestion) => suggestion.toString(),
+    onSelectionChange: (lastAddedElement) => null,
     strict: false,
     autoFocus: false,
     hideValues: false
@@ -164,11 +167,11 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   onChange = (newValue, ...args) => {
-    const { onSelectionChange } = this.props
+    const { onChange, onSelectionChange } = this.props
     const lastAddedElement = newValue.last()
 
-    this.props.onChange(newValue, ...args)
-    onSelectionChange && onSelectionChange(lastAddedElement, ...args)
+    onChange(newValue, ...args)
+    onSelectionChange(lastAddedElement, ...args)
   }
 
   handleKeyDown = (event) => {
