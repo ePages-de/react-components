@@ -1,4 +1,3 @@
-import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -133,7 +132,13 @@ export class SmartInputFieldRaw extends React.Component {
     )
 
     return (
-      <div className={classnames(styles.base, {[styles.baseFocused]: focused, [styles.baseWithSuggestions]: suggestionsVisible})} onMouseDown={this.handleMouseDownContainer}>
+      <div
+        className={[
+          styles.base,
+          focused && styles.baseFocused,
+          suggestionsVisible && styles.baseWithSuggestions
+        ].filter(Boolean).join(' ')}
+        onMouseDown={this.handleMouseDownContainer}>
         <div className={styles.input}>
           {values.concat(inputField)}
         </div>
@@ -144,7 +149,11 @@ export class SmartInputFieldRaw extends React.Component {
                 key={index}
                 onClick={this.handleClickSuggestion(suggestion, index)}
                 onMouseEnter={this.handleMouseEnterSuggestion(suggestion, index)}
-                className={classnames(styles.suggestion, {[styles.suggestionActive]: activeSuggestionIndex === index, [styles.suggestionDisabled]: suggestionDisabled(suggestion, index)})}
+                className={[
+                  styles.suggestion,
+                  activeSuggestionIndex === index && styles.suggestionActive,
+                  suggestionDisabled(suggestion, index) && styles.suggestionDisabled
+                ].filter(Boolean).join(' ')}
                 ref={`suggestion-${index}`}>
                 {renderSuggestion(suggestion)}
               </div>

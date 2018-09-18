@@ -1,4 +1,3 @@
-import classnames from 'classnames'
 import Immutable from 'immutable'
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
@@ -25,14 +24,15 @@ function render ({value = defaultValue} = {}) {
       itemCount={value.count()}>
       {(item) =>
         <div
-          className={classnames('list-item', {
-            'source-yes': item.get('__isSource'),
-            'source-no': !item.get('__isSource'),
-            'target-yes': item.get('__isTarget'),
-            'target-no': !item.get('__isTarget'),
-            'dragging-yes': item.get('__isDragging'),
-            'dragging-no': !item.get('__isDragging')
-          })}>
+          className={[
+            'list-item',
+            item.get('__isSource') && 'source-yes',
+            !item.get('__isSource') && 'source-no',
+            item.get('__isTarget') && 'target-yes',
+            !item.get('__isTarget') && 'target-no',
+            item.get('__isDragging') && 'dragging-yes',
+            !item.get('__isDragging') && 'dragging-no'
+          ].filter(Boolean).join(' ')}>
           {item.get('name')}
         </div>
       }

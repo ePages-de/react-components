@@ -1,7 +1,7 @@
 {
   "name": "@epages/react-components",
   "description": "A zoo of useful React components.",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "scripts": {
     "start": "NODE_ENV=development node ./webpack.devserver.js",
     "test": "jest",
@@ -21,7 +21,6 @@
   "license": "MIT",
   "main": "build/index.js",
   "peerDependencies": {
-    "classnames": "^2.2.5",
     "color": "^3.0.0",
     "hoist-non-react-statics": "^3.0.1",
     "prop-types": "^15.6.0",
@@ -37,7 +36,6 @@
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-1": "6.24.1",
     "bluebird": "3.5.1",
-    "classnames": "2.2.6",
     "color": "3.0.0",
     "create-react-class": "15.6.3",
     "eslint": "5.3.0",
