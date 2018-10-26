@@ -9,29 +9,44 @@ export class InputFieldRaw extends React.Component {
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
     scopedName: PropTypes.string,
-    type: PropTypes.string
+    type: PropTypes.string,
+    forwardedRef: PropTypes.node
   }
 
   static defaultProps = {
     type: 'text'
   }
 
-  render () {
-    const {value, onChange, name, scopedName, type, ...other} = this.props // eslint-disable-line no-unused-vars
-    return <input
-      autoComplete="off"
-      autoCorrect="off"
-      autoCapitalize="off"
-      spellCheck="false"
-      {...other}
-      name={scopedName}
-      type={type}
-      value={value}
-      onChange={(event) => onChange(event.target.value)}
-      ref={(node) => { this.input = node }} />
-  }
+  render() {
+    const {
+      value,
+      onChange,
+      name,
+      scopedName,
+      type,
+      forwardedRef,
+      ...other
+    } = this.props
 
-  focus = () => this.input && this.input.focus()
+    return (
+      <input
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
+        {...other}
+        name={scopedName}
+        type={type}
+        value={value}
+        onChange={event => onChange(event.target.value)}
+        ref={forwardedRef}
+      />
+    )
+  }
 }
 
-export default formField()(InputFieldRaw)
+const InputFormField = formField()(InputFieldRaw)
+
+export default React.forwardRef((props, ref) => (
+  <InputFormField {...props} forwardedRef={ref} />
+))

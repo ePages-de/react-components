@@ -1,47 +1,19 @@
 import React from 'react'
-import TestUtils from 'react-testutils-additions'
-import sinon from 'sinon'
-import expect from 'unexpected'
-
 import withClassName from '../src/withClassName'
+import { render } from 'react-testing-library'
 
-function render ({className, hoistedMethods = []} = {}) {
-  const focusSpy = sinon.spy()
+const TestComponent = React.forwardRef((_props, ref) => (
+  <input data-testid="test" ref={ref} />
+))
 
-  class TestComponent extends React.Component {
-    render () {
-      return <div {...this.props}>TestComponent</div>
-    }
+it('renders and passes ref', function() {
+  const className = 'foobar'
+  const TestComponentWithClassName = withClassName(className)(TestComponent)
+  const ref = React.createRef()
+  const { getByTestId } = render(<TestComponentWithClassName ref={ref} />)
 
-    focus = () => {
-      focusSpy()
-    }
-  }
-  const TestComponentWithClassName = withClassName(className, hoistedMethods)(TestComponent)
+  const input = getByTestId('test')
 
-  const dom = TestUtils.renderIntoDocument(
-    <TestComponentWithClassName />
-  )
-
-  return {focus: focusSpy, dom}
-}
-
-describe('withClassName', function () {
-  it('renders', function () {
-    const {dom} = render({className: 'foobar'})
-
-    expect(dom, 'to have rendered',
-      <div className="foobar">TestComponent</div>
-    )
-  })
-
-  it('hoists instance methods', function () {
-    const {dom: dom1} = render({hoistedMethods: []})
-    expect(dom1.focus, 'to be undefined')
-
-    const {dom: dom2, focus} = render({hoistedMethods: ['focus']})
-    expect(focus, 'was not called')
-    dom2.focus()
-    expect(focus, 'was called once')
-  })
+  expect(input).toBeInTheDocument()
+  expect(ref.current).toBe(input)
 })

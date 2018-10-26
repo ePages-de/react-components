@@ -1,8 +1,10 @@
 // mute some warnings and make everything else an error
-console.error = function (message) { // eslint-disable-line no-console
+console.error = function(message) {
+  // eslint-disable-line no-console
   throw new Error(message)
 }
-console.warn = function (message) { // eslint-disable-line no-console
+console.warn = function(message) {
+  // eslint-disable-line no-console
   throw new Error(message)
 }
 process.on('unhandledRejection', error => {
@@ -10,7 +12,7 @@ process.on('unhandledRejection', error => {
 })
 // mock unavailable window stuff
 if (typeof window !== 'undefined') {
-  window.requestAnimationFrame = function (fn) {
+  window.requestAnimationFrame = function(fn) {
     window.setTimeout(fn, 1000 / 60)
   }
 }

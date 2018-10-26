@@ -39,10 +39,13 @@
     "color": "3.0.0",
     "create-react-class": "15.6.3",
     "eslint": "5.3.0",
+    "eslint-config-prettier": "3.1.0",
+    "eslint-config-prettier-standard": "2.0.0",
     "eslint-config-standard": "11.0.0",
     "eslint-config-standard-react": "6.0.0",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-node": "7.0.1",
+    "eslint-plugin-prettier": "3.0.0",
     "eslint-plugin-promise": "3.8.0",
     "eslint-plugin-react": "7.11.0",
     "eslint-plugin-standard": "3.1.0",
@@ -55,6 +58,7 @@
     "import-sort-style-choffmeister": "1.0.0",
     "jest": "23.5.0",
     "json-loader": "0.5.7",
+    "prettier": "1.14.3",
     "prop-types": "15.6.2",
     "react": "16.4.2",
     "react-dom": "16.4.2",
@@ -78,8 +82,9 @@
   },
   "jest": {
     "setupFiles": [
-      "./test/setup.js"
+      "<rootDir>/test/setup.js"
     ],
+    "setupTestFrameworkScriptFile": "<rootDir>/test/frameworkSetup.js",
     "coveragePathIgnorePatterns": [
       "<rootDir>/build/",
       "<rootDir>/node_modules/",
@@ -89,6 +94,8 @@
   },
   "false": {},
   "dependencies": {
-    "immutablediff": "0.4.4"
+    "immutablediff": "0.4.4",
+    "jest-dom": "2.1.0",
+    "react-testing-library": "5.2.3"
   }
 }

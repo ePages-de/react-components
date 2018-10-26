@@ -3,10 +3,12 @@ import React from 'react'
 
 import BaseField from './BaseField'
 
-export default function formField () {
-  return function (Component) {
+export default function formField() {
+  return function(Component) {
     class FormField extends React.Component {
-      static displayName = `FormField(${Component.displayName || Component.name || 'Component'})`
+      static displayName = `FormField(${Component.displayName ||
+        Component.name ||
+        'Component'})`
 
       static contextTypes = {
         ...BaseField.contextTypes
@@ -20,26 +22,27 @@ export default function formField () {
         ...BaseField.defaultProps
       }
 
-      render () {
-        const {formValueScope} = this.context
-        const {name, ...other} = this.props
+      render() {
+        const { formValueScope } = this.context
+        const { name, forwardedRef, ...other } = this.props
 
-        return <Component
-          {...other}
-          value={formValueScope.getValue(name)}
-          onChange={(newValue) => formValueScope.setValue(name, newValue)}
-          name={name}
-          scopedName={formValueScope.name + '.' + name}
-          ref={this.hoistMethods} />
-      }
-
-      hoistMethods = (wrappedComponent) => {
-        if (wrappedComponent) {
-          this.focus = wrappedComponent.focus
-        }
+        return (
+          <Component
+            {...other}
+            value={formValueScope.getValue(name)}
+            onChange={newValue => formValueScope.setValue(name, newValue)}
+            name={name}
+            scopedName={formValueScope.name + '.' + name}
+            ref={forwardedRef}
+          />
+        )
       }
     }
 
-    return hoistNonReactStatics(FormField, Component)
+    const HoistedFormField = hoistNonReactStatics(FormField, Component)
+
+    return React.forwardRef((props, ref) => (
+      <HoistedFormField {...props} forwardedRef={ref} />
+    ))
   }
 }
