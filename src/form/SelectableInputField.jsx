@@ -24,35 +24,51 @@ class SelectableInputFieldRaw extends React.Component {
     type: 'text'
   }
 
-  render () {
-    const {formValueScope} = this.context
+  render() {
+    const { formValueScope } = this.context
     // eslint-disable-next-line no-unused-vars
-    const {value, onChange, name, scopedName, type, title, label, placeholder, ...other} = this.props
+    const {
+      value,
+      onChange,
+      name,
+      scopedName,
+      type,
+      title,
+      label,
+      placeholder,
+      ...other
+    } = this.props
     const checkboxName = `${name}Selected`
     const scopedCheckboxName = `${scopedName}Selected`
 
-    return <div {...other}>
-      <label title={title}>
-        <input
-          name={scopedCheckboxName}
-          type="checkbox"
-          checked={formValueScope.getValue(checkboxName)}
-          onChange={(event) => {
-            formValueScope.setValue(checkboxName, event.target.checked)
-            if (event.target.checked) {
-              // give time for the input field to be enabled
-              window.setTimeout(() => this.inputField.focus(), 0)
-            }
-          }} />
-        {label}
-      </label>
-      <InputField
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        disabled={!this.context.formValueScope.getValue(checkboxName)}
-        ref={(component) => { this.inputField = component }} />
-    </div>
+    return (
+      <div {...other}>
+        <label title={title}>
+          <input
+            name={scopedCheckboxName}
+            type="checkbox"
+            checked={formValueScope.getValue(checkboxName)}
+            onChange={event => {
+              formValueScope.setValue(checkboxName, event.target.checked)
+              if (event.target.checked) {
+                // give time for the input field to be enabled
+                window.setTimeout(() => this.inputField.focus(), 0)
+              }
+            }}
+          />
+          {label}
+        </label>
+        <InputField
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          disabled={!this.context.formValueScope.getValue(checkboxName)}
+          ref={component => {
+            this.inputField = component
+          }}
+        />
+      </div>
+    )
   }
 }
 

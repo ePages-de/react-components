@@ -20,22 +20,38 @@ export class RangeFieldRaw extends React.Component {
     multiplier: 1
   }
 
-  render () {
-    const {value, onChange, name, scopedName, min, max, step, multiplier, ...other} = this.props // eslint-disable-line no-unused-vars
-    return <input {...other}
-      name={scopedName}
-      type="range"
-      min={min}
-      max={max}
-      step={step}
-      value={this.transformValue(value)}
-      onChange={(event) => onChange(this.transformValueInverse(event.target.value))}
-      onInput={this.onChange} />
+  render() {
+    const {
+      value,
+      onChange,
+      name,
+      scopedName,
+      min,
+      max,
+      step,
+      multiplier,
+      ...other
+    } = this.props // eslint-disable-line no-unused-vars
+    return (
+      <input
+        {...other}
+        name={scopedName}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={this.transformValue(value)}
+        onChange={event =>
+          onChange(this.transformValueInverse(event.target.value))
+        }
+        onInput={this.onChange}
+      />
+    )
   }
 
-  transformValue = (value) => value * this.props.multiplier
+  transformValue = value => value * this.props.multiplier
 
-  transformValueInverse = (value) => value / this.props.multiplier
+  transformValueInverse = value => value / this.props.multiplier
 }
 
 export default formField()(RangeFieldRaw)

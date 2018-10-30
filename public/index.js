@@ -2,7 +2,20 @@ import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import {CheckboxField, ChoiceField, ColorpickerField, DropDownField, ErrorMessage, Form, InputField, RadioButtonField, SelectableInputField, SmartInputField, TextareaField, withClassName} from '../src/index'
+import {
+  CheckboxField,
+  ChoiceField,
+  ColorpickerField,
+  DropDownField,
+  ErrorMessage,
+  Form,
+  InputField,
+  RadioButtonField,
+  SelectableInputField,
+  SmartInputField,
+  TextareaField,
+  withClassName
+} from '../src/index'
 
 const initialValue = Immutable.fromJS({
   name: 'name',
@@ -19,33 +32,40 @@ const initialValue = Immutable.fromJS({
 })
 
 const sizes = [
-  {value: 's', label: 'Small'},
-  {value: 'm', label: 'Medium'},
-  {value: 'l', label: 'Large'}
+  { value: 's', label: 'Small' },
+  { value: 'm', label: 'Medium' },
+  { value: 'l', label: 'Large' }
 ]
 
 const cuts = [
-  {value: 'wide', label: 'Wide'},
-  {value: 'loose', label: 'Loose'},
-  {value: 'fit', label: 'Fit'}
+  { value: 'wide', label: 'Wide' },
+  { value: 'loose', label: 'Loose' },
+  { value: 'fit', label: 'Fit' }
 ]
 
-const getTagSuggestions = (text) => Promise.resolve(text.length > 0 ? [text + '1', text + '2'] : null)
+const getTagSuggestions = text =>
+  Promise.resolve(text.length > 0 ? [text + '1', text + '2'] : null)
 const BlueInputField = withClassName('blue', ['focus'])(InputField)
 
 class App extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
-    this.state = {formValue: initialValue}
+    this.state = { formValue: initialValue }
   }
 
-  render () {
+  render() {
     return (
       <div>
         <h1>Form</h1>
         <div>
-          <Form name="form" value={initialValue} onSubmit={this.onSubmit} onChange={this.debugOnChange} validate={this.validate} validateWaitMs={300}>
+          <Form
+            name="form"
+            value={initialValue}
+            onSubmit={this.onSubmit}
+            onChange={this.debugOnChange}
+            validate={this.validate}
+            validateWaitMs={300}>
             <div>
               <div>
                 <h2>BlueInputField</h2>
@@ -83,11 +103,22 @@ class App extends React.Component {
               </div>
               <div>
                 <h2>SelectableInputField</h2>
-                <SelectableInputField name="facebook" type="text" title="Selector" label="SelectorLabel" placeholder="type here" />
+                <SelectableInputField
+                  name="facebook"
+                  type="text"
+                  title="Selector"
+                  label="SelectorLabel"
+                  placeholder="type here"
+                />
               </div>
               <div>
                 <h2>SmartInputField</h2>
-                <SmartInputField name="tags" className="smart-input" placeholderText="type here" getSuggestions={getTagSuggestions} />
+                <SmartInputField
+                  name="tags"
+                  className="smart-input"
+                  placeholderText="type here"
+                  getSuggestions={getTagSuggestions}
+                />
               </div>
               <div>
                 <h2>ColorpickerField</h2>
@@ -96,24 +127,22 @@ class App extends React.Component {
             </div>
             <button type="submit">Submit</button>
           </Form>
-          <pre>
-            {JSON.stringify(this.state.formValue.toJS(), 0, 2)}
-          </pre>
+          <pre>{JSON.stringify(this.state.formValue.toJS(), 0, 2)}</pre>
         </div>
       </div>
     )
   }
 
-  debugOnChange = (newValue) => {
-    this.setState({formValue: newValue})
+  debugOnChange = newValue => {
+    this.setState({ formValue: newValue })
   }
 
-  onSubmit = (value) => {
+  onSubmit = value => {
     console.log(value.toJS()) // eslint-disable-line no-console
   }
 
-  validate = (value) => {
-    return Immutable.fromJS({name: !value.get('name') ? 'required' : null})
+  validate = value => {
+    return Immutable.fromJS({ name: !value.get('name') ? 'required' : null })
   }
 }
 

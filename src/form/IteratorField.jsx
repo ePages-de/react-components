@@ -20,18 +20,29 @@ class IteratorFieldRaw extends React.Component {
     skip: 0
   }
 
-  render () {
-    const {value, onChange, name, scopedName, skip, take, children, ...other} = this.props // eslint-disable-line no-unused-vars
+  render() {
+    const {
+      value,
+      onChange,
+      name,
+      scopedName,
+      skip,
+      take,
+      children,
+      ...other
+    } = this.props // eslint-disable-line no-unused-vars
     const items = value.skip(skip).take(take || value.count())
 
     return (
       <FormValueScope name={name}>
         <div {...other}>
-          {items.map((item, index) =>
+          {items.map((item, index) => (
             <FormValueScope key={index + skip} name={index + skip}>
-              {typeof children === 'function' ? children(item, index + skip) : children}
+              {typeof children === 'function'
+                ? children(item, index + skip)
+                : children}
             </FormValueScope>
-          )}
+          ))}
         </div>
       </FormValueScope>
     )

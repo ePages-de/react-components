@@ -3,9 +3,11 @@ import React from 'react'
 
 import formField from './formField'
 
-function stopPropagation (event) {
+function stopPropagation(event) {
   event.stopPropagation()
 }
+
+/* eslint-disable react/no-string-refs */
 
 /**
  * Renders a smart input that allows to choose zero or more values (for example a tag list).
@@ -57,15 +59,15 @@ export class SmartInputFieldRaw extends React.Component {
 
   static defaultProps = {
     suggestionDisabled: (suggestion, index) => false,
-    convertTextToValue: (text) => text,
-    convertSuggestionToValue: (suggestion) => suggestion,
+    convertTextToValue: text => text,
+    convertSuggestionToValue: suggestion => suggestion,
     renderValue: (value, handleRemove) => (
       <div>
         <div onClick={handleRemove}>X</div>
         {value.toString()}
       </div>
     ),
-    renderSuggestion: (suggestion) => suggestion.toString(),
+    renderSuggestion: suggestion => suggestion.toString(),
     strict: false,
     autoFocus: false,
     hideValues: false
@@ -85,25 +87,35 @@ export class SmartInputFieldRaw extends React.Component {
     }
   }
 
-  render () {
-    const {value, suggestionDisabled, autoFocus, renderValue, renderSuggestion, hideValues, placeholderText, className} = this.props
-    const {text, focused, suggestions, activeSuggestionIndex} = this.state
+  render() {
+    const {
+      value,
+      suggestionDisabled,
+      autoFocus,
+      renderValue,
+      renderSuggestion,
+      hideValues,
+      placeholderText,
+      className
+    } = this.props
+    const { text, focused, suggestions, activeSuggestionIndex } = this.state
     const suggestionsVisible = suggestions && suggestions.length > 0
 
-    const styles = typeof className === 'string'
-      ? {
-        base: className,
-        baseFocused: className + '-focused',
-        baseWithSuggestions: className + '-with-suggestions',
-        input: className + '-input',
-        inputValue: className + '-input-value',
-        inputText: className + '-input-tet',
-        suggestions: className + '-suggestions',
-        suggestion: className + '-suggestion',
-        suggestionActive: className + '-suggestion-active',
-        suggestionDisabled: className + '-suggestion-disabled'
-      }
-      : this.props.className
+    const styles =
+      typeof className === 'string'
+        ? {
+            base: className,
+            baseFocused: className + '-focused',
+            baseWithSuggestions: className + '-with-suggestions',
+            input: className + '-input',
+            inputValue: className + '-input-value',
+            inputText: className + '-input-tet',
+            suggestions: className + '-suggestions',
+            suggestion: className + '-suggestion',
+            suggestionActive: className + '-suggestion-active',
+            suggestionDisabled: className + '-suggestion-disabled'
+          }
+        : this.props.className
 
     const inputField = (
       <input
@@ -122,14 +134,22 @@ export class SmartInputFieldRaw extends React.Component {
         placeholder={placeholderText}
         className={styles.inputText}
         key="inputField"
-        ref={(node) => { this.input = node }} />
+        ref={node => {
+          this.input = node
+        }}
+      />
     )
 
-    const values = hideValues ? [] : value.map((value, index) =>
-      <div key={index} onMouseDown={stopPropagation} className={styles.inputValue}>
-        {renderValue(value, this.handleClickValueRemove(index))}
-      </div>
-    )
+    const values = hideValues
+      ? []
+      : value.map((value, index) => (
+          <div
+            key={index}
+            onMouseDown={stopPropagation}
+            className={styles.inputValue}>
+            {renderValue(value, this.handleClickValueRemove(index))}
+          </div>
+        ))
 
     return (
       <div
@@ -137,44 +157,57 @@ export class SmartInputFieldRaw extends React.Component {
           styles.base,
           focused && styles.baseFocused,
           suggestionsVisible && styles.baseWithSuggestions
-        ].filter(Boolean).join(' ')}
+        ]
+          .filter(Boolean)
+          .join(' ')}
         onMouseDown={this.handleMouseDownContainer}>
-        <div className={styles.input}>
-          {values.concat(inputField)}
-        </div>
+        <div className={styles.input}>{values.concat(inputField)}</div>
         {suggestionsVisible && (
           <div className={styles.suggestions} ref="suggestions">
-            {suggestions.map((suggestion, index) =>
+            {suggestions.map((suggestion, index) => (
               <div
                 key={index}
                 onClick={this.handleClickSuggestion(suggestion, index)}
-                onMouseEnter={this.handleMouseEnterSuggestion(suggestion, index)}
+                onMouseEnter={this.handleMouseEnterSuggestion(
+                  suggestion,
+                  index
+                )}
                 className={[
                   styles.suggestion,
                   activeSuggestionIndex === index && styles.suggestionActive,
-                  suggestionDisabled(suggestion, index) && styles.suggestionDisabled
-                ].filter(Boolean).join(' ')}
+                  suggestionDisabled(suggestion, index) &&
+                    styles.suggestionDisabled
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
                 ref={`suggestion-${index}`}>
                 {renderSuggestion(suggestion)}
               </div>
-            )}
+            ))}
           </div>
         )}
       </div>
     )
   }
 
-  handleChange = (event) => {
+  handleChange = event => {
     const text = event.target.value
 
     // update current entered text in state and update suggestion list
-    this.setState({text})
+    this.setState({ text })
     this.getSuggestions(text, this.props.value)
   }
 
-  handleKeyDown = (event) => {
-    const {value, onChange, convertTextToValue, convertSuggestionToValue, strict, hideValues} = this.props
-    const {text, suggestions, activeSuggestionIndex} = this.state
+  handleKeyDown = event => {
+    const {
+      value,
+      onChange,
+      convertTextToValue,
+      convertSuggestionToValue,
+      strict,
+      hideValues
+    } = this.props
+    const { text, suggestions, activeSuggestionIndex } = this.state
 
     switch (event.keyCode) {
       // enter
@@ -183,11 +216,14 @@ export class SmartInputFieldRaw extends React.Component {
         if (typeof activeSuggestionIndex === 'number' || event.target.value) {
           event.preventDefault()
 
-          const nextValue = typeof activeSuggestionIndex === 'number'
-            // use value from suggestion
-            ? convertSuggestionToValue(suggestions[activeSuggestionIndex])
-            // use value from entered text (if non-strict)
-            : (!strict ? convertTextToValue(event.target.value.trim()) : null)
+          const nextValue =
+            typeof activeSuggestionIndex === 'number'
+              ? // use value from suggestion
+                convertSuggestionToValue(suggestions[activeSuggestionIndex])
+              : // use value from entered text (if non-strict)
+                !strict
+                ? convertTextToValue(event.target.value.trim())
+                : null
 
           if (nextValue) {
             // update value and reset entered text and suggestion list
@@ -240,19 +276,19 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   handleFocus = () => {
-    const {value} = this.props
-    const {text} = this.state
+    const { value } = this.props
+    const { text } = this.state
 
-    this.setState({focused: true})
+    this.setState({ focused: true })
     this.getSuggestions(text, value)
   }
 
   handleBlur = () => {
-    this.setState({focused: false})
+    this.setState({ focused: false })
     this.resetText()
   }
 
-  handleMouseDownContainer = (event) => {
+  handleMouseDownContainer = event => {
     event.preventDefault()
 
     // input is visually the whole container, even though the actual HTML input is not spanning the whole container,
@@ -260,10 +296,10 @@ export class SmartInputFieldRaw extends React.Component {
     this.input && this.input.focus()
   }
 
-  handleClickValueRemove = (index) => {
-    const {value, onChange} = this.props
+  handleClickValueRemove = index => {
+    const { value, onChange } = this.props
 
-    return function (event) {
+    return function(event) {
       event.preventDefault()
       const newValue = value.slice(0, index).concat(value.slice(index + 1))
       onChange(newValue)
@@ -272,9 +308,14 @@ export class SmartInputFieldRaw extends React.Component {
 
   handleClickSuggestion = (suggestion, index) => {
     const self = this
-    const {value, onChange, suggestionDisabled, convertSuggestionToValue} = this.props
+    const {
+      value,
+      onChange,
+      suggestionDisabled,
+      convertSuggestionToValue
+    } = this.props
 
-    return function () {
+    return function() {
       if (!suggestionDisabled(suggestion, index)) {
         const newValue = value.concat([convertSuggestionToValue(suggestion)])
         onChange(newValue)
@@ -286,9 +327,9 @@ export class SmartInputFieldRaw extends React.Component {
 
   handleMouseEnterSuggestion = (suggestion, index) => {
     const self = this
-    const {suggestionDisabled} = this.props
+    const { suggestionDisabled } = this.props
 
-    return function () {
+    return function() {
       if (!suggestionDisabled(suggestion, index)) {
         self.selectSuggestion(index)
       }
@@ -304,30 +345,44 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   getSuggestions = (text, value) => {
-    const {getSuggestions, suggestionDisabled, strict} = this.props
+    const { getSuggestions, suggestionDisabled, strict } = this.props
 
     if (getSuggestions) {
-      this.setState({loading: true})
-      getSuggestions(text, value).then((suggestions) => {
-        this.setState({suggestions})
+      this.setState({ loading: true })
+      getSuggestions(text, value)
+        .then(suggestions => {
+          this.setState({ suggestions })
 
-        // if non-strict, then of all non-disabled suggestions pick the first and select it
-        const selection = strict && suggestions && suggestions.map((suggestion, index) => [suggestion, index]).filter(([s, i]) => !suggestionDisabled(s, i))[0]
+          // if non-strict, then of all non-disabled suggestions pick the first and select it
+          const selection =
+            strict &&
+            suggestions &&
+            suggestions
+              .map((suggestion, index) => [suggestion, index])
+              .filter(([s, i]) => !suggestionDisabled(s, i))[0]
 
-        this.selectSuggestion(selection ? selection[1] : null)
-      }).catch(() => {
-        this.setState({loading: false})
-      })
+          this.selectSuggestion(selection ? selection[1] : null)
+        })
+        .catch(() => {
+          this.setState({ loading: false })
+        })
     }
   }
 
   selectPreviousSuggestion = () => {
-    const {suggestionDisabled, strict} = this.props
-    const {suggestions, activeSuggestionIndex} = this.state
+    const { suggestionDisabled, strict } = this.props
+    const { suggestions, activeSuggestionIndex } = this.state
 
     if (typeof activeSuggestionIndex === 'number') {
       // of all non-disabled suggestion pick the next after the current
-      const selection = suggestions && suggestions.map((suggestion, index) => [suggestion, index]).filter(([s, i]) => i < activeSuggestionIndex && !suggestionDisabled(s, i)).reverse()[0]
+      const selection =
+        suggestions &&
+        suggestions
+          .map((suggestion, index) => [suggestion, index])
+          .filter(
+            ([s, i]) => i < activeSuggestionIndex && !suggestionDisabled(s, i)
+          )
+          .reverse()[0]
 
       if (selection) {
         this.selectSuggestion(selection[1])
@@ -340,18 +395,28 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   selectNextSuggestion = () => {
-    const {suggestionDisabled} = this.props
-    const {suggestions, activeSuggestionIndex} = this.state
+    const { suggestionDisabled } = this.props
+    const { suggestions, activeSuggestionIndex } = this.state
 
     if (typeof activeSuggestionIndex === 'number') {
       // of all non-disabled suggestion pick the next before the current
-      const selection = suggestions && suggestions.map((suggestion, index) => [suggestion, index]).filter(([s, i]) => i > activeSuggestionIndex && !suggestionDisabled(s, i))[0]
+      const selection =
+        suggestions &&
+        suggestions
+          .map((suggestion, index) => [suggestion, index])
+          .filter(
+            ([s, i]) => i > activeSuggestionIndex && !suggestionDisabled(s, i)
+          )[0]
 
       if (selection) {
         this.selectSuggestion(selection[1])
       }
     } else {
-      const selection = suggestions && suggestions.map((suggestion, index) => [suggestion, index]).filter(([s, i]) => !suggestionDisabled(s, i))[0]
+      const selection =
+        suggestions &&
+        suggestions
+          .map((suggestion, index) => [suggestion, index])
+          .filter(([s, i]) => !suggestionDisabled(s, i))[0]
 
       if (selection) {
         this.selectSuggestion(selection[1])
@@ -359,8 +424,8 @@ export class SmartInputFieldRaw extends React.Component {
     }
   }
 
-  selectSuggestion = (index) => {
-    this.setState({activeSuggestionIndex: index})
+  selectSuggestion = index => {
+    this.setState({ activeSuggestionIndex: index })
 
     const suggestionsNode = this.refs.suggestions
     const suggestionNode = this.refs[`suggestion-${index}`]
@@ -370,7 +435,8 @@ export class SmartInputFieldRaw extends React.Component {
       const r2 = suggestionNode.getBoundingClientRect()
 
       // check if there is the need for scrolling down
-      if (r1.bottom - 1 < r2.bottom) suggestionsNode.scrollTop += r2.bottom - r1.bottom + 1
+      if (r1.bottom - 1 < r2.bottom)
+        suggestionsNode.scrollTop += r2.bottom - r1.bottom + 1
 
       // check if there is the need for scrolling up
       if (r1.top + 1 > r2.top) suggestionsNode.scrollTop += r2.top - r1.top - 1

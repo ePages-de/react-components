@@ -8,7 +8,10 @@ const WebpackDevServer = require('webpack-dev-server')
 
 const port = 3000
 const config = require('./webpack.config.js')
-config.entry.unshift(`webpack-dev-server/client?http://localhost:${port}/`, 'webpack/hot/dev-server')
+config.entry.unshift(
+  `webpack-dev-server/client?http://localhost:${port}/`,
+  'webpack/hot/dev-server'
+)
 config.plugins.unshift(new webpack.HotModuleReplacementPlugin())
 
 const compiler = webpack(webpackConfig)
@@ -33,7 +36,7 @@ const server = new WebpackDevServer(compiler, {
   }
 })
 
-server.listen(port, (err) => {
+server.listen(port, err => {
   if (err) return console.err(err)
   console.log(`Now listening on http://localhost:${port}`)
 })

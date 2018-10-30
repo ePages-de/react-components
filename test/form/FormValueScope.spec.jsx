@@ -9,7 +9,7 @@ import Form from '../../src/form/Form'
 import FormValueScope from '../../src/form/FormValueScope'
 import TestField from './TestField'
 
-function render ({validate} = {}) {
+function render({ validate } = {}) {
   const initialValue = Immutable.fromJS({
     sub: {
       name: 'first'
@@ -17,7 +17,11 @@ function render ({validate} = {}) {
   })
   const onSubmit = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
-    <Form name="test" value={initialValue} onSubmit={onSubmit} validate={validate}>
+    <Form
+      name="test"
+      value={initialValue}
+      onSubmit={onSubmit}
+      validate={validate}>
       <div>
         <FormValueScope name="sub">
           <div>
@@ -31,14 +35,16 @@ function render ({validate} = {}) {
   const form = TestUtils.findOne(dom, 'form')
   const nameField = TestUtils.findOne(dom, '.name')
 
-  return {initialValue, onSubmit, dom, form, nameField}
+  return { initialValue, onSubmit, dom, form, nameField }
 }
 
-describe('FormValueScope', function () {
-  it('renders', function () {
-    const {dom} = render()
+describe('FormValueScope', function() {
+  it('renders', function() {
+    const { dom } = render()
 
-    expect(dom, 'to have rendered',
+    expect(
+      dom,
+      'to have rendered',
       <form>
         <div>
           <div>
@@ -49,17 +55,20 @@ describe('FormValueScope', function () {
     )
   })
 
-  it('passes through validation', function () {
-    const validate = (value) => Immutable.fromJS({
-      sub: {
-        name: !value.getIn(['sub', 'name']) ? 'required' : null
-      }
-    })
-    const {dom, form, nameField} = render({validate})
+  it('passes through validation', function() {
+    const validate = value =>
+      Immutable.fromJS({
+        sub: {
+          name: !value.getIn(['sub', 'name']) ? 'required' : null
+        }
+      })
+    const { dom, form, nameField } = render({ validate })
 
     TestUtils.Simulate.submit(form)
 
-    expect(dom, 'to have rendered',
+    expect(
+      dom,
+      'to have rendered',
       <form>
         <div>
           <div>
@@ -69,10 +78,12 @@ describe('FormValueScope', function () {
       </form>
     )
 
-    TestUtils.Simulate.change(nameField, {target: {value: ''}})
+    TestUtils.Simulate.change(nameField, { target: { value: '' } })
     TestUtils.Simulate.submit(form)
 
-    expect(dom, 'to have rendered',
+    expect(
+      dom,
+      'to have rendered',
       <form>
         <div>
           <div>

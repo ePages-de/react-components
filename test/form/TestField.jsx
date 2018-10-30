@@ -11,13 +11,17 @@ class TestField extends React.Component {
     scopedName: PropTypes.string.isRequired
   }
 
-  render () {
-    const {value, onChange, name, scopedName, ...other} = this.props // eslint-disable-line no-unused-vars
-    return <input {...other}
-      name={scopedName}
-      type="text"
-      value={value}
-      onChange={(event) => onChange(event.target.value)} />
+  render() {
+    const { value, onChange, name, scopedName, ...other } = this.props // eslint-disable-line no-unused-vars
+    return (
+      <input
+        {...other}
+        name={scopedName}
+        type="text"
+        value={value}
+        onChange={event => onChange(event.target.value)}
+      />
+    )
   }
 }
 

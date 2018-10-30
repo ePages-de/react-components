@@ -6,18 +6,18 @@ export class PropsSetter extends React.Component {
     component: PropTypes.any.isRequired
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
-    const {component, ...other} = props
+    const { component, ...other } = props
     this.state = other
   }
 
-  setProps (props) {
+  setProps(props) {
     this.setState(props)
   }
 
-  render () {
-    const {component: Component} = this.props
+  render() {
+    const { component: Component } = this.props
     return <Component {...this.state} />
   }
 }

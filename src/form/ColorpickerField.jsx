@@ -1,6 +1,6 @@
 import color from 'color'
 import PropTypes from 'prop-types'
-import React, {Component, PureComponent} from 'react'
+import React, { Component, PureComponent } from 'react'
 
 import formField from './formField'
 
@@ -10,7 +10,7 @@ import formField from './formField'
  * @param {string} value color value string
  * @returns {boolean} whether the string is a valid color or not
  */
-function isValidColor (value) {
+function isValidColor(value) {
   try {
     // `color` throws an error when the value is not a valid color
     color(value)
@@ -31,13 +31,13 @@ class Coordinator extends PureComponent {
     className: PropTypes.string
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.unbindEventListeners()
   }
 
-  handleCoordChange = ({clientX, clientY}) => {
-    const {onChange, width, height} = this.props
-    const {top, left} = this.node.getBoundingClientRect()
+  handleCoordChange = ({ clientX, clientY }) => {
+    const { onChange, width, height } = this.props
+    const { top, left } = this.node.getBoundingClientRect()
 
     // cap [0, 1]
     const rx = Math.max(0, Math.min((clientX - left) / width, 1))
@@ -47,7 +47,7 @@ class Coordinator extends PureComponent {
     onChange([rx, ry])
   }
 
-  handleMouseDown = (e) => {
+  handleMouseDown = e => {
     this.handleCoordChange(e)
 
     window.addEventListener('mousemove', this.handleCoordChange)
@@ -58,13 +58,13 @@ class Coordinator extends PureComponent {
     this.unbindEventListeners()
   }
 
-  unbindEventListeners () {
+  unbindEventListeners() {
     window.removeEventListener('mousemove', this.handleCoordChange)
     window.removeEventListener('mouseup', this.handleMouseUp)
   }
 
-  render () {
-    const {coords, children, width, height, style, className} = this.props
+  render() {
+    const { coords, children, width, height, style, className } = this.props
     const [rx, ry] = coords
 
     const x = rx * width
@@ -73,13 +73,15 @@ class Coordinator extends PureComponent {
     return (
       <div
         className={className}
-        style={{...(style || {}), width, height}}
-        ref={node => { this.node = node }}
+        style={{ ...(style || {}), width, height }}
+        ref={node => {
+          this.node = node
+        }}
         onMouseDown={this.handleMouseDown}
         onTouchMove={this.handleCoordChange}
-        onTouchStart={this.handleCoordChange}
-        children={children({x, y, rx, ry, width, height})}
-      />
+        onTouchStart={this.handleCoordChange}>
+        {children({ x, y, rx, ry, width, height })}
+      </div>
     )
   }
 }
@@ -121,13 +123,13 @@ export class ColorpickerFieldRaw extends Component {
     intermediateHexInput: null
   }
 
-  get color () {
+  get color() {
     return color(this.props.value).hsv()
   }
 
-  changeColor = (color) => {
+  changeColor = color => {
     if (isValidColor(color.string())) {
-      this.setState({intermediateHexInput: color.hex()})
+      this.setState({ intermediateHexInput: color.hex() })
 
       const preciseColor = color
         .hue(Math.round(color.hue()))
@@ -139,10 +141,7 @@ export class ColorpickerFieldRaw extends Component {
   }
 
   handleSvChange = ([x, y]) => {
-    this.changeColor(this.color
-      .saturationv(x * 100)
-      .value(100 - y * 100)
-    )
+    this.changeColor(this.color.saturationv(x * 100).value(100 - y * 100))
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -150,52 +149,63 @@ export class ColorpickerFieldRaw extends Component {
     this.changeColor(this.color.hue(y * 360))
   }
 
-  render () {
-    const {className, dimensions: {width, height, hueWidth, spacing}} = this.props
-    const {intermediateHexInput} = this.state
+  render() {
+    const {
+      className,
+      dimensions: { width, height, hueWidth, spacing }
+    } = this.props
+    const { intermediateHexInput } = this.state
 
-    const {h, s, v} = this.color.object()
+    const { h, s, v } = this.color.object()
 
-    const styles = typeof className === 'string' ? {
-      base: className,
-      baseSaturationValue: `${className}-saturation-value-canvas`,
-      baseHue: `${className}-hue`,
-      baseHexInput: `${className}-hex-input`,
-      saturation: `${className}-saturation`,
-      value: `${className}-value`,
-      marker: 'marker'
-    } : this.props.className
+    const styles =
+      typeof className === 'string'
+        ? {
+            base: className,
+            baseSaturationValue: `${className}-saturation-value-canvas`,
+            baseHue: `${className}-hue`,
+            baseHexInput: `${className}-hex-input`,
+            saturation: `${className}-saturation`,
+            value: `${className}-value`,
+            marker: 'marker'
+          }
+        : this.props.className
 
-    const hueColor = this.color.saturationv(100).value(100).hex()
-    const gradient = (direction, color) => `linear-gradient(${direction}, transparent 0%, ${color} 100%)`
+    const hueColor = this.color
+      .saturationv(100)
+      .value(100)
+      .hex()
+    const gradient = (direction, color) =>
+      `linear-gradient(${direction}, transparent 0%, ${color} 100%)`
 
-    const hexColorString = intermediateHexInput === null
-      ? this.color.hex()
-      : intermediateHexInput
+    const hexColorString =
+      intermediateHexInput === null ? this.color.hex() : intermediateHexInput
 
     return (
-      <div
-        className={styles.base}>
+      <div className={styles.base}>
         <Coordinator
           onChange={this.handleSvChange}
           className={styles.baseSaturationValue}
           width={width - (hueWidth + spacing)}
           height={height}
           coords={[s / 100, v / 100]}>
-          {({x, y, height}) => ([
+          {({ x, y, height }) => [
             <div
               key="s"
               className={styles.saturation}
-              style={{background: gradient('to right', hueColor)}} />,
+              style={{ background: gradient('to right', hueColor) }}
+            />,
             <div
               key="v"
               className={styles.value}
-              style={{background: gradient('to bottom', '#000')}} />,
+              style={{ background: gradient('to bottom', '#000') }}
+            />,
             <div
               key="marker"
               className={styles.marker}
-              style={{left: Math.round(x), top: Math.round(height - y)}} />
-          ])}
+              style={{ left: Math.round(x), top: Math.round(height - y) }}
+            />
+          ]}
         </Coordinator>
         <Coordinator
           onChange={this.handleHueChange}
@@ -203,7 +213,8 @@ export class ColorpickerFieldRaw extends Component {
           coords={[0, h / 360]}
           width={hueWidth}
           height={height}
-          style={{background: `linear-gradient(to bottom,
+          style={{
+            background: `linear-gradient(to bottom,
               #ff0000 0%,
               #ffff00 20%,
               #00ff00 35%,
@@ -212,8 +223,8 @@ export class ColorpickerFieldRaw extends Component {
               #ff00ff 80%,
               #ff0000 100%)`
           }}>
-          {({y}) => (
-            <div className={styles.marker} style={{top: Math.round(y)}} />
+          {({ y }) => (
+            <div className={styles.marker} style={{ top: Math.round(y) }} />
           )}
         </Coordinator>
         <input
@@ -221,14 +232,20 @@ export class ColorpickerFieldRaw extends Component {
           type="text"
           value={hexColorString}
           onChange={e => {
-            const {value} = e.target
+            const { value } = e.target
 
-            this.setState({intermediateHexInput: value})
+            this.setState({ intermediateHexInput: value })
 
             if (isValidColor(value)) {
-              this.props.onChange(color(value).hsl().round().string())
+              this.props.onChange(
+                color(value)
+                  .hsl()
+                  .round()
+                  .string()
+              )
             }
-          }} />
+          }}
+        />
       </div>
     )
   }

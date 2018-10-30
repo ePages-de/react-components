@@ -15,9 +15,11 @@ export default class ErrorMessage extends React.Component {
     Component: 'div'
   }
 
-  render () {
-    const {name, Component, ...other} = this.props
+  render() {
+    const { name, Component, ...other } = this.props
     const errorMessage = this.context.formValueScope.getError(name)
-    return errorMessage ? <Component {...other}>{errorMessage}</Component> : null
+    return errorMessage ? (
+      <Component {...other}>{errorMessage}</Component>
+    ) : null
   }
 }

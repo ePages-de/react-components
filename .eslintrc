@@ -1,13 +1,7 @@
 {
-  "extends": ["prettier-standard", "standard-react"],
+  "extends": ["plugin:react/recommended", "prettier-standard"],
   "plugins": ["react"],
   "parser": "babel-eslint",
-  "rules": {
-    "jsx-quotes": [2, "prefer-double"],
-    "no-alert": 2,
-    "no-console": 2,
-    "react/jsx-uses-vars": 1
-  },
   "settings": {
     "react": {
       "version": "16.4.2"
