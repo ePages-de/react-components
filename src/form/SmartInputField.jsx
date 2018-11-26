@@ -97,7 +97,7 @@ export class SmartInputFieldRaw extends React.Component {
         baseWithSuggestions: className + '-with-suggestions',
         input: className + '-input',
         inputValue: className + '-input-value',
-        inputText: className + '-input-tet',
+        inputText: className + '-input-text',
         suggestions: className + '-suggestions',
         suggestion: className + '-suggestion',
         suggestionActive: className + '-suggestion-active',
