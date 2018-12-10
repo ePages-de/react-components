@@ -18,6 +18,8 @@ export class SmartInputFieldRaw extends React.Component {
     value: PropTypes.any.isRequired,
     // value change handler
     onChange: PropTypes.func.isRequired,
+    // blur handler
+    onBlur: PropTypes.func,
     // function to generate suggestion list (must return a promise)
     getSuggestions: PropTypes.func,
     // decision function, whether a given suggestion can be choosen
@@ -248,8 +250,10 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   handleBlur = () => {
+    const {onBlur} = this.props
     this.setState({focused: false})
     this.resetText()
+    onBlur()
   }
 
   handleMouseDownContainer = (event) => {
