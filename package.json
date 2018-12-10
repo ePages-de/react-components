@@ -1,7 +1,7 @@
 {
   "name": "@epages/react-components",
   "description": "A zoo of useful React components.",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "scripts": {
     "start": "NODE_ENV=development node ./webpack.devserver.js",
     "test": "jest",

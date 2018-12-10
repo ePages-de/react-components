@@ -9,10 +9,12 @@ import {SmartInputFieldRaw} from '../../src/form/SmartInputField'
 
 function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabled, strict = false, placeholderText = 'Usage hint'} = {}) {
   const onChange = sinon.spy()
+  const onBlur = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
     <SmartInputFieldRaw
       value={value}
       onChange={onChange}
+      onBlur={onBlur}
       getSuggestions={getSuggestions}
       suggestionDisabled={suggestionDisabled}
       strict={strict}
@@ -21,7 +23,7 @@ function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabl
   )
   const input = TestUtils.findOne(dom, 'input')
 
-  return {value, getSuggestions, suggestionDisabled, strict, onChange, dom, input}
+  return {value, getSuggestions, suggestionDisabled, strict, onChange, dom, input, onBlur}
 }
 
 describe('SmartInputField', () => {
@@ -42,10 +44,11 @@ describe('SmartInputField', () => {
   })
 
   it('focuses and blurs', () => {
-    const {input} = render()
+    const {input, onBlur} = render()
 
     TestUtils.Simulate.focus(input)
     TestUtils.Simulate.blur(input)
+    expect(onBlur, 'was called once')
   })
 
   it('adds new non-strict value', () => {
