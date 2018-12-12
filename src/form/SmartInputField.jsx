@@ -70,7 +70,8 @@ export class SmartInputFieldRaw extends React.Component {
     renderSuggestion: (suggestion) => suggestion.toString(),
     strict: false,
     autoFocus: false,
-    hideValues: false
+    hideValues: false,
+    onBlur: () => {}
   }
 
   state = {
