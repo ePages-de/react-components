@@ -16,6 +16,8 @@ export class SmartInputFieldRaw extends React.Component {
   static propTypes = {
     // current value
     value: PropTypes.any.isRequired,
+    //disable input
+    disabled: PropTypes.bool,
     // value change handler
     onChange: PropTypes.func.isRequired,
     // blur handler
@@ -71,7 +73,8 @@ export class SmartInputFieldRaw extends React.Component {
     strict: false,
     autoFocus: false,
     hideValues: false,
-    onBlur: () => {}
+    onBlur: () => {},
+    disabled: false,
   }
 
   state = {
@@ -89,7 +92,7 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, suggestionDisabled, autoFocus, renderValue, renderSuggestion, hideValues, placeholderText, className} = this.props
+    const {value, suggestionDisabled, autoFocus, renderValue, renderSuggestion, hideValues, placeholderText, className, disabled} = this.props
     const {text, focused, suggestions, activeSuggestionIndex} = this.state
     const suggestionsVisible = suggestions && suggestions.length > 0
 
@@ -125,7 +128,8 @@ export class SmartInputFieldRaw extends React.Component {
         placeholder={placeholderText}
         className={styles.inputText}
         key="inputField"
-        ref={(node) => { this.input = node }} />
+        ref={(node) => { this.input = node }}
+        disabled={disabled} />
     )
 
     const values = hideValues ? [] : value.map((value, index) =>
