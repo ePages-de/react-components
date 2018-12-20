@@ -7,7 +7,7 @@ import expect from 'unexpected'
 
 import {SmartInputFieldRaw} from '../../src/form/SmartInputField'
 
-function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabled, strict = false, placeholderText = 'Usage hint'} = {}) {
+function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabled, strict = false, disabled =false, resetText=true, placeholderText = 'Usage hint'} = {}) {
   const onChange = sinon.spy()
   const onBlur = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
@@ -15,10 +15,12 @@ function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabl
       value={value}
       onChange={onChange}
       onBlur={onBlur}
+      disabled={disabled}
       getSuggestions={getSuggestions}
       suggestionDisabled={suggestionDisabled}
       strict={strict}
       placeholderText={placeholderText}
+      resetText={resetText}
       className="smart-input" />
   )
   const input = TestUtils.findOne(dom, 'input')
@@ -37,7 +39,21 @@ describe('SmartInputField', () => {
         <div>
           <div>first</div>
           <div>second</div>
-          <input placeholder="Usage hint" />
+          <input placeholder="Usage hint" disabled={false} />
+        </div>
+      </div>
+    )
+  })
+
+    it('renders disbaled', () => {
+    const {dom} = render({
+      disabled: true
+    })
+
+    expect(dom, 'to have rendered',
+      <div>
+        <div>
+          <input placeholder="Usage hint" disabled={true} />
         </div>
       </div>
     )
@@ -112,6 +128,41 @@ describe('SmartInputField', () => {
       TestUtils.Simulate.keyDown(input, {keyCode: 13})
 
       expect(onChange, 'was not called')
+    })
+  })
+
+  it('reset the text by default', () => {
+    const {getSuggestions, input} = render({
+      getSuggestions: sinon.stub().returns(Promise.resolve([])),
+    })
+
+    TestUtils.Simulate.change(input, {target: {value: 'test'}})
+
+    // wait for getSuggestions promise to resolve
+    return Bluebird.delay(10).then(() => {
+      TestUtils.Simulate.keyDown(input, {keyCode: 40})
+      TestUtils.Simulate.keyDown(input, {keyCode: 13})
+
+      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['', Immutable.fromJS(['test'])]])
+      expect(input.value, 'to equal', '')
+    })
+  })
+
+    it('not reset the text with the related option', () => {
+    const {getSuggestions, input, dom} = render({
+      getSuggestions: sinon.stub().returns(Promise.resolve([])),
+      resetText: false,
+    })
+
+    TestUtils.Simulate.change(input, {target: {value: 'test'}})
+
+    // wait for getSuggestions promise to resolve
+    return Bluebird.delay(10).then(() => {
+      TestUtils.Simulate.keyDown(input, {keyCode: 40})
+      TestUtils.Simulate.keyDown(input, {keyCode: 13})
+
+      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test'])]])
+      expect(input.value, 'to equal', 'test')
     })
   })
 
