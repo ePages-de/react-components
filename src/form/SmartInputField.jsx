@@ -18,8 +18,16 @@ export class SmartInputFieldRaw extends React.Component {
   static propTypes = {
     // current value
     value: PropTypes.any.isRequired,
+    // disable input
+    disabled: PropTypes.bool,
+    // should the input text be reset after each selection (default: true)
+    resetText: PropTypes.bool,
+    // should the input text be selected after each selection (only if 'resetText' is false, default: true)
+    selectText: PropTypes.bool,
     // value change handler
     onChange: PropTypes.func.isRequired,
+    // blur handler
+    onBlur: PropTypes.func,
     // function to generate suggestion list (must return a promise)
     getSuggestions: PropTypes.func,
     // decision function, whether a given suggestion can be choosen
@@ -70,7 +78,11 @@ export class SmartInputFieldRaw extends React.Component {
     renderSuggestion: suggestion => suggestion.toString(),
     strict: false,
     autoFocus: false,
-    hideValues: false
+    hideValues: false,
+    onBlur: () => {},
+    disabled: false,
+    resetText: true,
+    selectText: true
   }
 
   state = {
@@ -96,7 +108,8 @@ export class SmartInputFieldRaw extends React.Component {
       renderSuggestion,
       hideValues,
       placeholderText,
-      className
+      className,
+      disabled
     } = this.props
     const { text, focused, suggestions, activeSuggestionIndex } = this.state
     const suggestionsVisible = suggestions && suggestions.length > 0
@@ -109,7 +122,7 @@ export class SmartInputFieldRaw extends React.Component {
             baseWithSuggestions: className + '-with-suggestions',
             input: className + '-input',
             inputValue: className + '-input-value',
-            inputText: className + '-input-tet',
+            inputText: className + '-input-text',
             suggestions: className + '-suggestions',
             suggestion: className + '-suggestion',
             suggestionActive: className + '-suggestion-active',
@@ -137,6 +150,7 @@ export class SmartInputFieldRaw extends React.Component {
         ref={node => {
           this.input = node
         }}
+        disabled={disabled}
       />
     )
 
@@ -205,7 +219,9 @@ export class SmartInputFieldRaw extends React.Component {
       convertTextToValue,
       convertSuggestionToValue,
       strict,
-      hideValues
+      hideValues,
+      resetText,
+      selectText
     } = this.props
     const { text, suggestions, activeSuggestionIndex } = this.state
 
@@ -229,8 +245,13 @@ export class SmartInputFieldRaw extends React.Component {
             // update value and reset entered text and suggestion list
             const newValue = value.concat([nextValue])
             onChange(newValue)
-            this.resetText()
-            this.getSuggestions('', newValue)
+            if (resetText) {
+              this.resetText()
+              this.getSuggestions('', newValue)
+            } else {
+              this.getSuggestions(this.state.text, newValue)
+              selectText && this.input.select()
+            }
           }
         }
         break
@@ -284,8 +305,10 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   handleBlur = () => {
+    const { onBlur } = this.props
     this.setState({ focused: false })
     this.resetText()
+    onBlur()
   }
 
   handleMouseDownContainer = event => {
@@ -312,15 +335,22 @@ export class SmartInputFieldRaw extends React.Component {
       value,
       onChange,
       suggestionDisabled,
-      convertSuggestionToValue
+      convertSuggestionToValue,
+      resetText,
+      selectText
     } = this.props
 
     return function() {
       if (!suggestionDisabled(suggestion, index)) {
         const newValue = value.concat([convertSuggestionToValue(suggestion)])
         onChange(newValue)
-        self.resetText()
-        self.getSuggestions('', newValue)
+        if (resetText) {
+          self.resetText()
+          self.getSuggestions('', newValue)
+        } else {
+          self.getSuggestions(self.state.text, newValue)
+          selectText && self.input.select()
+        }
       }
     }
   }

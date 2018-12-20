@@ -1,10 +1,12 @@
 {
   "name": "@epages/react-components",
   "description": "A zoo of useful React components.",
-  "version": "0.6.1",
+  "version": "0.9.0",
   "scripts": {
     "start": "NODE_ENV=development node ./webpack.devserver.js",
+    "pretest": "npm run lint",
     "test": "jest",
+    "posttest": "npm run build",
     "build": "sh -c \"rm -rf build/ && NODE_ENV=production babel src/ --out-dir build/\"",
     "lint": "import-sort -l {src,test,public}/**/*.{js,jsx} && eslint --ext js,jsx *.js src/ test/ public/",
     "lint-fix": "import-sort --write {src,test,public}/**/*.{js,jsx}; eslint --ext js,jsx *.js src/ test/ public/ --fix",

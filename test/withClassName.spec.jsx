@@ -1,6 +1,7 @@
 import React from 'react'
-import withClassName from '../src/withClassName'
 import { render } from 'react-testing-library'
+
+import withClassName from '../src/withClassName'
 
 const TestComponent = React.forwardRef((_props, ref) => (
   <input data-testid="test" ref={ref} />

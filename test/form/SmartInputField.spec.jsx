@@ -12,17 +12,25 @@ function render({
   getSuggestions,
   suggestionDisabled,
   strict = false,
+  disabled = false,
+  resetText = true,
+  selectText = true,
   placeholderText = 'Usage hint'
 } = {}) {
   const onChange = sinon.spy()
+  const onBlur = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
     <SmartInputFieldRaw
       value={value}
       onChange={onChange}
+      onBlur={onBlur}
+      disabled={disabled}
       getSuggestions={getSuggestions}
       suggestionDisabled={suggestionDisabled}
       strict={strict}
       placeholderText={placeholderText}
+      resetText={resetText}
+      selectText={selectText}
       className="smart-input"
     />
   )
@@ -35,7 +43,8 @@ function render({
     strict,
     onChange,
     dom,
-    input
+    input,
+    onBlur
   }
 }
 
@@ -52,17 +61,34 @@ describe('SmartInputField', () => {
         <div>
           <div>first</div>
           <div>second</div>
-          <input placeholder="Usage hint" />
+          <input placeholder="Usage hint" disabled={false} />
+        </div>
+      </div>
+    )
+  })
+
+  it('renders disabled', () => {
+    const { dom } = render({
+      disabled: true
+    })
+
+    expect(
+      dom,
+      'to have rendered',
+      <div>
+        <div>
+          <input placeholder="Usage hint" disabled />
         </div>
       </div>
     )
   })
 
   it('focuses and blurs', () => {
-    const { input } = render()
+    const { input, onBlur } = render()
 
     TestUtils.Simulate.focus(input)
     TestUtils.Simulate.blur(input)
+    expect(onBlur, 'was called once')
   })
 
   it('adds new non-strict value', () => {
@@ -142,6 +168,73 @@ describe('SmartInputField', () => {
       TestUtils.Simulate.keyDown(input, { keyCode: 13 })
 
       expect(onChange, 'was not called')
+    })
+  })
+
+  it('reset the text by default', () => {
+    const { getSuggestions, input } = render({
+      getSuggestions: sinon.stub().returns(Promise.resolve([]))
+    })
+
+    TestUtils.Simulate.change(input, { target: { value: 'test' } })
+
+    // wait for getSuggestions promise to resolve
+    return Bluebird.delay(10).then(() => {
+      TestUtils.Simulate.keyDown(input, { keyCode: 40 })
+      TestUtils.Simulate.keyDown(input, { keyCode: 13 })
+
+      expect(getSuggestions, 'to have calls satisfying', [
+        ['test', Immutable.fromJS([])],
+        ['', Immutable.fromJS(['test'])]
+      ])
+      expect(input.value, 'to equal', '')
+    })
+  })
+
+  it('not reset the text with the related option and select it by default', () => {
+    const { getSuggestions, input } = render({
+      getSuggestions: sinon.stub().returns(Promise.resolve([])),
+      resetText: false
+    })
+    const select = sinon.spy(input, 'select')
+
+    TestUtils.Simulate.change(input, { target: { value: 'test' } })
+
+    // wait for getSuggestions promise to resolve
+    return Bluebird.delay(10).then(() => {
+      TestUtils.Simulate.keyDown(input, { keyCode: 40 })
+      TestUtils.Simulate.keyDown(input, { keyCode: 13 })
+
+      expect(getSuggestions, 'to have calls satisfying', [
+        ['test', Immutable.fromJS([])],
+        ['test', Immutable.fromJS(['test'])]
+      ])
+      expect(input.value, 'to equal', 'test')
+      expect(select, 'was called once')
+    })
+  })
+
+  it('not reset the text and not select it with the related options', () => {
+    const { getSuggestions, input } = render({
+      getSuggestions: sinon.stub().returns(Promise.resolve([])),
+      resetText: false,
+      selectText: false
+    })
+    const select = sinon.spy(input, 'select')
+
+    TestUtils.Simulate.change(input, { target: { value: 'test' } })
+
+    // wait for getSuggestions promise to resolve
+    return Bluebird.delay(10).then(() => {
+      TestUtils.Simulate.keyDown(input, { keyCode: 40 })
+      TestUtils.Simulate.keyDown(input, { keyCode: 13 })
+
+      expect(getSuggestions, 'to have calls satisfying', [
+        ['test', Immutable.fromJS([])],
+        ['test', Immutable.fromJS(['test'])]
+      ])
+      expect(input.value, 'to equal', 'test')
+      expect(select, 'was not called')
     })
   })
 
