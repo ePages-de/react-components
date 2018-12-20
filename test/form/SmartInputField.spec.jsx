@@ -46,7 +46,7 @@ describe('SmartInputField', () => {
     )
   })
 
-    it('renders disbaled', () => {
+    it('renders disabled', () => {
     const {dom} = render({
       disabled: true
     })
@@ -154,7 +154,7 @@ describe('SmartInputField', () => {
       getSuggestions: sinon.stub().returns(Promise.resolve([])),
       resetText: false,
     })
-    const setSelectionRange = sinon.spy(input, 'setSelectionRange')
+    const select = sinon.spy(input, 'select')
 
     TestUtils.Simulate.change(input, {target: {value: 'test'}})
 
@@ -165,7 +165,7 @@ describe('SmartInputField', () => {
 
       expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test'])]])
       expect(input.value, 'to equal', 'test')
-      expect(setSelectionRange, 'to have calls satisfying', [[0, 4]])
+      expect(select, 'was called once')
     })
   })
 
@@ -175,7 +175,7 @@ describe('SmartInputField', () => {
       resetText: false,
       selectText: false,
     })
-    const setSelectionRange = sinon.spy(input, 'setSelectionRange')
+    const select = sinon.spy(input, 'select')
 
     TestUtils.Simulate.change(input, {target: {value: 'test'}})
 
@@ -186,7 +186,7 @@ describe('SmartInputField', () => {
 
       expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test'])]])
       expect(input.value, 'to equal', 'test')
-      expect(setSelectionRange, 'was not called')
+      expect(select, 'was not called')
     })
   })
 

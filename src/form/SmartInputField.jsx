@@ -211,7 +211,7 @@ export class SmartInputFieldRaw extends React.Component {
               this.getSuggestions('', newValue)
             } else {
               this.getSuggestions(this.state.text, newValue)
-              selectText && this.input.setSelectionRange(0, this.input.value.length);
+              selectText && this.input.select();
             }
           }
         }
@@ -303,7 +303,7 @@ export class SmartInputFieldRaw extends React.Component {
           self.getSuggestions('', newValue)
         } else {
           self.getSuggestions(self.state.text, newValue)
-          selectText && self.input.setSelectionRange(0, self.input.value.length);
+          selectText && self.input.select();
         }
       }
     }
