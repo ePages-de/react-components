@@ -7,7 +7,7 @@ import expect from 'unexpected'
 
 import {SmartInputFieldRaw} from '../../src/form/SmartInputField'
 
-function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabled, strict = false, disabled =false, resetText=true, placeholderText = 'Usage hint'} = {}) {
+function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabled, strict = false, disabled = false, resetText = true, selectText = true, placeholderText = 'Usage hint'} = {}) {
   const onChange = sinon.spy()
   const onBlur = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
@@ -21,6 +21,7 @@ function render ({value = Immutable.fromJS([]), getSuggestions, suggestionDisabl
       strict={strict}
       placeholderText={placeholderText}
       resetText={resetText}
+      selectText={selectText}
       className="smart-input" />
   )
   const input = TestUtils.findOne(dom, 'input')
@@ -148,11 +149,12 @@ describe('SmartInputField', () => {
     })
   })
 
-    it('not reset the text with the related option', () => {
+  it('not reset the text with the related option and select it by default', () => {
     const {getSuggestions, input, dom} = render({
       getSuggestions: sinon.stub().returns(Promise.resolve([])),
       resetText: false,
     })
+    const setSelectionRange = sinon.spy(input, 'setSelectionRange')
 
     TestUtils.Simulate.change(input, {target: {value: 'test'}})
 
@@ -163,6 +165,28 @@ describe('SmartInputField', () => {
 
       expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test'])]])
       expect(input.value, 'to equal', 'test')
+      expect(setSelectionRange, 'to have calls satisfying', [[0, 4]])
+    })
+  })
+
+  it('not reset the text and not select it with the related options', () => {
+    const {getSuggestions, input, dom} = render({
+      getSuggestions: sinon.stub().returns(Promise.resolve([])),
+      resetText: false,
+      selectText: false,
+    })
+    const setSelectionRange = sinon.spy(input, 'setSelectionRange')
+
+    TestUtils.Simulate.change(input, {target: {value: 'test'}})
+
+    // wait for getSuggestions promise to resolve
+    return Bluebird.delay(10).then(() => {
+      TestUtils.Simulate.keyDown(input, {keyCode: 40})
+      TestUtils.Simulate.keyDown(input, {keyCode: 13})
+
+      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test'])]])
+      expect(input.value, 'to equal', 'test')
+      expect(setSelectionRange, 'was not called')
     })
   })
 

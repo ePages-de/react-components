@@ -21,7 +21,7 @@ export class SmartInputFieldRaw extends React.Component {
     //should the input text be reset after each selection (default: true)
     resetText: PropTypes.bool,
     //should the input text be selected after each selection (only if 'resetText' is false, default: true)
-    selectedText: PropTypes.bool,
+    selectText: PropTypes.bool,
     // value change handler
     onChange: PropTypes.func.isRequired,
     // blur handler
@@ -80,7 +80,7 @@ export class SmartInputFieldRaw extends React.Component {
     onBlur: () => {},
     disabled: false,
     resetText: true,
-    selectedText: true,
+    selectText: true,
   }
 
   state = {
