@@ -16,6 +16,12 @@ export class SmartInputFieldRaw extends React.Component {
   static propTypes = {
     // current value
     value: PropTypes.any.isRequired,
+    // disable input
+    disabled: PropTypes.bool,
+    // should the input text be reset after each selection (default: true)
+    resetText: PropTypes.bool,
+    // should the input text be selected after each selection (only if 'resetText' is false, default: true)
+    selectText: PropTypes.bool,
     // value change handler
     onChange: PropTypes.func.isRequired,
     // blur handler
@@ -71,7 +77,10 @@ export class SmartInputFieldRaw extends React.Component {
     strict: false,
     autoFocus: false,
     hideValues: false,
-    onBlur: () => {}
+    onBlur: () => {},
+    disabled: false,
+    resetText: true,
+    selectText: true
   }
 
   state = {
@@ -89,7 +98,7 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, suggestionDisabled, autoFocus, renderValue, renderSuggestion, hideValues, placeholderText, className} = this.props
+    const {value, suggestionDisabled, autoFocus, renderValue, renderSuggestion, hideValues, placeholderText, className, disabled} = this.props
     const {text, focused, suggestions, activeSuggestionIndex} = this.state
     const suggestionsVisible = suggestions && suggestions.length > 0
 
@@ -125,7 +134,8 @@ export class SmartInputFieldRaw extends React.Component {
         placeholder={placeholderText}
         className={styles.inputText}
         key="inputField"
-        ref={(node) => { this.input = node }} />
+        ref={(node) => { this.input = node }}
+        disabled={disabled} />
     )
 
     const values = hideValues ? [] : value.map((value, index) =>
@@ -176,7 +186,7 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   handleKeyDown = (event) => {
-    const {value, onChange, convertTextToValue, convertSuggestionToValue, strict, hideValues} = this.props
+    const {value, onChange, convertTextToValue, convertSuggestionToValue, strict, hideValues, resetText, selectText} = this.props
     const {text, suggestions, activeSuggestionIndex} = this.state
 
     switch (event.keyCode) {
@@ -196,8 +206,13 @@ export class SmartInputFieldRaw extends React.Component {
             // update value and reset entered text and suggestion list
             const newValue = value.concat([nextValue])
             onChange(newValue)
-            this.resetText()
-            this.getSuggestions('', newValue)
+            if (resetText) {
+              this.resetText()
+              this.getSuggestions('', newValue)
+            } else {
+              this.getSuggestions(this.state.text, newValue)
+              selectText && this.input.select()
+            }
           }
         }
         break
@@ -277,14 +292,19 @@ export class SmartInputFieldRaw extends React.Component {
 
   handleClickSuggestion = (suggestion, index) => {
     const self = this
-    const {value, onChange, suggestionDisabled, convertSuggestionToValue} = this.props
+    const {value, onChange, suggestionDisabled, convertSuggestionToValue, resetText, selectText} = this.props
 
     return function () {
       if (!suggestionDisabled(suggestion, index)) {
         const newValue = value.concat([convertSuggestionToValue(suggestion)])
         onChange(newValue)
-        self.resetText()
-        self.getSuggestions('', newValue)
+        if (resetText) {
+          self.resetText()
+          self.getSuggestions('', newValue)
+        } else {
+          self.getSuggestions(self.state.text, newValue)
+          selectText && self.input.select()
+        }
       }
     }
   }
