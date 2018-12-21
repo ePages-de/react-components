@@ -40,7 +40,7 @@ describe('SmartInputField', () => {
         <div>
           <div>first</div>
           <div>second</div>
-          <input placeholder="Usage hint" disabled={false} />
+          <input placeholder="Usage hint" />
         </div>
       </div>
     )
@@ -134,7 +134,7 @@ describe('SmartInputField', () => {
 
   it('reset the text by default', () => {
     const {getSuggestions, input} = render({
-      getSuggestions: sinon.stub().returns(Promise.resolve([]))
+      getSuggestions: sinon.stub().returns(Promise.resolve(['test1', 'test2', 'test3']))
     })
 
     TestUtils.Simulate.change(input, {target: {value: 'test'}})
@@ -144,14 +144,14 @@ describe('SmartInputField', () => {
       TestUtils.Simulate.keyDown(input, {keyCode: 40})
       TestUtils.Simulate.keyDown(input, {keyCode: 13})
 
-      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['', Immutable.fromJS(['test'])]])
+      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['', Immutable.fromJS(['test1'])]])
       expect(input.value, 'to equal', '')
     })
   })
 
   it('not reset the text with the related option and select it by default', () => {
     const {getSuggestions, input} = render({
-      getSuggestions: sinon.stub().returns(Promise.resolve([])),
+      getSuggestions: sinon.stub().returns(Promise.resolve(['test1', 'test2', 'test3'])),
       resetText: false
     })
     const select = sinon.spy(input, 'select')
@@ -160,10 +160,12 @@ describe('SmartInputField', () => {
 
     // wait for getSuggestions promise to resolve
     return Bluebird.delay(10).then(() => {
-      TestUtils.Simulate.keyDown(input, {keyCode: 40})
+      for (let i = 0; i < 2; i++) {
+        TestUtils.Simulate.keyDown(input, {keyCode: 40})
+      }
       TestUtils.Simulate.keyDown(input, {keyCode: 13})
 
-      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test'])]])
+      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test2'])]])
       expect(input.value, 'to equal', 'test')
       expect(select, 'was called once')
     })
@@ -171,7 +173,7 @@ describe('SmartInputField', () => {
 
   it('not reset the text and not select it with the related options', () => {
     const {getSuggestions, input} = render({
-      getSuggestions: sinon.stub().returns(Promise.resolve([])),
+      getSuggestions: sinon.stub().returns(Promise.resolve(['test1', 'test2', 'test3'])),
       resetText: false,
       selectText: false
     })
@@ -181,10 +183,73 @@ describe('SmartInputField', () => {
 
     // wait for getSuggestions promise to resolve
     return Bluebird.delay(10).then(() => {
-      TestUtils.Simulate.keyDown(input, {keyCode: 40})
+      for (let i = 0; i < 3; i++) {
+        TestUtils.Simulate.keyDown(input, {keyCode: 40})
+      }
       TestUtils.Simulate.keyDown(input, {keyCode: 13})
 
-      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test'])]])
+      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test3'])]])
+      expect(input.value, 'to equal', 'test')
+      expect(select, 'was not called')
+    })
+  })
+
+  it('should handle a click correctly', () => {
+    const {getSuggestions, input, dom, onChange} = render({
+      getSuggestions: sinon.stub().returns(Promise.resolve(['test1', 'test2', 'test3']))
+    })
+
+    TestUtils.Simulate.change(input, {target: {value: 'test'}})
+
+    // wait for getSuggestions promise to resolve
+    return Bluebird.delay(10).then(() => {
+      const suggestions = TestUtils.find(dom, '.smart-input-suggestion')
+      TestUtils.Simulate.click(suggestions[0])
+
+      expect(onChange, 'to have calls satisfying', () => onChange(Immutable.fromJS(['test1'])))
+      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['', Immutable.fromJS(['test1'])]])
+      expect(input.value, 'to equal', '')
+    })
+  })
+
+  it('should not reset the text after a click', () => {
+    const {getSuggestions, input, dom, onChange} = render({
+      getSuggestions: sinon.stub().returns(Promise.resolve(['test1', 'test2', 'test3'])),
+      resetText: false
+    })
+    const select = sinon.spy(input, 'select')
+
+    TestUtils.Simulate.change(input, {target: {value: 'test'}})
+
+    // wait for getSuggestions promise to resolve
+    return Bluebird.delay(10).then(() => {
+      const suggestions = TestUtils.find(dom, '.smart-input-suggestion')
+      TestUtils.Simulate.click(suggestions[1])
+
+      expect(onChange, 'to have calls satisfying', () => onChange(Immutable.fromJS(['test2'])))
+      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test2'])]])
+      expect(input.value, 'to equal', 'test')
+      expect(select, 'was called once')
+    })
+  })
+
+  it('should not select the text after a click', () => {
+    const {getSuggestions, input, dom, onChange} = render({
+      getSuggestions: sinon.stub().returns(Promise.resolve(['test1', 'test2', 'test3'])),
+      resetText: false,
+      selectText: false
+    })
+    const select = sinon.spy(input, 'select')
+
+    TestUtils.Simulate.change(input, {target: {value: 'test'}})
+
+    // wait for getSuggestions promise to resolve
+    return Bluebird.delay(10).then(() => {
+      const suggestions = TestUtils.find(dom, '.smart-input-suggestion')
+      TestUtils.Simulate.click(suggestions[2])
+
+      expect(onChange, 'to have calls satisfying', () => onChange(Immutable.fromJS(['test3'])))
+      expect(getSuggestions, 'to have calls satisfying', [['test', Immutable.fromJS([])], ['test', Immutable.fromJS(['test3'])]])
       expect(input.value, 'to equal', 'test')
       expect(select, 'was not called')
     })
