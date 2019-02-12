@@ -122,6 +122,7 @@ export class ColorpickerFieldRaw extends Component {
   }
 
   changedByInput = false
+
   get color () {
     return color(this.props.value).hsv()
   }
