@@ -228,7 +228,7 @@ export class ColorpickerFieldRaw extends Component {
             this.changedByInput = true
 
             this.setState({intermediateHexInput: value}, () => {
-              // after color was change, we could set this to initial value 
+              // after color was changed we can set it to initial value
               this.changedByInput = false
             })
 
