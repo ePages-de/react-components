@@ -22,3 +22,6 @@ npm run build
 
 ## Test page
 In order to try out the components you can run `npm start` and then open http://localhost:3000 in your browser.
+
+## Contributing
+If you want to test how your code changes affect a package that depends on `react-components`, use _The Incredible [Yalc](https://github.com/whitecolor/yalc)_ to preview them before the actual publication.
