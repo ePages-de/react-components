@@ -169,9 +169,7 @@ export class ColorpickerFieldRaw extends Component {
     const hueColor = this.color.saturationv(100).value(100).hex()
     const gradient = (direction, color) => `linear-gradient(${direction}, transparent 0%, ${color} 100%)`
 
-    const hexColorString = intermediateHexInput === null
-      ? this.color.hex()
-      : intermediateHexInput
+    const hexColorString = this.hexInputValueChange ? intermediateHexInput : this.color.hex()
 
     return (
       <div
@@ -223,7 +221,11 @@ export class ColorpickerFieldRaw extends Component {
           onChange={e => {
             const {value} = e.target
 
-            this.setState({intermediateHexInput: value})
+            this.hexInputValueChange = true
+
+            this.setState({intermediateHexInput: value}, () => {
+              this.hexInputValueChange = false
+            })
 
             if (isValidColor(value)) {
               this.props.onChange(color(value).hsl().round().string())
