@@ -22,14 +22,14 @@ export class DropDownFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, scopedName, options, ...other} = this.props
+    const { value, onChange, name, scopedName, options, ...other } = this.props
 
     return (
       <select
         {...other}
         name={scopedName}
         value={String(value)}
-        onChange={event => onChange(options.find(({value}) => String(value) === event.target.value).value)}>
+        onChange={event => onChange(options.find(({ value }) => String(value) === event.target.value).value)}>
         {options.map((option, index) =>
           <option
             key={index}

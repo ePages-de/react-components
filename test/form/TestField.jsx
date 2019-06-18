@@ -12,7 +12,8 @@ class TestField extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, scopedName, ...other} = this.props // eslint-disable-line no-unused-vars
+    const { value, onChange, name, scopedName, ...other } = this.props
+
     return <input {...other}
       name={scopedName}
       type="text"

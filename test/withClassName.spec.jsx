@@ -1,11 +1,11 @@
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
 import sinon from 'sinon'
-import expect from 'unexpected'
 
 import withClassName from '../src/withClassName'
+import expect from './unexpected'
 
-function render ({className, hoistedMethods = []} = {}) {
+function render ({ className, hoistedMethods = [] } = {}) {
   const focusSpy = sinon.spy()
 
   class TestComponent extends React.Component {
@@ -23,12 +23,12 @@ function render ({className, hoistedMethods = []} = {}) {
     <TestComponentWithClassName />
   )
 
-  return {focus: focusSpy, dom}
+  return { focus: focusSpy, dom }
 }
 
 describe('withClassName', function () {
   it('renders', function () {
-    const {dom} = render({className: 'foobar'})
+    const { dom } = render({ className: 'foobar' })
 
     expect(dom, 'to have rendered',
       <div className="foobar">TestComponent</div>
@@ -36,10 +36,10 @@ describe('withClassName', function () {
   })
 
   it('hoists instance methods', function () {
-    const {dom: dom1} = render({hoistedMethods: []})
+    const { dom: dom1 } = render({ hoistedMethods: [] })
     expect(dom1.focus, 'to be undefined')
 
-    const {dom: dom2, focus} = render({hoistedMethods: ['focus']})
+    const { dom: dom2, focus } = render({ hoistedMethods: ['focus'] })
     expect(focus, 'was not called')
     dom2.focus()
     expect(focus, 'was called once')

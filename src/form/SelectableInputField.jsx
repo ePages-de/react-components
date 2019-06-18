@@ -25,9 +25,8 @@ class SelectableInputFieldRaw extends React.Component {
   }
 
   render () {
-    const {formValueScope} = this.context
-    // eslint-disable-next-line no-unused-vars
-    const {value, onChange, name, scopedName, type, title, label, placeholder, ...other} = this.props
+    const { formValueScope } = this.context
+    const { value, onChange, name, scopedName, type, title, label, placeholder, ...other } = this.props
     const checkboxName = `${name}Selected`
     const scopedCheckboxName = `${scopedName}Selected`
 

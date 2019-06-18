@@ -8,7 +8,7 @@ export class PropsSetter extends React.Component {
 
   constructor (props) {
     super(props)
-    const {component, ...other} = props
+    const { component, ...other } = props
     this.state = other
   }
 
@@ -17,7 +17,7 @@ export class PropsSetter extends React.Component {
   }
 
   render () {
-    const {component: Component} = this.props
+    const { component: Component } = this.props
     return <Component {...this.state} />
   }
 }

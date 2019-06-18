@@ -21,8 +21,8 @@ export default function formField () {
       }
 
       render () {
-        const {formValueScope} = this.context
-        const {name, ...other} = this.props
+        const { formValueScope } = this.context
+        const { name, ...other } = this.props
 
         return <Component
           {...other}

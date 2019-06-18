@@ -39,14 +39,29 @@ export class SortFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, scopedName, children, onReorder, validate, disabled, orientation, itemSize, crossAxisItemSize, itemCount, itemSpacing, ...other} = this.props // eslint-disable-line no-unused-vars
-    const {dragIndex, dropIndex} = this.state
+    const {
+      value,
+      onChange,
+      name,
+      scopedName,
+      children,
+      onReorder,
+      validate,
+      disabled,
+      orientation,
+      itemSize,
+      crossAxisItemSize,
+      itemCount,
+      itemSpacing,
+      ...other
+    } = this.props
+    const { dragIndex, dropIndex } = this.state
     const dimension = orientation === 'horizontal'
-      ? {width: itemSize * itemCount + (itemSpacing * (itemCount - 1)), height: crossAxisItemSize}
-      : {height: itemSize * itemCount + (itemSpacing * (itemCount - 1)), width: crossAxisItemSize}
+      ? { width: itemSize * itemCount + (itemSpacing * (itemCount - 1)), height: crossAxisItemSize }
+      : { height: itemSize * itemCount + (itemSpacing * (itemCount - 1)), width: crossAxisItemSize }
 
     return (
-      <div {...other} style={{position: 'relative', ...dimension}}>
+      <div {...other} style={{ position: 'relative', ...dimension }}>
         {value.map((item, index) => {
           const itemWithDndInfo = item
             .set('__isSource', dragIndex === index)
@@ -54,31 +69,31 @@ export class SortFieldRaw extends React.Component {
             .set('__isDragging', dragIndex !== null)
             .set('__isDisabled', disabled(item, index, value))
           const itemPosition = orientation === 'horizontal'
-            ? {left: index * (itemSize + itemSpacing), top: 0}
-            : {top: index * (itemSize + itemSpacing), left: 0}
+            ? { left: index * (itemSize + itemSpacing), top: 0 }
+            : { top: index * (itemSize + itemSpacing), left: 0 }
           const itemDimension = orientation === 'horizontal'
-            ? {width: itemSize, height: crossAxisItemSize}
-            : {height: itemSize, width: crossAxisItemSize}
+            ? { width: itemSize, height: crossAxisItemSize }
+            : { height: itemSize, width: crossAxisItemSize }
 
           return (
             <div
               key={index}
               draggable
-              style={{position: 'absolute', ...itemPosition, ...itemDimension}}
+              style={{ position: 'absolute', ...itemPosition, ...itemDimension }}
               onDragStart={(event) => {
                 if (!itemWithDndInfo.get('__isDisabled')) {
                   if (event.dataTransfer) event.dataTransfer.setData('Url', '#')
-                  this.setState({dragIndex: index})
+                  this.setState({ dragIndex: index })
                 } else {
                   event.preventDefault()
                 }
               }}
               onDragEnd={() => {
-                this.setState({dragIndex: null})
+                this.setState({ dragIndex: null })
               }}
               onDragEnter={() => {
                 if (dragIndex !== null && dragIndex !== index && validate(swap(value, dragIndex, index))) {
-                  this.setState({dropIndex: index})
+                  this.setState({ dropIndex: index })
                 }
               }}
               onDragOver={(event) => {
@@ -88,12 +103,12 @@ export class SortFieldRaw extends React.Component {
               }}
               onDragLeave={() => {
                 if (dropIndex === index) {
-                  this.setState({dropIndex: null})
+                  this.setState({ dropIndex: null })
                 }
               }}
               onDrop={(event) => {
                 event.preventDefault()
-                this.setState({dragIndex: null, dropIndex: null})
+                this.setState({ dragIndex: null, dropIndex: null })
                 this.props.onReorder(dragIndex, index)
                 onChange(swap(value, dragIndex, index))
               }}>

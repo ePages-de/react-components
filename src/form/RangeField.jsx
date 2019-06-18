@@ -21,7 +21,8 @@ export class RangeFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, scopedName, min, max, step, multiplier, ...other} = this.props // eslint-disable-line no-unused-vars
+    const { value, onChange, name, scopedName, min, max, step, multiplier, ...other } = this.props
+
     return <input {...other}
       name={scopedName}
       type="range"

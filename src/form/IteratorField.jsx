@@ -21,7 +21,7 @@ class IteratorFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, scopedName, skip, take, children, ...other} = this.props // eslint-disable-line no-unused-vars
+    const { value, onChange, name, scopedName, skip, take, children, ...other } = this.props
     const items = value.skip(skip).take(take || value.count())
 
     return (

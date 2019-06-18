@@ -2,14 +2,14 @@ import Immutable from 'immutable'
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
 import sinon from 'sinon'
-import expect from 'unexpected'
 
 import ErrorMessage from '../../src/form/ErrorMessage'
 import Form from '../../src/form/Form'
 import FormValueScope from '../../src/form/FormValueScope'
+import expect from '../unexpected'
 import TestField from './TestField'
 
-function render ({validate} = {}) {
+function render ({ validate } = {}) {
   const initialValue = Immutable.fromJS({
     sub: {
       name: 'first'
@@ -31,12 +31,12 @@ function render ({validate} = {}) {
   const form = TestUtils.findOne(dom, 'form')
   const nameField = TestUtils.findOne(dom, '.name')
 
-  return {initialValue, onSubmit, dom, form, nameField}
+  return { initialValue, onSubmit, dom, form, nameField }
 }
 
 describe('FormValueScope', function () {
   it('renders', function () {
-    const {dom} = render()
+    const { dom } = render()
 
     expect(dom, 'to have rendered',
       <form>
@@ -55,7 +55,7 @@ describe('FormValueScope', function () {
         name: !value.getIn(['sub', 'name']) ? 'required' : null
       }
     })
-    const {dom, form, nameField} = render({validate})
+    const { dom, form, nameField } = render({ validate })
 
     TestUtils.Simulate.submit(form)
 
@@ -69,7 +69,7 @@ describe('FormValueScope', function () {
       </form>
     )
 
-    TestUtils.Simulate.change(nameField, {target: {value: ''}})
+    TestUtils.Simulate.change(nameField, { target: { value: '' } })
     TestUtils.Simulate.submit(form)
 
     expect(dom, 'to have rendered',

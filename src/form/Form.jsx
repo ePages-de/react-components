@@ -284,7 +284,7 @@ export default class Form extends React.Component {
     return this.state.errors.getIn(parseName(name))
   }
 
-  submit = () => this.onSubmit({preventDefault: () => {}})
+  submit = () => this.onSubmit({ preventDefault: () => {} })
 
   onSubmit = (event) => {
     event.preventDefault()
@@ -296,14 +296,14 @@ export default class Form extends React.Component {
         validationResult => {
           if (containsError(validationResult)) {
             this.props.onError(validationResult, true)
-            this.setState({errors: validationResult, triedToSubmit: true})
+            this.setState({ errors: validationResult, triedToSubmit: true })
           } else {
-            this.setState({errors: new Immutable.Map()})
+            this.setState({ errors: new Immutable.Map() })
 
             const result = this.props.onSubmit(this.props.normalize(this.state.value))
             if (result && typeof result.then === 'function') {
-              this.setState({submitting: true})
-              result.catch(() => {}).then(() => this.willUnmount || this.setState({submitting: false}))
+              this.setState({ submitting: true })
+              result.catch(() => {}).then(() => this.willUnmount || this.setState({ submitting: false }))
             }
           }
 
@@ -315,7 +315,23 @@ export default class Form extends React.Component {
   }
 
   render () {
-    const {name, value, onSubmit, onChange, prepare, validate, validateWaitMs, normalize, disabled, children, externalErrors, handleUnmappedErrors, onError, ...other} = this.props // eslint-disable-line no-unused-vars
+    const {
+      name,
+      value,
+      onSubmit,
+      onChange,
+      prepare,
+      validate,
+      validateWaitMs,
+      normalize,
+      disabled,
+      children,
+      externalErrors,
+      handleUnmappedErrors,
+      onError,
+      ...other
+    } = this.props
+
     return (
       <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
         {typeof children === 'function' ? children({

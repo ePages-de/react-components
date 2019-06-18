@@ -17,7 +17,8 @@ export class InputFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, scopedName, type, ...other} = this.props // eslint-disable-line no-unused-vars
+    const { value, onChange, name, scopedName, type, ...other } = this.props
+
     return <input
       autoComplete="off"
       autoCorrect="off"

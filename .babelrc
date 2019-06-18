@@ -1,10 +1,17 @@
 {
   "presets": [
-    "es2015",
-    "stage-1",
-    "react"
+    "@babel/preset-react",
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "usage",
+        "corejs": 3,
+        "exclude": ["@babel/plugin-transform-regenerator"]
+      }
+    ]
   ],
   "plugins": [
-    "transform-es2015-modules-umd"
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-transform-modules-umd"
   ]
 }
