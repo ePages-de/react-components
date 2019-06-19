@@ -16,7 +16,7 @@ export class ChoiceFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, scopedName, choices, ...other} = this.props // eslint-disable-line no-unused-vars
+    const { value, onChange, name, scopedName, choices, ...other } = this.props
 
     return (
       <div {...other}>

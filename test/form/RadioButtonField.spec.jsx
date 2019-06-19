@@ -1,14 +1,14 @@
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
 import sinon from 'sinon'
-import expect from 'unexpected'
 
-import {RadioButtonFieldRaw} from '../../src/form/RadioButtonField'
+import { RadioButtonFieldRaw } from '../../src/form/RadioButtonField'
+import expect from '../unexpected'
 
-function render ({value} = {}) {
+function render ({ value } = {}) {
   const buttons = [
-    {label: 'Yes', value: true},
-    {label: 'No', value: false}
+    { label: 'Yes', value: true },
+    { label: 'No', value: false }
   ]
   const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
@@ -16,12 +16,12 @@ function render ({value} = {}) {
   )
   const radioButtons = TestUtils.find(dom, 'input')
 
-  return {onChange, dom, radioButtons}
+  return { onChange, dom, radioButtons }
 }
 
 describe('RadioButtonField', function () {
   it('renders with initial value', function () {
-    const {dom} = render({value: false})
+    const { dom } = render({ value: false })
     expect(dom, 'to have rendered',
       <div>
         <span>
@@ -44,7 +44,7 @@ describe('RadioButtonField', function () {
   })
 
   it('returns new value', function () {
-    const {onChange, radioButtons} = render({value: true})
+    const { onChange, radioButtons } = render({ value: true })
 
     TestUtils.Simulate.click(radioButtons[1])
     TestUtils.Simulate.change(radioButtons[1])

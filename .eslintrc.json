@@ -1,0 +1,15 @@
+{
+  "extends": ["eslint:recommended", "standard", "standard-react"],
+  "parser": "babel-eslint",
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "jsx-quotes": [2, "prefer-double"]
+  },
+  "env": {
+    "browser": true
+  }
+}

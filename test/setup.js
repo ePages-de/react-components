@@ -15,11 +15,7 @@ if (typeof window !== 'undefined') {
   }
 }
 
-// configure test suite
-const unexpected = require('unexpected')
-const unexpectedImmutable = require('unexpected-immutable')
-const unexpectedReact = require('unexpected-react')
-const unexpectedSinon = require('unexpected-sinon')
-unexpected.use(unexpectedImmutable)
-unexpected.use(unexpectedReact)
-unexpected.use(unexpectedSinon)
+// This require is necessary because `unexpected-react` must be required before `react`.
+// See: https://github.com/bruderstein/unexpected-react/tree/6be72d34ae571d1b095a1701a1181837d9d89b5a#with-the-full-virtual-dom-all-custom-components-and-the-dom-elements
+// Otherwise, tests would fail with an error: "The global rendering hook is not attached".
+require('unexpected-react')

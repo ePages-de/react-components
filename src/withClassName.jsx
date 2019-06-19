@@ -12,7 +12,7 @@ export default function withClassName (className, hoistedMethods = []) {
       }
 
       render () {
-        const {className: additionalClassName, ...other} = this.props
+        const { className: additionalClassName, ...other } = this.props
         return <Component
           {...other}
           className={additionalClassName ? className + ' ' + additionalClassName : className}

@@ -13,7 +13,8 @@ export class TextareaFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, scopedName, rows, ...other} = this.props // eslint-disable-line no-unused-vars
+    const { value, onChange, name, scopedName, rows, ...other } = this.props
+
     return <textarea
       autoComplete="off"
       autoCorrect="off"

@@ -2,16 +2,16 @@ import Immutable from 'immutable'
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
 import sinon from 'sinon'
-import expect from 'unexpected'
 
-import {SortFieldRaw} from '../../src/form/SortField'
+import { SortFieldRaw } from '../../src/form/SortField'
+import expect from '../unexpected'
 
 const defaultValue = Immutable.fromJS([
-  {name: 'first'},
-  {name: 'second'}
+  { name: 'first' },
+  { name: 'second' }
 ])
 
-function render ({value = defaultValue} = {}) {
+function render ({ value = defaultValue } = {}) {
   const onChange = sinon.spy()
   const dom = TestUtils.renderIntoDocument(
     <SortFieldRaw
@@ -40,12 +40,12 @@ function render ({value = defaultValue} = {}) {
   )
   const items = TestUtils.find(dom, '.list-item')
 
-  return {onChange, dom, items}
+  return { onChange, dom, items }
 }
 
 describe('SortField', function () {
   it('renders', function () {
-    const {dom} = render()
+    const { dom } = render()
 
     expect(dom, 'to have rendered',
       <div className="list">
@@ -56,10 +56,10 @@ describe('SortField', function () {
   })
 
   it('returns new value', function () {
-    const {onChange, items} = render()
+    const { onChange, items } = render()
 
     expect(onChange, 'was not called')
-    TestUtils.Simulate.dragStart(items[0], {dataTransfer: {setData: () => {}}})
+    TestUtils.Simulate.dragStart(items[0], { dataTransfer: { setData: () => {} } })
     TestUtils.Simulate.dragEnter(items[1])
     TestUtils.Simulate.dragOver(items[1])
 
@@ -68,14 +68,14 @@ describe('SortField', function () {
 
     expect(onChange, 'to have calls satisfying', () => {
       onChange(Immutable.fromJS([
-        {name: 'second'},
-        {name: 'first'}
+        { name: 'second' },
+        { name: 'first' }
       ]))
     })
   })
 
   it('adds source/target information', function () {
-    const {onChange, dom, items} = render()
+    const { onChange, dom, items } = render()
 
     TestUtils.Simulate.dragStart(items[0])
 

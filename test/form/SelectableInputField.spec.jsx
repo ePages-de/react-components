@@ -2,10 +2,10 @@ import Immutable from 'immutable'
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
 import sinon from 'sinon'
-import expect from 'unexpected'
 
 import Form from '../../src/form/Form'
 import SelectableInputField from '../../src/form/SelectableInputField'
+import expect from '../unexpected'
 
 function render () {
   const initialValue = Immutable.fromJS({
@@ -22,12 +22,12 @@ function render () {
   const inputField0 = TestUtils.find(dom, 'input')[0]
   const inputField1 = TestUtils.find(dom, 'input')[1]
 
-  return {initialValue, onSubmit, dom, form, inputField0, inputField1}
+  return { initialValue, onSubmit, dom, form, inputField0, inputField1 }
 }
 
 describe('SelectableInputField', function () {
   it('renders', function () {
-    const {dom} = render()
+    const { dom } = render()
 
     expect(dom, 'to have rendered',
       <form>
@@ -51,17 +51,17 @@ describe('SelectableInputField', function () {
   })
 
   it('returns new value', function () {
-    const {form, onSubmit, inputField0, inputField1} = render()
+    const { form, onSubmit, inputField0, inputField1 } = render()
 
     expect(onSubmit, 'was not called')
 
     expect(inputField1.disabled, 'to be', true)
     expect(inputField0.checked, 'to be', false)
-    TestUtils.Simulate.change(inputField0, {target: {checked: true}})
+    TestUtils.Simulate.change(inputField0, { target: { checked: true } })
     expect(inputField0.checked, 'to be', true)
     expect(inputField1.disabled, 'to be', false)
 
-    TestUtils.Simulate.change(inputField1, {target: {value: 'ab'}})
+    TestUtils.Simulate.change(inputField1, { target: { value: 'ab' } })
     expect(inputField1.value, 'to be', 'ab')
 
     TestUtils.Simulate.submit(form)

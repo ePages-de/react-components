@@ -2,18 +2,18 @@ import Immutable from 'immutable'
 import React from 'react'
 import TestUtils from 'react-testutils-additions'
 import sinon from 'sinon'
-import expect from 'unexpected'
 
 import ErrorMessage from '../../src/form/ErrorMessage'
 import Form from '../../src/form/Form'
 import IteratorField from '../../src/form/IteratorField'
+import expect from '../unexpected'
 import TestField from './TestField'
 
-function render ({validate, skip, take} = {}) {
+function render ({ validate, skip, take } = {}) {
   const initialValue = Immutable.fromJS({
     tags: [
-      {name: 'first', color: {hex: '#ff0000'}},
-      {name: 'second', color: {hex: '#00ff00'}}
+      { name: 'first', color: { hex: '#ff0000' } },
+      { name: 'second', color: { hex: '#00ff00' } }
     ]
   })
   const onSubmit = sinon.spy()
@@ -33,12 +33,12 @@ function render ({validate, skip, take} = {}) {
   const form = TestUtils.findOne(dom, 'form')
   const tagNameFields = TestUtils.find(dom, '.tagName')
 
-  return {initialValue, onSubmit, dom, form, tagNameFields}
+  return { initialValue, onSubmit, dom, form, tagNameFields }
 }
 
 describe('IteratorField', function () {
   it('renders', function () {
-    const {dom} = render()
+    const { dom } = render()
 
     expect(dom, 'to have rendered',
       <form>
@@ -57,7 +57,7 @@ describe('IteratorField', function () {
   })
 
   it('skips items', function () {
-    const {dom} = render({skip: 1})
+    const { dom } = render({ skip: 1 })
 
     expect(dom, 'to have rendered',
       <form>
@@ -69,7 +69,7 @@ describe('IteratorField', function () {
   })
 
   it('takes items', function () {
-    const {dom} = render({take: 1})
+    const { dom } = render({ take: 1 })
 
     expect(dom, 'to have rendered',
       <form>
@@ -81,20 +81,20 @@ describe('IteratorField', function () {
   })
 
   it('returns new value', function () {
-    const {onSubmit, form, tagNameFields} = render()
+    const { onSubmit, form, tagNameFields } = render()
 
     expect(tagNameFields, 'to have length', 2)
     expect(onSubmit, 'was not called')
-    TestUtils.Simulate.change(tagNameFields[0], {target: {value: 'first-new'}})
-    TestUtils.Simulate.change(tagNameFields[1], {target: {value: 'second-new'}})
+    TestUtils.Simulate.change(tagNameFields[0], { target: { value: 'first-new' } })
+    TestUtils.Simulate.change(tagNameFields[1], { target: { value: 'second-new' } })
     TestUtils.Simulate.submit(form)
 
     expect(onSubmit, 'was called once')
     expect(onSubmit, 'to have calls satisfying', function () {
       onSubmit(Immutable.fromJS({
         tags: [
-          {name: 'first-new', color: {hex: '#ff0000'}},
-          {name: 'second-new', color: {hex: '#00ff00'}}
+          { name: 'first-new', color: { hex: '#ff0000' } },
+          { name: 'second-new', color: { hex: '#00ff00' } }
         ]
       }))
     })
@@ -106,7 +106,7 @@ describe('IteratorField', function () {
         name: !tag.get('name') ? 'required' : null
       }))
     })
-    const {dom, form, tagNameFields} = render({validate})
+    const { dom, form, tagNameFields } = render({ validate })
 
     expect(tagNameFields, 'to have length', 2)
     TestUtils.Simulate.submit(form)
@@ -122,7 +122,7 @@ describe('IteratorField', function () {
         </div>
       </form>
     )
-    TestUtils.Simulate.change(tagNameFields[1], {target: {value: ''}})
+    TestUtils.Simulate.change(tagNameFields[1], { target: { value: '' } })
     TestUtils.Simulate.submit(form)
 
     expect(dom, 'to have rendered',

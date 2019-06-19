@@ -21,7 +21,7 @@ export class RadioButtonFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, onChange, name, scopedName, buttons, disabled, ...other} = this.props // eslint-disable-line no-unused-vars
+    const { value, onChange, name, scopedName, buttons, disabled, ...other } = this.props
 
     return (
       <div {...other}>

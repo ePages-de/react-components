@@ -2,7 +2,7 @@ import Immutable from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import {CheckboxField, ChoiceField, ColorpickerField, DropDownField, ErrorMessage, Form, InputField, RadioButtonField, SelectableInputField, SmartInputField, TextareaField, withClassName} from '../src/index'
+import { CheckboxField, ChoiceField, ColorpickerField, DropDownField, ErrorMessage, Form, InputField, RadioButtonField, SelectableInputField, SmartInputField, TextareaField, withClassName } from '../src/index'
 
 const initialValue = Immutable.fromJS({
   name: 'name',
@@ -19,15 +19,15 @@ const initialValue = Immutable.fromJS({
 })
 
 const sizes = [
-  {value: 's', label: 'Small'},
-  {value: 'm', label: 'Medium'},
-  {value: 'l', label: 'Large'}
+  { value: 's', label: 'Small' },
+  { value: 'm', label: 'Medium' },
+  { value: 'l', label: 'Large' }
 ]
 
 const cuts = [
-  {value: 'wide', label: 'Wide'},
-  {value: 'loose', label: 'Loose'},
-  {value: 'fit', label: 'Fit'}
+  { value: 'wide', label: 'Wide' },
+  { value: 'loose', label: 'Loose' },
+  { value: 'fit', label: 'Fit' }
 ]
 
 const getTagSuggestions = (text) => Promise.resolve(text.length > 0 ? [text + '1', text + '2'] : null)
@@ -37,7 +37,7 @@ class App extends React.Component {
   constructor (props) {
     super(props)
 
-    this.state = {formValue: initialValue}
+    this.state = { formValue: initialValue }
   }
 
   render () {
@@ -105,7 +105,7 @@ class App extends React.Component {
   }
 
   debugOnChange = (newValue) => {
-    this.setState({formValue: newValue})
+    this.setState({ formValue: newValue })
   }
 
   onSubmit = (value) => {
@@ -113,7 +113,7 @@ class App extends React.Component {
   }
 
   validate = (value) => {
-    return Immutable.fromJS({name: !value.get('name') ? 'required' : null})
+    return Immutable.fromJS({ name: !value.get('name') ? 'required' : null })
   }
 }
 

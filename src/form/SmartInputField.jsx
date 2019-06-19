@@ -91,6 +91,9 @@ export class SmartInputFieldRaw extends React.Component {
     activeSuggestionIndex: null
   }
 
+  suggestionsNodeRef = React.createRef()
+  suggestionNodeRefs = {}
+
   focus = () => {
     if (this.input) {
       this.input.focus()
@@ -98,8 +101,18 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   render () {
-    const {value, suggestionDisabled, autoFocus, renderValue, renderSuggestion, hideValues, placeholderText, className, disabled} = this.props
-    const {text, focused, suggestions, activeSuggestionIndex} = this.state
+    const {
+      value,
+      suggestionDisabled,
+      autoFocus,
+      renderValue,
+      renderSuggestion,
+      hideValues,
+      placeholderText,
+      className,
+      disabled
+    } = this.props
+    const { text, focused, suggestions, activeSuggestionIndex } = this.state
     const suggestionsVisible = suggestions && suggestions.length > 0
 
     const styles = typeof className === 'string'
@@ -156,7 +169,7 @@ export class SmartInputFieldRaw extends React.Component {
           {values.concat(inputField)}
         </div>
         {suggestionsVisible && (
-          <div className={styles.suggestions} ref="suggestions">
+          <div className={styles.suggestions} ref={this.suggestionsNodeRef}>
             {suggestions.map((suggestion, index) =>
               <div
                 key={index}
@@ -167,7 +180,7 @@ export class SmartInputFieldRaw extends React.Component {
                   activeSuggestionIndex === index && styles.suggestionActive,
                   suggestionDisabled(suggestion, index) && styles.suggestionDisabled
                 ].filter(Boolean).join(' ')}
-                ref={`suggestion-${index}`}>
+                ref={node => { this.suggestionNodeRefs[index] = node }}>
                 {renderSuggestion(suggestion)}
               </div>
             )}
@@ -181,13 +194,13 @@ export class SmartInputFieldRaw extends React.Component {
     const text = event.target.value
 
     // update current entered text in state and update suggestion list
-    this.setState({text})
+    this.setState({ text })
     this.getSuggestions(text, this.props.value)
   }
 
   handleKeyDown = (event) => {
-    const {value, onChange, convertTextToValue, convertSuggestionToValue, strict, hideValues, resetText, selectText} = this.props
-    const {text, suggestions, activeSuggestionIndex} = this.state
+    const { value, onChange, convertTextToValue, convertSuggestionToValue, strict, hideValues, resetText, selectText } = this.props
+    const { text, suggestions, activeSuggestionIndex } = this.state
 
     switch (event.keyCode) {
       // enter
@@ -258,16 +271,16 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   handleFocus = () => {
-    const {value} = this.props
-    const {text} = this.state
+    const { value } = this.props
+    const { text } = this.state
 
-    this.setState({focused: true})
+    this.setState({ focused: true })
     this.getSuggestions(text, value)
   }
 
   handleBlur = () => {
-    const {onBlur} = this.props
-    this.setState({focused: false})
+    const { onBlur } = this.props
+    this.setState({ focused: false })
     this.resetText()
     onBlur()
   }
@@ -281,7 +294,7 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   handleClickValueRemove = (index) => {
-    const {value, onChange} = this.props
+    const { value, onChange } = this.props
 
     return function (event) {
       event.preventDefault()
@@ -292,7 +305,7 @@ export class SmartInputFieldRaw extends React.Component {
 
   handleClickSuggestion = (suggestion, index) => {
     const self = this
-    const {value, onChange, suggestionDisabled, convertSuggestionToValue, resetText, selectText} = this.props
+    const { value, onChange, suggestionDisabled, convertSuggestionToValue, resetText, selectText } = this.props
 
     return function () {
       if (!suggestionDisabled(suggestion, index)) {
@@ -311,7 +324,7 @@ export class SmartInputFieldRaw extends React.Component {
 
   handleMouseEnterSuggestion = (suggestion, index) => {
     const self = this
-    const {suggestionDisabled} = this.props
+    const { suggestionDisabled } = this.props
 
     return function () {
       if (!suggestionDisabled(suggestion, index)) {
@@ -329,26 +342,26 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   getSuggestions = (text, value) => {
-    const {getSuggestions, suggestionDisabled, strict} = this.props
+    const { getSuggestions, suggestionDisabled, strict } = this.props
 
     if (getSuggestions) {
-      this.setState({loading: true})
+      this.setState({ loading: true })
       getSuggestions(text, value).then((suggestions) => {
-        this.setState({suggestions})
+        this.setState({ suggestions })
 
         // if non-strict, then of all non-disabled suggestions pick the first and select it
         const selection = strict && suggestions && suggestions.map((suggestion, index) => [suggestion, index]).filter(([s, i]) => !suggestionDisabled(s, i))[0]
 
         this.selectSuggestion(selection ? selection[1] : null)
       }).catch(() => {
-        this.setState({loading: false})
+        this.setState({ loading: false })
       })
     }
   }
 
   selectPreviousSuggestion = () => {
-    const {suggestionDisabled, strict} = this.props
-    const {suggestions, activeSuggestionIndex} = this.state
+    const { suggestionDisabled, strict } = this.props
+    const { suggestions, activeSuggestionIndex } = this.state
 
     if (typeof activeSuggestionIndex === 'number') {
       // of all non-disabled suggestion pick the next after the current
@@ -365,8 +378,8 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   selectNextSuggestion = () => {
-    const {suggestionDisabled} = this.props
-    const {suggestions, activeSuggestionIndex} = this.state
+    const { suggestionDisabled } = this.props
+    const { suggestions, activeSuggestionIndex } = this.state
 
     if (typeof activeSuggestionIndex === 'number') {
       // of all non-disabled suggestion pick the next before the current
@@ -385,10 +398,10 @@ export class SmartInputFieldRaw extends React.Component {
   }
 
   selectSuggestion = (index) => {
-    this.setState({activeSuggestionIndex: index})
+    this.setState({ activeSuggestionIndex: index })
 
-    const suggestionsNode = this.refs.suggestions
-    const suggestionNode = this.refs[`suggestion-${index}`]
+    const suggestionsNode = this.suggestionsNodeRef.current
+    const suggestionNode = this.suggestionNodeRefs[index]
 
     if (suggestionsNode && suggestionNode) {
       const r1 = suggestionsNode.getBoundingClientRect()
