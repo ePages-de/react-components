@@ -30,28 +30,33 @@ class SelectableInputFieldRaw extends React.Component {
     const checkboxName = `${name}Selected`
     const scopedCheckboxName = `${scopedName}Selected`
 
-    return <div {...other}>
-      <label title={title}>
-        <input
-          name={scopedCheckboxName}
-          type="checkbox"
-          checked={formValueScope.getValue(checkboxName)}
-          onChange={(event) => {
-            formValueScope.setValue(checkboxName, event.target.checked)
-            if (event.target.checked) {
-              // give time for the input field to be enabled
-              window.setTimeout(() => this.inputField.focus(), 0)
-            }
-          }} />
-        {label}
-      </label>
-      <InputField
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        disabled={!this.context.formValueScope.getValue(checkboxName)}
-        ref={(component) => { this.inputField = component }} />
-    </div>
+    return (
+      <div {...other}>
+        <label title={title}>
+          <input
+            name={scopedCheckboxName}
+            type="checkbox"
+            checked={formValueScope.getValue(checkboxName)}
+            onChange={(event) => {
+              formValueScope.setValue(checkboxName, event.target.checked)
+
+              if (event.target.checked) {
+                // Defer so that the browser can enable the input field before trying to focus it.
+                window.setTimeout(() => this.inputField.focus(), 0)
+              }
+            }}
+          />
+          {label}
+        </label>
+        <InputField
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          disabled={!this.context.formValueScope.getValue(checkboxName)}
+          ref={(component) => { this.inputField = component }}
+        />
+      </div>
+    )
   }
 }
 

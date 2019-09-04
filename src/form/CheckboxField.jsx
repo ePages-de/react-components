@@ -19,11 +19,15 @@ export class CheckboxFieldRaw extends React.Component {
   render () {
     const { value, onChange, name, scopedName, negate, ...other } = this.props
 
-    return <input {...other}
-      name={scopedName}
-      type="checkbox"
-      checked={this.transformValue(value)}
-      onChange={(event) => onChange(this.transformValue(event.target.checked))} />
+    return (
+      <input
+        {...other}
+        name={scopedName}
+        type="checkbox"
+        checked={this.transformValue(value)}
+        onChange={(event) => onChange(this.transformValue(event.target.checked))}
+      />
+    )
   }
 
   transformValue = (value) => {

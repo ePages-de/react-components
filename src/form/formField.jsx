@@ -24,13 +24,16 @@ export default function formField () {
         const { formValueScope } = this.context
         const { name, ...other } = this.props
 
-        return <Component
-          {...other}
-          value={formValueScope.getValue(name)}
-          onChange={(newValue) => formValueScope.setValue(name, newValue)}
-          name={name}
-          scopedName={formValueScope.name + '.' + name}
-          ref={this.hoistMethods} />
+        return (
+          <Component
+            {...other}
+            value={formValueScope.getValue(name)}
+            onChange={(newValue) => formValueScope.setValue(name, newValue)}
+            name={name}
+            scopedName={formValueScope.name + '.' + name}
+            ref={this.hoistMethods}
+          />
+        )
       }
 
       hoistMethods = (wrappedComponent) => {

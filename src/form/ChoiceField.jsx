@@ -25,7 +25,8 @@ export class ChoiceFieldRaw extends React.Component {
             <div
               key={index}
               onClick={() => onChange(choice.value)}
-              data-active={choice.value === value ? 'yes' : 'no'}>
+              data-active={choice.value === value ? 'yes' : 'no'}
+            >
               {choice.label}
             </div>
           )

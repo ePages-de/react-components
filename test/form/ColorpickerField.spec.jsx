@@ -12,7 +12,8 @@ function render ({ color = DEFAULT_COLOR_HSL_STRING, onChange = () => null }) {
     <ColorpickerFieldRaw
       className="test-colorpicker"
       value={color}
-      onChange={onChange} />
+      onChange={onChange}
+    />
   )
 
   const svCanvas = TestUtils.findOne(dom, '.test-colorpicker-value')

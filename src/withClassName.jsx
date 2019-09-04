@@ -13,10 +13,14 @@ export default function withClassName (className, hoistedMethods = []) {
 
       render () {
         const { className: additionalClassName, ...other } = this.props
-        return <Component
-          {...other}
-          className={additionalClassName ? className + ' ' + additionalClassName : className}
-          ref={this.hoistMethods} />
+
+        return (
+          <Component
+            {...other}
+            className={additionalClassName ? className + ' ' + additionalClassName : className}
+            ref={this.hoistMethods}
+          />
+        )
       }
 
       hoistMethods = (wrappedComponent) => {

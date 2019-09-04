@@ -111,7 +111,8 @@ export class SortFieldRaw extends React.Component {
                 this.setState({ dragIndex: null, dropIndex: null })
                 this.props.onReorder(dragIndex, index)
                 onChange(swap(value, dragIndex, index))
-              }}>
+              }}
+            >
               {children(itemWithDndInfo, index, value)}
             </div>
           )

@@ -21,7 +21,8 @@ function render ({ value = defaultValue } = {}) {
       orientation="vertical"
       itemSize={30}
       crossAxisItemSize={100}
-      itemCount={value.count()}>
+      itemCount={value.count()}
+    >
       {(item) =>
         <div
           className={[
@@ -32,10 +33,10 @@ function render ({ value = defaultValue } = {}) {
             !item.get('__isTarget') && 'target-no',
             item.get('__isDragging') && 'dragging-yes',
             !item.get('__isDragging') && 'dragging-no'
-          ].filter(Boolean).join(' ')}>
+          ].filter(Boolean).join(' ')}
+        >
           {item.get('name')}
-        </div>
-      }
+        </div>}
     </SortFieldRaw>
   )
   const items = TestUtils.find(dom, '.list-item')

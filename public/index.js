@@ -45,7 +45,7 @@ class App extends React.Component {
       <div>
         <h1>Form</h1>
         <div>
-          <Form name="form" value={initialValue} onSubmit={this.onSubmit} onChange={this.debugOnChange} validate={this.validate} validateWaitMs={300}>
+          <Form name="form" value={initialValue} onSubmit={this.handleSubmit} onChange={this.handleChange} validate={this.validate} validateWaitMs={300}>
             <div>
               <div>
                 <h2>BlueInputField</h2>
@@ -104,12 +104,13 @@ class App extends React.Component {
     )
   }
 
-  debugOnChange = (newValue) => {
+  handleChange = (newValue) => {
     this.setState({ formValue: newValue })
   }
 
-  onSubmit = (value) => {
-    console.log(value.toJS()) // eslint-disable-line no-console
+  handleSubmit = (value) => {
+    // eslint-disable-next-line no-console
+    console.log(value.toJS())
   }
 
   validate = (value) => {
