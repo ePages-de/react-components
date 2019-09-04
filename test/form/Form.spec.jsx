@@ -72,7 +72,7 @@ function render (props) {
   const onSubmit = sinon.stub()
   const dom = TestUtils.renderIntoDocument(
     <Form name="test" value={initialValue} onSubmit={onSubmit} {...props}>
-      {({ pristine, submitting }) =>
+      {({ pristine, submitting }) => (
         <div>
           <TestField name="firstName" className="firstName" />
           <ErrorMessage name="firstName" />
@@ -86,7 +86,7 @@ function render (props) {
           <div>{`pristine ${pristine}`}</div>
           <div>{`submitting ${submitting}`}</div>
         </div>
-      }
+      )}
     </Form>
   )
   const form = TestUtils.findOne(dom, 'form')
@@ -357,7 +357,8 @@ describe('Form', function () {
           <Form
             name="test"
             value={Immutable.fromJS({})}
-            onSubmit={() => this.setState({ unmounted: true }) || Promise.resolve()}>
+            onSubmit={() => this.setState({ unmounted: true }) || Promise.resolve()}
+          >
             {() => null}
           </Form>
         )

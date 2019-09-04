@@ -22,7 +22,8 @@ function render ({ value = Immutable.fromJS([]), getSuggestions, suggestionDisab
       placeholderText={placeholderText}
       resetText={resetText}
       selectText={selectText}
-      className="smart-input" />
+      className="smart-input"
+    />
   )
   const input = TestUtils.findOne(dom, 'input')
 

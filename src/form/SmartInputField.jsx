@@ -148,7 +148,8 @@ export class SmartInputFieldRaw extends React.Component {
         className={styles.inputText}
         key="inputField"
         ref={(node) => { this.input = node }}
-        disabled={disabled} />
+        disabled={disabled}
+      />
     )
 
     const values = hideValues ? [] : value.map((value, index) =>
@@ -164,7 +165,8 @@ export class SmartInputFieldRaw extends React.Component {
           focused && styles.baseFocused,
           suggestionsVisible && styles.baseWithSuggestions
         ].filter(Boolean).join(' ')}
-        onMouseDown={this.handleMouseDownContainer}>
+        onMouseDown={this.handleMouseDownContainer}
+      >
         <div className={styles.input}>
           {values.concat(inputField)}
         </div>
@@ -180,7 +182,8 @@ export class SmartInputFieldRaw extends React.Component {
                   activeSuggestionIndex === index && styles.suggestionActive,
                   suggestionDisabled(suggestion, index) && styles.suggestionDisabled
                 ].filter(Boolean).join(' ')}
-                ref={node => { this.suggestionNodeRefs[index] = node }}>
+                ref={node => { this.suggestionNodeRefs[index] = node }}
+              >
                 {renderSuggestion(suggestion)}
               </div>
             )}

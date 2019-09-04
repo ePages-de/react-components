@@ -14,11 +14,15 @@ class TestField extends React.Component {
   render () {
     const { value, onChange, name, scopedName, ...other } = this.props
 
-    return <input {...other}
-      name={scopedName}
-      type="text"
-      value={value}
-      onChange={(event) => onChange(event.target.value)} />
+    return (
+      <input
+        {...other}
+        name={scopedName}
+        type="text"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    )
   }
 }
 

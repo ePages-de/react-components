@@ -173,26 +173,31 @@ export class ColorpickerFieldRaw extends Component {
 
     return (
       <div
-        className={styles.base}>
+        className={styles.base}
+      >
         <Coordinator
           onChange={this.handleSvChange}
           className={styles.baseSaturationValue}
           width={width - (hueWidth + spacing)}
           height={height}
-          coords={[s / 100, v / 100]}>
+          coords={[s / 100, v / 100]}
+        >
           {({ x, y, height }) => ([
             <div
               key="s"
               className={styles.saturation}
-              style={{ background: gradient('to right', hueColor) }} />,
+              style={{ background: gradient('to right', hueColor) }}
+            />,
             <div
               key="v"
               className={styles.value}
-              style={{ background: gradient('to bottom', '#000') }} />,
+              style={{ background: gradient('to bottom', '#000') }}
+            />,
             <div
               key="marker"
               className={styles.marker}
-              style={{ left: Math.round(x), top: Math.round(height - y) }} />
+              style={{ left: Math.round(x), top: Math.round(height - y) }}
+            />
           ])}
         </Coordinator>
         <Coordinator
@@ -201,7 +206,8 @@ export class ColorpickerFieldRaw extends Component {
           coords={[0, h / 360]}
           width={hueWidth}
           height={height}
-          style={{ background: `linear-gradient(to bottom,
+          style={{
+            background: `linear-gradient(to bottom,
               #ff0000 0%,
               #ffff00 20%,
               #00ff00 35%,
@@ -209,7 +215,8 @@ export class ColorpickerFieldRaw extends Component {
               #0000ff 65%,
               #ff00ff 80%,
               #ff0000 100%)`
-          }}>
+          }}
+        >
           {({ y }) => (
             <div className={styles.marker} style={{ top: Math.round(y) }} />
           )}
@@ -230,7 +237,8 @@ export class ColorpickerFieldRaw extends Component {
             if (isValidColor(value)) {
               this.props.onChange(color(value).hsl().round().string())
             }
-          }} />
+          }}
+        />
       </div>
     )
   }

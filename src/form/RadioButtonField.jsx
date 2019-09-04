@@ -34,7 +34,8 @@ export class RadioButtonFieldRaw extends React.Component {
               value={index}
               onChange={(event) => onChange(buttons[parseInt(event.target.value)].value)}
               checked={value === button.value}
-              disabled={disabled} />
+              disabled={disabled}
+            />
             <label htmlFor={scopedName + '.' + index}>
               {button.label}
             </label>

@@ -23,15 +23,20 @@ export class RangeFieldRaw extends React.Component {
   render () {
     const { value, onChange, name, scopedName, min, max, step, multiplier, ...other } = this.props
 
-    return <input {...other}
-      name={scopedName}
-      type="range"
-      min={min}
-      max={max}
-      step={step}
-      value={this.transformValue(value)}
-      onChange={(event) => onChange(this.transformValueInverse(event.target.value))}
-      onInput={this.onChange} />
+    return (
+      <input
+        {...other}
+        name={scopedName}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={this.transformValue(value)}
+        onChange={(event) => onChange(this.transformValueInverse(event.target.value))}
+        // eslint-disable-next-line react/jsx-handler-names
+        onInput={this.onChange}
+      />
+    )
   }
 
   transformValue = (value) => value * this.props.multiplier

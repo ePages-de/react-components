@@ -121,7 +121,8 @@ export default class Form extends React.Component {
     this.validate = createValidateFunc(props.validate, props.validateWaitMs)
   }
 
-  componentWillReceiveProps (nextProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps (nextProps) {
     const serverErrors =
       nextProps.externalErrors &&
       nextProps.externalErrors.size > 0
@@ -284,9 +285,9 @@ export default class Form extends React.Component {
     return this.state.errors.getIn(parseName(name))
   }
 
-  submit = () => this.onSubmit({ preventDefault: () => {} })
+  submit = () => this.handleSubmit({ preventDefault: () => {} })
 
-  onSubmit = (event) => {
+  handleSubmit = (event) => {
     event.preventDefault()
 
     if (!this.props.disabled && !this.state.submitting) {
@@ -333,7 +334,7 @@ export default class Form extends React.Component {
     } = this.props
 
     return (
-      <form autoComplete="off" {...other} name={name} onSubmit={this.onSubmit}>
+      <form autoComplete="off" {...other} name={name} onSubmit={this.handleSubmit}>
         {typeof children === 'function' ? children({
           value: this.state.value,
           pristine: Immutable.is(value, this.state.value),

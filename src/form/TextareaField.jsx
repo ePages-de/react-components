@@ -15,17 +15,20 @@ export class TextareaFieldRaw extends React.Component {
   render () {
     const { value, onChange, name, scopedName, rows, ...other } = this.props
 
-    return <textarea
-      autoComplete="off"
-      autoCorrect="off"
-      autoCapitalize="off"
-      spellCheck="false"
-      {...other}
-      name={scopedName}
-      rows={rows}
-      value={value}
-      onChange={(event) => onChange(event.target.value)}
-      ref={(node) => { this.textarea = node }} />
+    return (
+      <textarea
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
+        {...other}
+        name={scopedName}
+        rows={rows}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        ref={(node) => { this.textarea = node }}
+      />
+    )
   }
 
   focus = () => this.textarea && this.textarea.focus()

@@ -35,7 +35,8 @@ describe('SelectableInputField', function () {
           <label title="mySelectableInput">
             <input
               name="testform.facebookSelected"
-              type="checkbox" />
+              type="checkbox"
+            />
           </label>
           <input
             autoComplete="off"
@@ -44,7 +45,8 @@ describe('SelectableInputField', function () {
             spellCheck="false"
             name="testform.facebook"
             type="text"
-            value="testvalue" />
+            value="testvalue"
+          />
         </div>
       </form>
     )
