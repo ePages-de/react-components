@@ -69,7 +69,7 @@
     "unexpected-react": "5.0.1",
     "unexpected-sinon": "10.11.2",
     "webpack": "4.39.3",
-    "webpack-cli": "3.3.7",
+    "webpack-cli": "3.3.9",
     "webpack-dev-server": "3.8.0"
   },
   "importSort": {
