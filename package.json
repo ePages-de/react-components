@@ -61,7 +61,7 @@
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "react-immutable-proptypes": "2.1.0",
-    "react-test-renderer": "16.9.0",
+    "react-test-renderer": "16.11.0",
     "react-testutils-additions": "16.0.2",
     "sinon": "7.4.2",
     "unexpected": "11.8.0",
