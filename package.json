@@ -25,7 +25,7 @@
   "peerDependencies": {
     "color": "^3.1.2",
     "hoist-non-react-statics": "^3.3.0",
-    "prop-types": "^15.6.0",
+    "prop-types": "^15.7.2",
     "react": "^16.0.0",
     "immutable": "^3.8.2"
   },
