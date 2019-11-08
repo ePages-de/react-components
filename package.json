@@ -68,9 +68,9 @@
     "unexpected-immutable": "0.5.0",
     "unexpected-react": "5.0.1",
     "unexpected-sinon": "10.11.2",
-    "webpack": "4.39.3",
-    "webpack-cli": "3.3.7",
-    "webpack-dev-server": "3.8.0"
+    "webpack": "4.41.2",
+    "webpack-cli": "3.3.10",
+    "webpack-dev-server": "3.9.0"
   },
   "importSort": {
     ".js, .jsx": {
