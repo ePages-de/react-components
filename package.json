@@ -23,7 +23,7 @@
   "license": "MIT",
   "main": "build/index.js",
   "peerDependencies": {
-    "color": "^3.0.0",
+    "color": "^3.1.2",
     "hoist-non-react-statics": "^3.0.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
