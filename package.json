@@ -50,7 +50,7 @@
     "eslint-plugin-react": "7.16.0",
     "eslint-plugin-standard": "4.0.1",
     "file-loader": "4.2.0",
-    "hoist-non-react-statics": "3.3.0",
+    "hoist-non-react-statics": "3.3.1",
     "immutable": "3.8.2",
     "import-sort-cli": "6.0.0",
     "import-sort-parser-babylon": "6.0.0",
