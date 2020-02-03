@@ -55,7 +55,7 @@
     "import-sort-cli": "6.0.0",
     "import-sort-parser-babylon": "6.0.0",
     "import-sort-style-choffmeister": "1.0.0",
-    "jest": "24.9.0",
+    "jest": "25.1.0",
     "json-loader": "0.5.7",
     "prop-types": "15.7.2",
     "react": "16.11.0",
