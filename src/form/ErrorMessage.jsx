@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-export default class ErrorMessage extends React.Component {
-  static contextTypes = {
-    formValueScope: PropTypes.object.isRequired
-  }
+import { FormScopeValueContext } from './Form'
 
+class ErrorMessage extends React.Component {
   static propTypes = {
     name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     Component: PropTypes.any
@@ -17,7 +15,11 @@ export default class ErrorMessage extends React.Component {
 
   render () {
     const { name, Component, ...other } = this.props
-    const errorMessage = this.context.formValueScope.getError(name)
+    const errorMessage = this.context.getError(name)
     return errorMessage ? <Component {...other}>{errorMessage}</Component> : null
   }
 }
+
+ErrorMessage.contextType = FormScopeValueContext
+
+export default ErrorMessage

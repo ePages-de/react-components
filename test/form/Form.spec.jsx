@@ -6,17 +6,13 @@ import TestUtils from 'react-testutils-additions'
 import sinon from 'sinon'
 
 import ErrorMessage from '../../src/form/ErrorMessage'
-import Form from '../../src/form/Form'
+import Form, { FormScopeValueContext } from '../../src/form/Form'
 import { PropsSetter } from '../reactHelpers'
 import expect from '../unexpected'
 import TestField from './TestField'
 
 // to be able to output in dom server errors this component was made
 class ServerErrorMessage extends React.Component {
-  static contextTypes = {
-    formValueScope: PropTypes.object.isRequired
-  };
-
   static defaultProps = {
     Component: 'div'
   };
@@ -37,7 +33,7 @@ class ServerErrorMessage extends React.Component {
     const {
       updatedExternalErrors,
       props
-    } = this.context.formValueScope
+    } = this.context
 
     const { externalErrors } = props
 
@@ -60,6 +56,8 @@ class ServerErrorMessage extends React.Component {
     ) : null
   }
 }
+
+ServerErrorMessage.contextType = FormScopeValueContext
 
 function render (props) {
   const initialValue = Immutable.fromJS({

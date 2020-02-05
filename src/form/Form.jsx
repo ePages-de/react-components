@@ -4,11 +4,12 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
-import FormValueScope from './FormValueScope'
 
 // Creates a debounced version of `func` that receives its arguments as first,
 // and a callback function as second argument. When invoked multiple times, the
 // callback function is only called for the last invocation of `func`.
+export const FormScopeValueContext = React.createContext()
+
 function createValidateFunc (func, waitMs = 0) {
   let timer = null
   let lastPendingId = 0
@@ -72,7 +73,7 @@ function parseName (name) {
 // make sure to mirror changes in FormValueScope here
 export default class Form extends React.Component {
   static propTypes = {
-    ...FormValueScope.propTypes,
+    name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     value: PropTypes.any,
     onSubmit: PropTypes.func,
     onChange: PropTypes.func,
@@ -214,12 +215,16 @@ export default class Form extends React.Component {
   }
 
   setValue = (name, value) => {
+    console.log(`form setvalue`)
     const newValue1 = name !== undefined && name !== null
       ? this.state.value.setIn(parseName(name), value)
       : value
 
     const newValue2 = this.props.onChange(newValue1)
     const newValue = newValue2 || newValue1
+
+    console.log(`newValue:`)
+    console.log(newValue.toJS())
 
     const externalErrors =
       this.updatedExternalErrors || this.props.externalErrors
@@ -263,6 +268,8 @@ export default class Form extends React.Component {
         })
       }
     )
+
+    return newValue
   }
 
   reset = () => {
@@ -333,25 +340,20 @@ export default class Form extends React.Component {
       ...other
     } = this.props
 
+    console.log('rendering with:')
+    console.log(this.state.value.toJS())
+    
     return (
-      <form autoComplete="off" {...other} name={name} onSubmit={this.handleSubmit}>
-        {typeof children === 'function' ? children({
-          value: this.state.value,
-          pristine: Immutable.is(value, this.state.value),
-          submitting: this.state.submitting,
-          reset: () => this.reset()
-        }) : children}
-      </form>
+      <FormScopeValueContext.Provider value={this}>
+        <form autoComplete="off" {...other} name={name} onSubmit={this.handleSubmit}>
+          {typeof children === 'function' ? children({
+            value: this.state.value,
+            pristine: Immutable.is(value, this.state.value),
+            submitting: this.state.submitting,
+            reset: () => this.reset()
+          }) : children}
+        </form>
+      </FormScopeValueContext.Provider>
     )
-  }
-
-  static childContextTypes = {
-    formValueScope: PropTypes.object
-  }
-
-  getChildContext () {
-    return {
-      formValueScope: this
-    }
   }
 }

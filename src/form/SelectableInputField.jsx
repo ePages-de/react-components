@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
+import { FormScopeValueContext } from './Form'
 import InputField from './InputField'
 import formField from './formField'
 
 class SelectableInputFieldRaw extends React.Component {
-  static contextTypes = {
-    formValueScope: PropTypes.any.isRequired
-  }
-
   static propTypes = {
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -25,7 +22,7 @@ class SelectableInputFieldRaw extends React.Component {
   }
 
   render () {
-    const { formValueScope } = this.context
+    const formValueScope = this.context
     const { value, onChange, name, scopedName, type, title, label, placeholder, ...other } = this.props
     const checkboxName = `${name}Selected`
     const scopedCheckboxName = `${scopedName}Selected`
@@ -52,12 +49,14 @@ class SelectableInputFieldRaw extends React.Component {
           name={name}
           type={type}
           placeholder={placeholder}
-          disabled={!this.context.formValueScope.getValue(checkboxName)}
+          disabled={!formValueScope.getValue(checkboxName)}
           ref={(component) => { this.inputField = component }}
         />
       </div>
     )
   }
 }
+
+SelectableInputFieldRaw.contextType = FormScopeValueContext
 
 export default formField()(SelectableInputFieldRaw)
