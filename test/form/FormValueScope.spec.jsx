@@ -35,7 +35,7 @@ function renderWithContext ({ validate } = {}) {
 }
 
 describe('FormValueScope', function () {
-  it.only('renders', function () {
+  it('renders', function () {
     const { form, nameField } = renderWithContext()
 
     expect(form).toBeTruthy()
