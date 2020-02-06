@@ -4,6 +4,7 @@
   "version": "0.10.3",
   "scripts": {
     "start": "NODE_ENV=development node ./webpack.devserver.js",
+    "pretest": "npm run lint",
     "test": "jest",
     "posttest": "npm run build",
     "build": "sh -c \"rm -rf build/ && NODE_ENV=production babel src/ --out-dir build/\"",
