@@ -20,53 +20,44 @@ class FormValueScope extends React.Component {
   }
 
   get name () {
-    const outerScope = this.context
+    const outerScope = this.context.instance
     const ownName = this.props.name
     return `${outerScope.name}.${ownName}`
   }
 
   render () {
-    console.log('rerendering FormValueScope')
     return (
-      <FormScopeValueContext.Provider value={this}>
+      <FormScopeValueContext.Provider value={{ instance: this, state: this.state }}>
         {this.props.children}
       </FormScopeValueContext.Provider>
     )
   }
 
   getValue = (name) => {
-    const outerScope = this.context
+    const outerScope = this.context.instance
     const ownName = this.props.name
     const value = outerScope.getValue(ownName)
 
-    let result
     if (name !== undefined && name !== null) {
-      result = value ? value.getIn(parseName(name)) : undefined
+      return value ? value.getIn(parseName(name)) : undefined
     } else {
-      result = value
+      return value
     }
-
-    console.log('formValueScope result:')
-    console.log(result)
-    return result
   }
 
   setValue = (name, value) => {
-    const outerScope = this.context
+    const outerScope = this.context.instance
     const ownName = this.props.name
-    console.log('formValueScope setValue')
-    console.log(`ownName=${ownName}`)
 
     if (name !== undefined && name !== null) {
       return outerScope.setValue(ownName, outerScope.getValue(ownName).setIn(parseName(name), value))
     } else {
-      console.log('else setValue')
       return outerScope.setValue(ownName, value)
     }
   }
 
   getError = (name) => {
-    const outerScope = this.context
+    const outerScope = this.context.instance
     const ownName = this.props.name
     const error = outerScope.getError(ownName)
     return error ? error.getIn(parseName(name)) : undefined

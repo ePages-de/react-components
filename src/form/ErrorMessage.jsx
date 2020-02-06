@@ -15,7 +15,7 @@ class ErrorMessage extends React.Component {
 
   render () {
     const { name, Component, ...other } = this.props
-    const errorMessage = this.context.getError(name)
+    const errorMessage = this.context.instance.getError(name)
     return errorMessage ? <Component {...other}>{errorMessage}</Component> : null
   }
 }

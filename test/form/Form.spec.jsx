@@ -33,7 +33,7 @@ class ServerErrorMessage extends React.Component {
     const {
       updatedExternalErrors,
       props
-    } = this.context
+    } = this.context.instance
 
     const { externalErrors } = props
 

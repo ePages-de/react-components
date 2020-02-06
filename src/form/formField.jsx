@@ -9,8 +9,6 @@ export default function formField () {
     class FormField extends React.Component {
       static displayName = `FormField(${Component.displayName || Component.name || 'Component'})`
 
-      static contextType = FormScopeValueContext
-
       static propTypes = {
         ...BaseField.propTypes
       }
@@ -20,21 +18,14 @@ export default function formField () {
       }
 
       render () {
-        const formValueScope = this.context
+        const formValueScope = this.context.instance
         const { name, ...other } = this.props
-
-        console.log(`rendering formField:`)
-        console.log(formValueScope.getValue(name))
 
         return (
           <Component
             {...other}
             value={formValueScope.getValue(name)}
-            onChange={(newValue) => {
-              const result = formValueScope.setValue(name, newValue)
-              console.log(`onChange result=${result}`)
-              return result
-            }}
+            onChange={(newValue) => formValueScope.setValue(name, newValue)}
             name={name}
             scopedName={formValueScope.name + '.' + name}
             ref={this.hoistMethods}
@@ -48,6 +39,8 @@ export default function formField () {
         }
       }
     }
+
+    FormField.contextType = FormScopeValueContext
 
     return hoistNonReactStatics(FormField, Component)
   }

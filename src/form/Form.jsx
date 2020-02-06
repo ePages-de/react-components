@@ -4,12 +4,11 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
+export const FormScopeValueContext = React.createContext()
 
 // Creates a debounced version of `func` that receives its arguments as first,
 // and a callback function as second argument. When invoked multiple times, the
 // callback function is only called for the last invocation of `func`.
-export const FormScopeValueContext = React.createContext()
-
 function createValidateFunc (func, waitMs = 0) {
   let timer = null
   let lastPendingId = 0
@@ -215,7 +214,6 @@ export default class Form extends React.Component {
   }
 
   setValue = (name, value) => {
-    console.log(`form setvalue`)
     const newValue1 = name !== undefined && name !== null
       ? this.state.value.setIn(parseName(name), value)
       : value
@@ -335,11 +333,8 @@ export default class Form extends React.Component {
       ...other
     } = this.props
 
-    console.log('rendering with:')
-    console.log(this.state.value.toJS())
-
     return (
-      <FormScopeValueContext.Provider value={this}>
+      <FormScopeValueContext.Provider value={{ instance: this, state: this.state }}>
         <form autoComplete="off" {...other} name={name} onSubmit={this.handleSubmit}>
           {typeof children === 'function' ? children({
             value: this.state.value,
