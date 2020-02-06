@@ -223,9 +223,6 @@ export default class Form extends React.Component {
     const newValue2 = this.props.onChange(newValue1)
     const newValue = newValue2 || newValue1
 
-    console.log(`newValue:`)
-    console.log(newValue.toJS())
-
     const externalErrors =
       this.updatedExternalErrors || this.props.externalErrors
 
@@ -268,8 +265,6 @@ export default class Form extends React.Component {
         })
       }
     )
-
-    return newValue
   }
 
   reset = () => {
