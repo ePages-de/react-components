@@ -26,6 +26,7 @@ class FormValueScope extends React.Component {
   }
 
   render () {
+    console.log('rerendering FormValueScope')
     return (
       <FormScopeValueContext.Provider value={this}>
         {this.props.children}
@@ -57,22 +58,7 @@ class FormValueScope extends React.Component {
     console.log(`ownName=${ownName}`)
 
     if (name !== undefined && name !== null) {
-      console.log('name:')
-      console.log('VERDAMMTER outerScope:')
-      console.log(outerScope.state.value)
-
-
-
-      console.log(outerScope.getValue(ownName).toJS())
-      console.log(parseName(name))
-      console.log(value)
-      console.log(outerScope.getValue(ownName).setIn(parseName(name), value).toJS())
-      const result = outerScope.setValue(ownName, outerScope.getValue(ownName).setIn(parseName(name), value))
-      console.log('outerScope.setValue')
-      console.log(outerScope.setValue)
-      console.log(`setValue result:`)
-      console.log(result)
-      return result
+      return outerScope.setValue(ownName, outerScope.getValue(ownName).setIn(parseName(name), value))
     } else {
       console.log('else setValue')
       return outerScope.setValue(ownName, value)

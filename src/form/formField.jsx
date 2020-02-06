@@ -23,6 +23,9 @@ export default function formField () {
         const formValueScope = this.context
         const { name, ...other } = this.props
 
+        console.log(`rendering formField:`)
+        console.log(formValueScope.getValue(name))
+
         return (
           <Component
             {...other}

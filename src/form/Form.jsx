@@ -342,7 +342,7 @@ export default class Form extends React.Component {
 
     console.log('rendering with:')
     console.log(this.state.value.toJS())
-    
+
     return (
       <FormScopeValueContext.Provider value={this}>
         <form autoComplete="off" {...other} name={name} onSubmit={this.handleSubmit}>
