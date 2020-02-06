@@ -1,7 +1,6 @@
 import { fireEvent, render } from '@testing-library/react'
 import Immutable from 'immutable'
 import React from 'react'
-import sinon from 'sinon'
 
 import ErrorMessage from '../../src/form/ErrorMessage'
 import Form from '../../src/form/Form'
@@ -14,7 +13,7 @@ function renderWithContext ({ validate } = {}) {
       name: 'first'
     }
   })
-  const onSubmit = sinon.spy()
+  const onSubmit = jest.fn()
   const helpers = render(
     <Form name="test" value={initialValue} onSubmit={onSubmit} validate={validate}>
       <div>
@@ -51,18 +50,24 @@ describe('FormValueScope', function () {
         }
       })
     }
-    const { form, nameField, queryByText } = renderWithContext({ validate })
+    const { form, nameField, queryByText, onSubmit } = renderWithContext({ validate })
 
-    fireEvent.change(nameField, { target: { value: 'x' } })
+    fireEvent.change(nameField, { target: { value: 'testing' } })
     fireEvent.submit(form)
 
-    expect(nameField.value).toBe('x')
+    expect(nameField.value).toBe('testing')
     expect(queryByText('required')).toBeFalsy()
+    expect(onSubmit).toHaveBeenCalledWith(Immutable.fromJS({
+      sub: { name: 'testing' }
+    }))
+
+    jest.clearAllMocks()
 
     fireEvent.change(nameField, { target: { value: '' } })
     fireEvent.submit(form)
 
     expect(nameField.value).toBe('')
     expect(queryByText('required')).toBeTruthy()
+    expect(onSubmit).not.toHaveBeenCalled()
   })
 })
