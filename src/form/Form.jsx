@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
-export const FormScopeValueContext = React.createContext()
+export const FormValueScopeContext = React.createContext()
 
 // Creates a debounced version of `func` that receives its arguments as first,
 // and a callback function as second argument. When invoked multiple times, the
@@ -334,7 +334,7 @@ export default class Form extends React.Component {
     } = this.props
 
     return (
-      <FormScopeValueContext.Provider value={{ instance: this, state: this.state }}>
+      <FormValueScopeContext.Provider value={{ instance: this, state: this.state }}>
         <form autoComplete="off" {...other} name={name} onSubmit={this.handleSubmit}>
           {typeof children === 'function' ? children({
             value: this.state.value,
@@ -343,7 +343,7 @@ export default class Form extends React.Component {
             reset: () => this.reset()
           }) : children}
         </form>
-      </FormScopeValueContext.Provider>
+      </FormValueScopeContext.Provider>
     )
   }
 }

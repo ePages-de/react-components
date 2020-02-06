@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import { FormScopeValueContext } from './Form'
+import { FormValueScopeContext } from './Form'
 
 function parseName (name) {
   // only split string names by dots, but keep non string names (for example number names
@@ -12,7 +12,7 @@ function parseName (name) {
 // is kind of inherited by Form
 // make sure to mirror changes in here also in Form
 class FormValueScope extends React.Component {
-  static contextType = FormScopeValueContext
+  static contextType = FormValueScopeContext
 
   static propTypes = {
     name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -27,9 +27,9 @@ class FormValueScope extends React.Component {
 
   render () {
     return (
-      <FormScopeValueContext.Provider value={{ instance: this, state: this.state }}>
+      <FormValueScopeContext.Provider value={{ instance: this, state: this.state }}>
         {this.props.children}
-      </FormScopeValueContext.Provider>
+      </FormValueScopeContext.Provider>
     )
   }
 

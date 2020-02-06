@@ -2,7 +2,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics'
 import React from 'react'
 
 import BaseField from './BaseField'
-import { FormScopeValueContext } from './Form'
+import { FormValueScopeContext } from './Form'
 
 export default function formField () {
   return function (Component) {
@@ -40,7 +40,7 @@ export default function formField () {
       }
     }
 
-    FormField.contextType = FormScopeValueContext
+    FormField.contextType = FormValueScopeContext
 
     return hoistNonReactStatics(FormField, Component)
   }

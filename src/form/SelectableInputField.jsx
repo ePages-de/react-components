@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import { FormScopeValueContext } from './Form'
+import { FormValueScopeContext } from './Form'
 import InputField from './InputField'
 import formField from './formField'
 
@@ -57,6 +57,6 @@ class SelectableInputFieldRaw extends React.Component {
   }
 }
 
-SelectableInputFieldRaw.contextType = FormScopeValueContext
+SelectableInputFieldRaw.contextType = FormValueScopeContext
 
 export default formField()(SelectableInputFieldRaw)

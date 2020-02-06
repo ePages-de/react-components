@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import { FormScopeValueContext } from './Form'
+import { FormValueScopeContext } from './Form'
 
 class ErrorMessage extends React.Component {
   static propTypes = {
@@ -20,6 +20,6 @@ class ErrorMessage extends React.Component {
   }
 }
 
-ErrorMessage.contextType = FormScopeValueContext
+ErrorMessage.contextType = FormValueScopeContext
 
 export default ErrorMessage

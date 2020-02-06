@@ -6,7 +6,7 @@ import TestUtils from 'react-testutils-additions'
 import sinon from 'sinon'
 
 import ErrorMessage from '../../src/form/ErrorMessage'
-import Form, { FormScopeValueContext } from '../../src/form/Form'
+import Form, { FormValueScopeContext } from '../../src/form/Form'
 import { PropsSetter } from '../reactHelpers'
 import expect from '../unexpected'
 import TestField from './TestField'
@@ -57,7 +57,7 @@ class ServerErrorMessage extends React.Component {
   }
 }
 
-ServerErrorMessage.contextType = FormScopeValueContext
+ServerErrorMessage.contextType = FormValueScopeContext
 
 function render (props) {
   const initialValue = Immutable.fromJS({
