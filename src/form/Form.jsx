@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
-export const FormValueScopeContext = React.createContext()
+import BaseField from './BaseField'
 
 // Creates a debounced version of `func` that receives its arguments as first,
 // and a callback function as second argument. When invoked multiple times, the
@@ -67,6 +67,8 @@ function parseName (name) {
   // like in IteratorField) as they are
   return typeof name === 'string' ? name.split(/\./g) : [name]
 }
+
+const FormValueScopeContext = BaseField.contextType
 
 // kind of inherits from FormValueScope
 // make sure to mirror changes in FormValueScope here

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import { FormValueScopeContext } from './Form'
+import BaseField from './BaseField'
 
 function parseName (name) {
   // only split string names by dots, but keep non string names (for example number names
@@ -11,6 +11,8 @@ function parseName (name) {
 
 // is kind of inherited by Form
 // make sure to mirror changes in here also in Form
+const FormValueScopeContext = BaseField.contextType
+
 class FormValueScope extends React.Component {
   static contextType = FormValueScopeContext
 
