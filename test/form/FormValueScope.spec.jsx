@@ -1,22 +1,20 @@
+import { fireEvent, render } from '@testing-library/react'
 import Immutable from 'immutable'
 import React from 'react'
-import TestUtils from 'react-testutils-additions'
-import sinon from 'sinon'
 
 import ErrorMessage from '../../src/form/ErrorMessage'
 import Form from '../../src/form/Form'
 import FormValueScope from '../../src/form/FormValueScope'
-import expect from '../unexpected'
 import TestField from './TestField'
 
-function render ({ validate } = {}) {
+function renderWithContext ({ validate } = {}) {
   const initialValue = Immutable.fromJS({
     sub: {
       name: 'first'
     }
   })
-  const onSubmit = sinon.spy()
-  const dom = TestUtils.renderIntoDocument(
+  const onSubmit = jest.fn()
+  const helpers = render(
     <Form name="test" value={initialValue} onSubmit={onSubmit} validate={validate}>
       <div>
         <FormValueScope name="sub">
@@ -28,59 +26,48 @@ function render ({ validate } = {}) {
       </div>
     </Form>
   )
-  const form = TestUtils.findOne(dom, 'form')
-  const nameField = TestUtils.findOne(dom, '.name')
 
-  return { initialValue, onSubmit, dom, form, nameField }
+  const form = helpers.container.querySelector('form')
+  const nameField = helpers.container.querySelector('input')
+
+  return { initialValue, onSubmit, form, nameField, ...helpers }
 }
 
 describe('FormValueScope', function () {
   it('renders', function () {
-    const { dom } = render()
+    const { form, nameField } = renderWithContext()
 
-    expect(dom, 'to have rendered',
-      <form>
-        <div>
-          <div>
-            <input name="test.sub.name" value="first" />
-          </div>
-        </div>
-      </form>
-    )
+    expect(form).toBeTruthy()
+    expect(nameField.value).toBe('first')
+    expect(nameField.name).toBe('test.sub.name')
   })
 
-  it('passes through validation', function () {
-    const validate = (value) => Immutable.fromJS({
-      sub: {
-        name: !value.getIn(['sub', 'name']) ? 'required' : null
-      }
-    })
-    const { dom, form, nameField } = render({ validate })
+  it('passes through validation', async function () {
+    const validate = (value) => {
+      return Immutable.fromJS({
+        sub: {
+          name: !value.getIn(['sub', 'name']) ? 'required' : null
+        }
+      })
+    }
+    const { form, nameField, queryByText, onSubmit } = renderWithContext({ validate })
 
-    TestUtils.Simulate.submit(form)
+    fireEvent.change(nameField, { target: { value: 'testing' } })
+    fireEvent.submit(form)
 
-    expect(dom, 'to have rendered',
-      <form>
-        <div>
-          <div>
-            <input name="test.sub.name" value="first" />
-          </div>
-        </div>
-      </form>
-    )
+    expect(nameField.value).toBe('testing')
+    expect(queryByText('required')).toBeFalsy()
+    expect(onSubmit).toHaveBeenCalledWith(Immutable.fromJS({
+      sub: { name: 'testing' }
+    }))
 
-    TestUtils.Simulate.change(nameField, { target: { value: '' } })
-    TestUtils.Simulate.submit(form)
+    jest.clearAllMocks()
 
-    expect(dom, 'to have rendered',
-      <form>
-        <div>
-          <div>
-            <input name="test.sub.name" value="" />
-            <div>required</div>
-          </div>
-        </div>
-      </form>
-    )
+    fireEvent.change(nameField, { target: { value: '' } })
+    fireEvent.submit(form)
+
+    expect(nameField.value).toBe('')
+    expect(queryByText('required')).toBeTruthy()
+    expect(onSubmit).not.toHaveBeenCalled()
   })
 })

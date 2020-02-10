@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
-import FormValueScope from './FormValueScope'
+import BaseField from './BaseField'
 
 // Creates a debounced version of `func` that receives its arguments as first,
 // and a callback function as second argument. When invoked multiple times, the
@@ -68,11 +68,13 @@ function parseName (name) {
   return typeof name === 'string' ? name.split(/\./g) : [name]
 }
 
+const FormValueScopeContext = BaseField.contextType
+
 // kind of inherits from FormValueScope
 // make sure to mirror changes in FormValueScope here
 export default class Form extends React.Component {
   static propTypes = {
-    ...FormValueScope.propTypes,
+    name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     value: PropTypes.any,
     onSubmit: PropTypes.func,
     onChange: PropTypes.func,
@@ -334,24 +336,16 @@ export default class Form extends React.Component {
     } = this.props
 
     return (
-      <form autoComplete="off" {...other} name={name} onSubmit={this.handleSubmit}>
-        {typeof children === 'function' ? children({
-          value: this.state.value,
-          pristine: Immutable.is(value, this.state.value),
-          submitting: this.state.submitting,
-          reset: () => this.reset()
-        }) : children}
-      </form>
+      <FormValueScopeContext.Provider value={{ instance: this, state: this.state }}>
+        <form autoComplete="off" {...other} name={name} onSubmit={this.handleSubmit}>
+          {typeof children === 'function' ? children({
+            value: this.state.value,
+            pristine: Immutable.is(value, this.state.value),
+            submitting: this.state.submitting,
+            reset: () => this.reset()
+          }) : children}
+        </form>
+      </FormValueScopeContext.Provider>
     )
-  }
-
-  static childContextTypes = {
-    formValueScope: PropTypes.object
-  }
-
-  getChildContext () {
-    return {
-      formValueScope: this
-    }
   }
 }

@@ -8,10 +8,6 @@ export default function formField () {
     class FormField extends React.Component {
       static displayName = `FormField(${Component.displayName || Component.name || 'Component'})`
 
-      static contextTypes = {
-        ...BaseField.contextTypes
-      }
-
       static propTypes = {
         ...BaseField.propTypes
       }
@@ -21,7 +17,7 @@ export default function formField () {
       }
 
       render () {
-        const { formValueScope } = this.context
+        const formValueScope = this.context.instance
         const { name, ...other } = this.props
 
         return (
@@ -42,6 +38,8 @@ export default function formField () {
         }
       }
     }
+
+    FormField.contextType = BaseField.contextType
 
     return hoistNonReactStatics(FormField, Component)
   }

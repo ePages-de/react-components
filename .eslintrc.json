@@ -10,6 +10,7 @@
     "jsx-quotes": [2, "prefer-double"]
   },
   "env": {
-    "browser": true
+    "browser": true,
+    "jest": true
   }
 }

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
+import BaseField from './BaseField'
+
 function parseName (name) {
   // only split string names by dots, but keep non string names (for example number names
   // like in IteratorField) as they are
@@ -9,10 +11,10 @@ function parseName (name) {
 
 // is kind of inherited by Form
 // make sure to mirror changes in here also in Form
-export default class FormValueScope extends React.Component {
-  static contextTypes = {
-    formValueScope: PropTypes.object.isRequired
-  }
+const FormValueScopeContext = BaseField.contextType
+
+class FormValueScope extends React.Component {
+  static contextType = FormValueScopeContext
 
   static propTypes = {
     name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -20,17 +22,21 @@ export default class FormValueScope extends React.Component {
   }
 
   get name () {
-    const outerScope = this.context.formValueScope
+    const outerScope = this.context.instance
     const ownName = this.props.name
     return `${outerScope.name}.${ownName}`
   }
 
   render () {
-    return this.props.children
+    return (
+      <FormValueScopeContext.Provider value={{ instance: this, state: this.state }}>
+        {this.props.children}
+      </FormValueScopeContext.Provider>
+    )
   }
 
   getValue = (name) => {
-    const outerScope = this.context.formValueScope
+    const outerScope = this.context.instance
     const ownName = this.props.name
     const value = outerScope.getValue(ownName)
 
@@ -42,7 +48,7 @@ export default class FormValueScope extends React.Component {
   }
 
   setValue = (name, value) => {
-    const outerScope = this.context.formValueScope
+    const outerScope = this.context.instance
     const ownName = this.props.name
 
     if (name !== undefined && name !== null) {
@@ -53,19 +59,11 @@ export default class FormValueScope extends React.Component {
   }
 
   getError = (name) => {
-    const outerScope = this.context.formValueScope
+    const outerScope = this.context.instance
     const ownName = this.props.name
     const error = outerScope.getError(ownName)
     return error ? error.getIn(parseName(name)) : undefined
   }
-
-  static childContextTypes = {
-    formValueScope: PropTypes.object
-  }
-
-  getChildContext () {
-    return {
-      formValueScope: this
-    }
-  }
 }
+
+export default FormValueScope
