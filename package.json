@@ -71,7 +71,7 @@
     "unexpected-sinon": "10.11.2",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.10",
-    "webpack-dev-server": "3.9.0"
+    "webpack-dev-server": "3.11.1"
   },
   "importSort": {
     ".js, .jsx": {
